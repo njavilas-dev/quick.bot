@@ -1,9 +1,47 @@
 import {
-  WorkspaceBillingPlanTier as PrismaWorkspaceBillingPlanTier,
-  WorkspaceBillingPlan as PrismaPlan,
   BillingPlanType,
 } from '@quickbot.io/prisma'
 import { z } from '../../zod'
+
+// Define types locally since they're not exported from Prisma
+type PrismaWorkspaceBillingPlanTier = {
+  id: string
+  upTo: number | null
+  flatAmount: number | null
+  flatAmountDecimal: string | null
+  unitAmount: number | null
+  unitAmountDecimal: string | null
+  isInfinite: boolean
+  billingPlanId: string
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date | null
+}
+
+type PrismaPlan = {
+  id: string
+  name: string
+  key: BillingPlanType
+  description: string | null
+  price: number
+  chatsLimit: number | null
+  storageLimit: number | null
+  botsLimit: number | null
+  membersLimit: number | null
+  isSystem: boolean
+  currency: string
+  isYearly: boolean | null
+  allowCustomDomain: boolean
+  allowWhatsapp: boolean
+  allowAnalytics: boolean
+  allowedBotBlocks: string[]
+  allowGuests: boolean
+  allowResults: boolean
+  allowRemoveBrand: boolean
+  createdAt: Date
+  updatedAt: Date
+  deletedAt: Date | null
+}
 
 export const chatStripeTierSchema = z.object({
   id: z.string(),
