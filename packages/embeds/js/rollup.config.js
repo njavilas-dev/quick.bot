@@ -16,6 +16,18 @@ const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 const packageVersion = packageJson.version
 const preamble = `// v${packageVersion}`
 
+// Obtener workspace packages de devDependencies
+const workspacePackages = Object.entries(packageJson.devDependencies || {})
+  .filter(([_, version]) => version.startsWith('workspace:'))
+  .map(([name]) => name)
+
+// Lista de paquetes externos (dependencies + workspace packages)
+const externalPackages = [
+  ...Object.keys(packageJson.dependencies || {}),
+  ...workspacePackages,
+  '@prisma/client',
+]
+
 const indexConfig = {
   input: './src/index.ts',
   output: {
@@ -23,14 +35,10 @@ const indexConfig = {
     format: 'es',
   },
   external: (id) => {
-    // Excluir @prisma/client y paquetes workspace que lo usan
-    if (id.includes('@prisma/client')) return true
-    if (id.includes('@quickbot.io/prisma')) return true
-    if (id.includes('@quickbot.io/schemas')) return true
-    if (id.includes('@quickbot.io/bot-engine')) return true
-    if (id.includes('@quickbot.io/env')) return true
-    if (id.includes('@quickbot.io/lib')) return true
-    return false
+    // Los paquetes en node_modules se bundlean
+    if (id.includes('node_modules')) return false
+    // Marcar como externos los workspace packages y dependencies
+    return externalPackages.some((pkg) => id === pkg || id.startsWith(`${pkg}/`))
   },
   onwarn,
   watch: {
@@ -38,7 +46,12 @@ const indexConfig = {
     exclude: ['node_modules/**', 'dist/**', '*.d.ts', '**/*.d.ts'],
   },
   plugins: [
-    resolve({ extensions }),
+    resolve({
+      extensions,
+      moduleDirectories: ['node_modules'],
+      preferBuiltins: false,
+      browser: true,
+    }),
     commonjs(),
     babel({
       babelHelpers: 'bundled',
