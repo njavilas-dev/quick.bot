@@ -26,7 +26,8 @@
     "ky": "1.2.4",
     "marked": "9.0.3",
     "solid-element": "1.7.1",
-    "solid-js": "1.7.8"
+    "solid-js": "1.7.8",
+    "zod-openapi": "^2.18.0"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "6.0.3",
