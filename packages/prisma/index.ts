@@ -1,15 +1,20 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 
-// Export enums (valores reales que existen en runtime)
-export {
+// Re-export PrismaClient
+export { PrismaClient }
+
+// Re-export Prisma namespace para acceso a tipos
+export { Prisma }
+
+// Export enums (se obtienen del Prisma generado)
+export const {
     ChangeRequestStatus,
     ChangeRequestType,
     TypeConfirmation,
     WorkspaceRole,
     CollaborationType,
     BillingPlanType,
-    PrismaClient,
-} from '@prisma/client'
+} = Prisma
 
 // Export tipos de modelos usando Prisma namespace
 export type UserAuth = Prisma.UserAuthGetPayload<{}>
