@@ -61,7 +61,26 @@ const indexConfig = {
     }),
     typescriptPaths({ preserveExtensions: true }),
     typescript({
-      noEmitOnError: !process.env.ROLLUP_WATCH,
+      noEmitOnError: false,
+      tsconfig: './tsconfig.json',
+      compilerOptions: {
+        skipLibCheck: true,
+        noEmit: false,
+        emitDeclarationOnly: true,
+        skipDefaultLibCheck: true,
+        // No resolver tipos de workspace packages
+        types: [],
+      },
+      include: ['src/**/*'],
+      exclude: [
+        'dist',
+        'node_modules',
+        '../../schemas/**/*',
+        '../../prisma/**/*',
+        '../../lib/**/*',
+        '../../bot-engine/**/*',
+        '../../env/**/*',
+      ],
     }),
     postcss({
       plugins: [autoprefixer(), tailwindcss()],
