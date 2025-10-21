@@ -61,6 +61,11 @@ jobs:
           cd packages/variables
           bun install isolated-vm@5.0.1
 
+      - name: Generate Prisma client
+        run: |
+          cd packages/prisma
+          bun run prisma:generate
+
       - name: Copy env to .env
         run: |
           chmod +x scripts/setup-env.sh

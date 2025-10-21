@@ -1,41 +1,11 @@
-export {
-    type UserAuth,
-    type UserSession,
-    type UserVerificationToken,
-    type UserNotification,
-    type User,
-    type UserApiToken,
+export * from '@prisma/client'
 
+// Export only enums that are available as values
+export {
     ChangeRequestStatus,
     ChangeRequestType,
     TypeConfirmation,
-    type ChangeRequest,
-
-    type Workspace,
-    type WorkspaceMember,
-    type WorkspaceInvitation,
-    type WorkspaceCustomDomain,
-    type WorkspaceCredential,
-    type WorkspaceDashboardFolder,
-    type WorkspaceBillingPlan,
-    type WorkspaceBillingPlanTier,
-
     WorkspaceRole,
     CollaborationType,
     BillingPlanType,
-
-    type Bot,
-    type BotInvitation,
-    type BotCollaborator,
-    type BotPublic,
-    type BotResult,
-    type BotResultVariableHistory,
-    type BotResultVisitedEdge,
-    type BotLog,
-    type AnswerV2,
-    type Coupon,
-    type Webhook,
-    type ChatSession,
-    type BotThemeTemplate,
-    type UserBannedIp,
 } from '@prisma/client'
