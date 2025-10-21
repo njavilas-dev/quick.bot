@@ -1,0 +1,266 @@
+---
+title: Website
+icon: link
+---
+
+The Website user block allows you to collect URLs from users with automatic format validation. It
+ensures URLs are properly structured and provides user-friendly error handling for invalid entries.
+This block is perfect for collecting website links, social media profiles, portfolio URLs, and any
+web-based references.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/website-flow.png"
+        alt="Website input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/website-bot.png"
+        alt="Website input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Configuration Options
+
+### Label Customization
+
+- **Placeholder Text**: Guide users with helpful input hints (supports variables)
+- **Button Text**: Customize the submit button label (supports variables)
+- **Retry Message**: Set custom error message for invalid URLs (supports variables)
+
+### URL Validation
+
+- **Format Checking**: Validates URL structure and format automatically
+- **Protocol Support**: Accepts HTTP, HTTPS, and other standard protocols
+- **Error Handling**: Displays retry message when URLs are improperly formatted
+- **Real-time Feedback**: Immediate validation feedback to users
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the validated URL
+- **Variable Support**: All text fields support variable insertion using `{{variableName}}` syntax
+
+## Advanced Features
+
+### Comprehensive URL Validation
+
+The website block performs thorough URL format validation:
+
+- **Protocol Detection**: Automatically recognizes HTTP, HTTPS, FTP, and other protocols
+- **Domain Validation**: Checks for proper domain name structure
+- **Path Validation**: Validates URL paths and parameters
+- **Special Character Handling**: Properly processes encoded characters and international domains
+
+### Smart URL Processing
+
+- **Auto-completion**: Automatically adds "https://" prefix when missing
+- **Format Normalization**: Standardizes URLs for consistent storage
+- **Case Handling**: Manages case sensitivity appropriately
+- **Whitespace Management**: Trims leading and trailing whitespace
+
+### Error Handling and User Guidance
+
+- **Custom Error Messages**: Personalize retry messages for better user experience
+- **Context-aware Feedback**: Variable-driven error messages based on user data
+- **Clear Instructions**: Guide users toward proper URL format
+- **Accessibility Support**: Screen reader friendly error messages
+
+### Variable Integration
+
+- **Dynamic Placeholders**: Use variables to personalize placeholder text
+- **Context-aware Labels**: Customize button and error text based on collected data
+- **Integration Ready**: Validated URLs work seamlessly with webhooks and external systems
+
+## Best Practices
+
+### User Experience
+
+- Use clear, instructive placeholder text (e.g., "Enter your website URL")
+- Provide helpful retry messages that explain proper URL format
+- Consider auto-completing common protocols (https://) for user convenience
+- Test URL validation with various formats and edge cases
+
+### Data Management
+
+- Use descriptive variable names for URL storage
+- Remember that URLs are stored in normalized format
+- Consider privacy implications when storing website URLs
+- Plan for URL verification workflows if needed
+
+### Validation Strategy
+
+- Rely on built-in format validation for structural checking
+- Use retry messages to educate users about expected formats
+- Consider follow-up verification via webhook for critical applications
+- Document expected URL formats in your integration specifications
+
+### Content Strategy
+
+- Clarify what types of URLs are expected (website, social media, etc.)
+- Provide examples in placeholder text or instructions
+- Consider regional differences in website formats
+- Plan for internationalized domain names (IDN) support
+
+## Integration Examples
+
+### Social Media Collection
+
+```javascript
+{
+  "social_profiles": {
+    "website": "{{userWebsite}}",
+    "platform": "determined by URL pattern",
+    "verified": "false (requires additional verification)"
+  }
+}
+```
+
+### Portfolio Verification Flow
+
+1. Collect website URL with Website block
+2. Save to variable (e.g., `portfolioURL`)
+3. Use webhook to verify URL accessibility
+4. Follow up with additional questions based on site content
+5. Store verified URLs for portfolio review
+
+### Lead Generation
+
+- Collect company website URLs for B2B leads
+- Validate URL format before CRM integration
+- Use URLs for company research and qualification
+- Track website data for lead scoring and analysis
+
+### Content Curation
+
+- Collect article or resource URLs from users
+- Validate format before adding to content database
+- Use URLs for automated content analysis
+- Build curated content libraries from user submissions
+
+## Common Use Cases
+
+### Business Information Collection
+
+- Company websites for B2B lead generation
+- Portfolio URLs for freelancers and agencies
+- Social media profiles for influencer outreach
+- E-commerce store URLs for partnership programs
+
+### Reference and Resource Gathering
+
+- Article or blog post recommendations
+- Educational resource sharing
+- Tool and software recommendations
+- Research source collection
+
+### Social Media Integration
+
+- LinkedIn profile collection
+- Instagram or Twitter account URLs
+- YouTube channel or video links
+- Facebook page or group references
+
+## Troubleshooting
+
+### Common Issues
+
+**URLs not validating correctly**
+
+- Verify users are entering complete URLs with protocols
+- Check that URL format includes proper domain structure
+- Ensure retry message clearly explains expected format
+- Test with various URL formats including subdomains and paths
+
+**Variable not saving URLs**
+
+- Confirm a variable is selected in "Save Answer" dropdown
+- Verify variable names don't contain special characters
+- Check that URL validation passes before attempting to save
+- Test variable integration with subsequent blocks and webhooks
+
+**Retry message not displaying**
+
+- Verify retry message is configured in block settings
+- Check that custom retry message text is appropriate
+- Test retry message with intentionally invalid URLs
+- Ensure message provides helpful guidance for correction
+
+**Protocol handling issues**
+
+- Test URLs with and without "http://" or "https://" prefixes
+- Verify automatic protocol addition works correctly
+- Check handling of non-standard protocols (ftp, file, etc.)
+- Test with various domain formats and international characters
+
+### Validation Problems
+
+**International domain names**
+
+- Test with non-Latin character domains
+- Verify punycode encoding is handled correctly
+- Check that international TLDs are accepted
+- Test with various language-specific domains
+
+**Special URL formats**
+
+- Test with URLs containing parameters and queries
+- Verify handling of anchor links and fragments
+- Check subdomain and port number validation
+- Test with encoded characters and special symbols
+
+### Integration Considerations
+
+**URL Accessibility**
+
+- Format validation doesn't guarantee URL accessibility
+- Consider implementing webhook-based URL verification
+- Plan for handling of temporary or private URLs
+- Document limitations of format-only validation
+
+**Data Processing**
+
+- URLs are stored exactly as validated and normalized
+- External systems may need additional URL parsing
+- Consider URL shortening or expansion requirements
+- Plan for handling of redirect URLs
+
+### Error Message Optimization
+
+**User-Friendly Messages**
+
+- Customize retry messages for your specific use case
+- Use variables to make error messages more contextual
+- Provide examples of correctly formatted URLs
+- Test error messages with common user mistakes
+
+**Accessibility Features**
+
+- Ensure error messages work with screen readers
+- Provide sufficient color contrast for error text
+- Use appropriate ARIA labels for validation feedback
+- Test accessibility across different devices and browsers
+
+### Performance Considerations
+
+**Validation Speed**
+
+- URL format validation happens client-side for instant feedback
+- Complex URLs may require additional processing time
+- Test validation performance with very long URLs
+- Monitor user experience across different network conditions
+
+**Storage Efficiency**
+
+- Consider URL length limits for your storage system
+- Plan for handling of very long URLs with parameters
+- Implement URL normalization for consistent storage
+- Monitor storage usage for URL-heavy applications

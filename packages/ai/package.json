@@ -1,0 +1,13 @@
+{
+  "name": "@quickbot.io/ai",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "dependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/lib": "workspace:*",
+    "@quickbot.io/variables": "workspace:*",
+    "ai": "^4.0.0",
+    "ky": "1.2.4"
+  }
+}

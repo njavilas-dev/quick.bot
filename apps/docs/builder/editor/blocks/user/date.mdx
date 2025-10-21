@@ -1,0 +1,215 @@
+---
+title: Date
+icon: calendar
+---
+
+The Date user block allows you to ask your user for a date. You can ask for a specific date or range
+and include time. The block uses native date pickers that adapt to different devices and browsers.
+
+## Configuration Options
+
+### Date Range Toggle
+
+Enable date range selection to allow users to pick both start and end dates:
+
+- **From Label**: Customize the label for the start date field
+- **To Label**: Customize the label for the end date field
+- Collected as a formatted range string in the saved variable
+
+### Time Integration
+
+Enable time selection alongside date picking:
+
+- Changes input type from `date` to `datetime-local`
+- Allows users to specify both date and time
+- Affects the format patterns and display options
+
+### Custom Labels
+
+- **Button Label**: Customize the text shown on the submit button
+- **From Label**: Set the label for the start date (range mode only)
+- **To Label**: Set the label for the end date (range mode only)
+
+### Date Constraints
+
+- **Minimum Date**: Set the earliest selectable date (format: YYYY-MM-DD or YYYY-MM-DDTHH:mm)
+- **Maximum Date**: Set the latest selectable date (format: YYYY-MM-DD or YYYY-MM-DDTHH:mm)
+- Supports variable integration for dynamic date limits
+
+### Format Customization
+
+Customize how the collected date is formatted and stored using date-fns formatting tokens.
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the collected date/range
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/date-flow.png"
+        alt="Date input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/date-bot.png"
+        alt="Date input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Native Date Picker
+
+The input will use the native date picker depending on the device and browser used to answer the
+bot. For example on Firefox it looks like this:
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/blocks/user/date-native-picker.png" alt="Date native picker" />
+</Frame>
+
+## Format Options
+
+The `Format` setting lets you customize the picked date format. Under the hood, it is done using the
+[date-fns](https://date-fns.org/) library. You can use any of the
+[formatting tokens](https://date-fns.org/docs/format) supported by the library.
+
+### Common Format Examples
+
+**Date Only:**
+
+```text
+yyyy-MM-dd          → 2023-01-15
+dd/MM/yyyy          → 15/01/2023
+MM/dd/yy            → 01/15/23
+d.MM.yy             → 15.1.23
+```
+
+**Date with Time:**
+
+```text
+yyyy-MM-dd HH:mm:ss → 2023-01-15 14:30:00
+dd/MM/yyyy HH:mm    → 15/01/2023 14:30
+dd.MM HH:mm         → 15.01 14:30
+```
+
+### Format Behavior
+
+- Single date: Returns formatted date string
+- Date range: Returns "formatted_start_date to formatted_end_date"
+- Format automatically adapts to time inclusion
+- Default formats: `dd/MM/yyyy` (date) and `dd/MM/yyyy HH:mm` (datetime)
+
+## Advanced Features
+
+### Dynamic Date Constraints
+
+Use variables to set dynamic minimum and maximum dates:
+
+- Reference other collected dates for validation
+- Create date dependencies between multiple date inputs
+- Implement business logic for date restrictions
+
+### Cross-Platform Compatibility
+
+The block automatically detects the device and browser capabilities:
+
+- Mobile devices: Optimized touch-friendly date pickers
+- Desktop browsers: Standard date input controls
+- Fallback support for browsers without native date picker support
+
+### Validation
+
+Automatic validation ensures:
+
+- Selected dates are within min/max constraints
+- Date ranges have valid start/end relationships
+- Proper date format compliance
+
+## Best Practices
+
+### User Experience
+
+- Use clear, descriptive labels for date fields
+- Set appropriate min/max constraints to guide user selection
+- Consider timezone implications for time-enabled inputs
+- Test across different devices and browsers
+
+### Format Selection
+
+- Choose formats familiar to your target audience
+- Consider localization requirements
+- Use shorter formats for mobile interfaces
+- Include time only when necessary
+
+### Variable Management
+
+- Use descriptive variable names that indicate content
+- Consider how date data will be processed downstream
+- Account for range vs. single date format differences
+- Plan for integration with external systems
+
+## Integration Examples
+
+### Date Range for Booking
+
+```
+From: 2023-12-01
+To: 2023-12-07
+Saved as: "01/12/2023 to 07/12/2023"
+```
+
+### DateTime for Appointments
+
+```
+Date/Time: 2023-12-01T14:30
+Saved as: "01/12/2023 14:30"
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Date picker not appearing**
+
+- Ensure browser supports HTML5 date inputs
+- Check that the input type is correctly set based on time settings
+- Verify JavaScript is enabled in the browser
+
+**Format not applied correctly**
+
+- Verify format string uses valid date-fns tokens
+- Check that format matches the time setting (with/without time)
+- Test format with expected date values
+
+**Date range validation errors**
+
+- Ensure "from" date is before "to" date
+- Check min/max constraints don't conflict with range selection
+- Verify both dates are within allowed range
+
+**Variable not saving properly**
+
+- Confirm a variable is selected in the "Save Answer" dropdown
+- Check variable type compatibility with date strings
+- Verify format produces expected string output
+
+### Browser-Specific Considerations
+
+- Safari: May have different date picker styling
+- Firefox: Different format display in picker
+- Mobile browsers: Touch-optimized interfaces
+- Legacy browsers: May require polyfills or fallback handling
+
+### Integration Tips
+
+- Parse date strings correctly in webhook handlers
+- Account for timezone differences in processing
+- Convert formats as needed for external API integration
+- Handle range format parsing for "to" relationships

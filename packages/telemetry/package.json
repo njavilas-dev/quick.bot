@@ -1,0 +1,16 @@
+{
+  "name": "@quickbot.io/telemetry",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@quickbot.io/schemas": "workspace:*",
+    "ky": "1.2.4",
+    "posthog-node": "3.1.1",
+    "@quickbot.io/env": "workspace:*"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,1 @@
+export { woocommerceTemplate } from './template'

@@ -1,0 +1,243 @@
+---
+title: Number
+icon: hashtag
+---
+
+The Number user block allows you to ask your user for numerical input with built-in validation and
+formatting controls. It provides a specialized input field that ensures only valid numbers are
+accepted.
+
+## Configuration Options
+
+### Input Validation
+
+- **Minimum Value**: Set the lowest acceptable number (supports variables)
+- **Maximum Value**: Set the highest acceptable number (supports variables)
+- **Step Value**: Define increment/decrement steps for input controls
+- Automatic validation prevents out-of-range submissions
+
+### Custom Labels
+
+- **Placeholder**: Set placeholder text shown in the number input field
+- **Button Label**: Customize the text shown on the submit button
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the collected number
+- All constraint fields support variable integration for dynamic limits
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/number-flow.png"
+        alt="Number input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/number-bot.png"
+        alt="Number input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Validation Features
+
+### Range Validation
+
+The block automatically validates that entered numbers fall within the specified range:
+
+- Values below minimum are rejected
+- Values above maximum are rejected
+- Users must re-enter valid values to proceed
+- Clear validation feedback for out-of-range attempts
+
+### Input Type Enforcement
+
+- Uses HTML5 number input type for optimal user experience
+- Mobile devices display numeric keyboards automatically
+- Prevents non-numeric character entry
+- Supports decimal numbers and negative values (when min allows)
+
+### Step Validation
+
+When a step value is configured:
+
+- Input controls increment/decrement by the step amount
+- Validates that entered values align with step intervals
+- Useful for specific increments (e.g., multiples of 5, 10, 0.5)
+
+## Advanced Features
+
+### Dynamic Constraints
+
+All constraint fields support variable integration:
+
+- **Dynamic Minimum**: Use variables to set contextual lower bounds
+- **Dynamic Maximum**: Use variables to set contextual upper bounds
+- **Dynamic Step**: Adjust step values based on collected data
+- Enables complex validation scenarios and business logic
+
+### Mobile Optimization
+
+- Numeric keypad on mobile devices
+- Touch-friendly increment/decrement buttons
+- Responsive layout adaptation
+- Optimized for various screen sizes
+
+### Accessibility
+
+Built-in accessibility features:
+
+- Proper ARIA labeling for screen readers
+- Keyboard navigation support
+- High contrast compatibility
+- Focus management and validation feedback
+
+## Use Cases
+
+### Basic Number Collection
+
+- Age input with reasonable min/max (0-120)
+- Quantity selection with step increments
+- Score or rating collection
+- Simple counting and measurement
+
+### Advanced Validation Scenarios
+
+- Budget ranges with dynamic limits based on user profile
+- Date-based constraints (e.g., years based on age)
+- Tiered pricing with step validation
+- Inventory-based limits from external data
+
+### Business Logic Integration
+
+- Dynamic pricing calculations
+- Conditional limits based on previous answers
+- Multi-step form validation with dependencies
+- Complex business rule enforcement
+
+## Best Practices
+
+### User Experience
+
+- Set reasonable min/max ranges for the context
+- Use clear, descriptive placeholder text
+- Choose appropriate step values for the use case
+- Provide context about valid ranges when helpful
+
+### Validation Design
+
+- Consider edge cases (zero, negative numbers, decimals)
+- Test boundary values thoroughly
+- Provide clear feedback for validation failures
+- Balance strictness with user flexibility
+
+### Variable Integration
+
+- Use descriptive variable names for number storage
+- Consider data type requirements for downstream processing
+- Plan for null/undefined values in variable-based constraints
+- Test dynamic constraint scenarios thoroughly
+
+## Integration Examples
+
+### Age Collection
+
+```
+Configuration:
+- Min: 0, Max: 120, Step: 1
+- Placeholder: "Enter your age"
+User Input: 25
+Saved Variable: 25
+```
+
+### Budget Range with Dynamic Limits
+
+```
+Configuration:
+- Min: {{userProfile.minBudget}}, Max: {{userProfile.maxBudget}}
+- Step: 100, Placeholder: "Your budget"
+User Input: 5000
+Validation: ✓ Within dynamic range
+Saved Variable: 5000
+```
+
+### Quantity Selection
+
+```
+Configuration:
+- Min: 1, Max: 10, Step: 1
+- Placeholder: "How many items?"
+User Input: 3
+Saved Variable: 3
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Numbers not being accepted**
+
+- Verify min/max ranges allow the intended values
+- Check that step configuration doesn't conflict with valid inputs
+- Test decimal vs. integer requirements
+- Ensure browser supports HTML5 number inputs
+
+**Range validation not working**
+
+- Confirm min/max values are properly configured
+- Check that variables used in constraints contain valid numbers
+- Verify step alignment with intended input values
+- Test boundary conditions (exactly min/max values)
+
+**Variable not saving numbers**
+
+- Ensure a variable is selected in the "Save Answer" dropdown
+- Verify variable type compatibility with numeric data
+- Check that numbers pass all validation before storage
+- Test with various number formats (integer, decimal, negative)
+
+**Mobile keyboard issues**
+
+- Confirm input type is set to 'number'
+- Test on actual mobile devices for keyboard behavior
+- Verify numeric keypad appears correctly
+- Check touch target sizes for increment/decrement controls
+
+### Validation Considerations
+
+**Decimal Numbers**
+
+- Consider precision requirements for decimal inputs
+- Test step validation with decimal values
+- Plan for floating-point arithmetic edge cases
+- Validate decimal places in downstream processing
+
+**Negative Numbers**
+
+- Explicitly test negative number handling if min < 0
+- Consider user expectations for negative value input
+- Validate sign handling in mobile keyboards
+- Test edge cases around zero crossing
+
+**Large Numbers**
+
+- Consider JavaScript number precision limits
+- Test very large number input and storage
+- Validate display formatting for large values
+- Plan for scientific notation in extreme cases
+
+### Integration Tips
+
+- Store numbers in appropriate data types for external systems
+- Handle number formatting consistently across integrations
+- Consider locale-specific number formatting requirements
+- Implement proper error handling for numeric conversions
+- Validate number ranges align with downstream system constraints

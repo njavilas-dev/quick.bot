@@ -1,0 +1,287 @@
+---
+title: Billing & Usage
+icon: credit-card
+---
+
+Manage your workspace subscription, monitor usage, and handle billing information. Track your
+current plan limits, view invoices, and upgrade or modify your subscription as your needs grow.
+
+## Accessing Billing & Usage
+
+To access your billing and usage information:
+
+1. Navigate to your workspace dashboard
+2. Click the **Billing** menu tab
+
+This interface provides a comprehensive overview of your subscription status, usage metrics, and
+billing history.
+
+<Frame>
+  <img src="/images/app/workspace-billing.png" alt="Workspace billing and usage" />
+</Frame>
+
+## Billing Overview
+
+### Subscription Summary
+
+The billing header displays key information about your current subscription:
+
+- **Plan Type**: Your current plan (FREE, PERSONAL, BUSINESS, ENTERPRISE)
+- **Payment Method**: Currently Stripe for all transactions
+- **Status**: Subscription status (Active, Canceled, Past Due)
+- **Seats Usage**: Current members vs. plan limit (e.g., "3 / 10")
+- **Conversations Usage**: Monthly chat consumption vs. limit
+- **Renewal/Cancellation**: Next payment or cancellation date
+- **Next Payment Amount**: Cost for the upcoming billing cycle
+
+### Usage Tracking
+
+Monitor your workspace resource consumption:
+
+#### Member Seats
+
+- **Current Usage**: Active admins and members (excludes guests)
+- **Plan Limit**: Maximum members allowed on your plan
+- **Pending Invitations**: Count toward your seat limit
+- **Overage Handling**: Invitations blocked when limit reached
+
+#### Monthly Conversations
+
+- **Chat Consumption**: Number of bot conversations this month
+- **Plan Allowance**: Monthly chat limit based on your subscription
+- **Reset Date**: When your monthly usage counter resets
+- **Overage Policy**: What happens when you exceed limits
+
+<Note>
+  Chat usage includes all published bot interactions. Preview and test conversations typically don't
+  count toward your monthly limit.
+</Note>
+
+## Available Plans
+
+QuickBot offers multiple subscription tiers to meet different needs:
+
+### FREE Plan
+
+- **Cost**: $0/month
+- **Members**: Limited seats
+- **Bots**: Limited number of bots
+- **Conversations**: Limited monthly conversations
+- **Features**: Basic functionality
+
+### PERSONAL Plan
+
+- **Cost**: Competitive monthly rate
+- **Members**: Increased seat limit
+- **Bots**: More bots allowed
+- **Conversations**: Higher monthly limit
+- **Features**: Enhanced capabilities
+
+### BUSINESS Plan (Most Popular)
+
+- **Cost**: Professional-tier pricing
+- **Members**: Substantial seat allowance
+- **Bots**: Extensive bot limits
+- **Conversations**: High-volume chat allowance
+- **Features**: Advanced business features
+- **Additional**: Guest collaboration, custom branding removal
+
+### ENTERPRISE Plan
+
+- **Cost**: Premium pricing
+- **Members**: Maximum or unlimited seats
+- **Bots**: Highest bot limits
+- **Conversations**: Enterprise-level chat volumes
+- **Features**: Full feature access
+- **Support**: Priority support and advanced integrations
+
+## Plan Features Comparison
+
+### Feature Availability by Plan
+
+| Feature                  | FREE | PERSONAL | BUSINESS | ENTERPRISE |
+| ------------------------ | ---- | -------- | -------- | ---------- |
+| **Guest Collaboration**  | ❌   | ❌       | ✅       | ✅         |
+| **Remove Branding**      | ❌   | ❌       | ✅       | ✅         |
+| **Advanced Analytics**   | ❌   | Limited  | ✅       | ✅         |
+| **Results Export**       | ❌   | Limited  | ✅       | ✅         |
+| **WhatsApp Integration** | ❌   | ❌       | ✅       | ✅         |
+| **Priority Support**     | ❌   | ❌       | Limited  | ✅         |
+
+## Upgrading Your Plan
+
+### Upgrade Process
+
+1. **Access Plan Selection**: Click the upgrade button or access from billing tab
+2. **Review Plan Options**: Compare features and pricing
+3. **Select Your Plan**: Choose the plan that fits your needs
+4. **Billing Information**: Complete or update billing details
+5. **Confirm Purchase**: Finalize your subscription upgrade
+
+### Plan Selection Modal
+
+The upgrade interface presents:
+
+- **Visual Plan Cards**: Clear comparison of each plan
+- **Feature Lists**: Detailed breakdown of what's included
+- **Pricing Display**: Monthly costs prominently shown
+- **Popular Plan Highlighting**: Business plan marked as most popular
+- **Current Plan Indicator**: Shows your active subscription
+
+### Billing Information Collection
+
+Before upgrading, you may need to provide:
+
+- **Billing Email**: Contact for billing communications
+- **Company Information**: Business name for invoices
+- **VAT Details**: Tax information where applicable
+- **Payment Method**: Credit card via Stripe
+
+<Tip>
+  Choose your plan based on projected growth. You can always upgrade later, but plan ahead for
+  member and chat volume increases.
+</Tip>
+
+## Billing Portal Integration
+
+### Stripe Billing Portal
+
+Manage your subscription through Stripe's secure billing portal:
+
+1. **Access Portal**: Click the "Billing Portal" button in your billing tab
+2. **Secure Redirect**: Opens Stripe's customer portal in new tab
+3. **Self-Service Management**: Handle various billing tasks independently
+
+### Available Actions in Portal
+
+- **Update Payment Methods**: Add, remove, or modify credit cards
+- **Download Invoices**: Access past and current billing statements
+- **View Payment History**: Complete transaction record
+- **Update Billing Address**: Modify billing contact information
+- **Cancel Subscription**: Downgrade or cancel your plan
+- **Reactivate Subscription**: Resume canceled subscriptions (if eligible)
+
+<Warning>
+  Subscription changes in the billing portal take effect immediately. Downgrades may restrict access
+  to features or data until the next billing cycle.
+</Warning>
+
+## Invoice Management
+
+### Invoice History
+
+View and manage your billing history with detailed invoice information:
+
+- **Invoice Number**: Unique identifier for each billing statement
+- **Issue Date**: When the invoice was generated
+- **Payment Method**: Stripe payment processing
+- **Amount**: Total charged including taxes
+- **Status**: Payment status (typically "Paid")
+- **Download Action**: PDF invoice download
+
+### Invoice Details
+
+Each invoice includes:
+
+- **Billing Period**: Service dates covered
+- **Plan Information**: Subscription details
+- **Usage Details**: Member and chat consumption
+- **Tax Information**: Applicable taxes and VAT
+- **Payment Confirmation**: Transaction details
+
+## Usage Limits and Restrictions
+
+### Member Limit Enforcement
+
+When you reach your member limit:
+
+- **Invitation Block**: New member invitations are disabled
+- **Upgrade Prompt**: Alert banner appears with upgrade option
+- **Current Members**: Existing members retain access
+- **Pending Invitations**: Count toward limit until accepted or canceled
+
+### Chat Limit Handling
+
+Approaching or exceeding chat limits:
+
+- **Usage Monitoring**: Real-time tracking of monthly consumption
+- **Overage Notifications**: Alerts when approaching limits
+- **Service Continuation**: Bots typically continue functioning
+- **Upgrade Recommendations**: Suggestions for higher-tier plans
+
+## Subscription Lifecycle
+
+### Active Subscription
+
+- **Automatic Renewal**: Monthly billing on subscription date
+- **Pro-rated Changes**: Immediate upgrades with billing adjustments
+- **Feature Access**: Full access to plan features
+- **Usage Tracking**: Real-time monitoring of limits
+
+### Subscription Cancellation
+
+- **Service Continuation**: Access remains until billing period ends
+- **Data Retention**: Information preserved during subscription period
+- **Feature Restrictions**: Immediate loss of premium features
+- **Reactivation Options**: May be available before period expires
+
+### Payment Issues
+
+- **Failed Payment Handling**: Retry attempts and notifications
+- **Grace Period**: Temporary continued access
+- **Service Suspension**: Eventually restricted access
+- **Recovery Process**: Steps to restore subscription
+
+## Billing Administration
+
+### Admin-Only Access
+
+Billing management requires workspace admin privileges:
+
+- **View Billing**: Only admins can access billing information
+- **Plan Changes**: Subscription modifications restricted to admins
+- **Invoice Access**: Billing history available to administrators
+- **Portal Access**: Billing portal button only visible to admins
+
+### Multi-Admin Environments
+
+- **Shared Responsibility**: All admins can manage billing
+- **Change Notifications**: Updates visible to all workspace admins
+- **Audit Trail**: Billing changes tracked for accountability
+
+## Best Practices
+
+### Plan Selection
+
+- **Growth Planning**: Choose plans with room for expansion
+- **Feature Requirements**: Select based on needed capabilities
+- **Usage Patterns**: Monitor historical usage for appropriate limits
+- **Cost Optimization**: Balance features with budget considerations
+
+### Usage Monitoring
+
+- **Regular Review**: Check usage patterns monthly
+- **Limit Awareness**: Monitor approaching limits proactively
+- **Team Communication**: Keep stakeholders informed of usage status
+- **Upgrade Timing**: Plan upgrades before hitting limits
+
+### Financial Management
+
+- **Invoice Review**: Regularly verify billing accuracy
+- **Budget Planning**: Account for subscription costs in budgets
+- **Tax Compliance**: Ensure proper handling of business expenses
+- **Payment Method Maintenance**: Keep payment information current
+
+<CardGroup cols={2}>
+  <Card title="Workspace Settings" icon="gear" href="/app/workspace/settings">
+    Configure workspace name, icon, and general settings
+  </Card>
+  <Card title="Members Management" icon="users" href="/app/workspace/members">
+    Manage workspace members and understand seat limits
+  </Card>
+</CardGroup>
+
+<Tip>
+  Monitor your usage regularly and upgrade proactively to avoid service interruptions. The Business
+  plan offers the best balance of features and value for most growing teams.
+</Tip>

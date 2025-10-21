@@ -1,0 +1,41 @@
+{
+  "name": "landing-page",
+  "version": "0.0.1",
+  "license": "Copyright 2024",
+  "engines": {
+    "node": "22.x"
+  },
+  "scripts": {
+    "dev": "dotenv -e ./.env -e ../../.env  -- next dev -p 3002",
+    "build": "dotenv -e ./.env -e ../../.env -- next build",
+    "start": "dotenv -e ./.env -e ../../.env -- next start",
+    "lint": "dotenv -e ./.env -e ../../.env -- next lint",
+    "format:write": "prettier --write ./src --ignore-path ../../.prettierignore",
+    "format:check": "prettier --check ./src --ignore-path ../../.prettierignore",
+    "test": "dotenv -e ./.env -e ../../.env -- bun run playwright test",
+    "test:dev": "dotenv -e ./.env -e ../../.env -- bun run playwright test --max-failures=1",
+    "test:ui": "dotenv -e ./.env -e ../../.env -- bun run playwright test --ui",
+    "test:report": "bun run playwright show-report ../../tests/viewer-html-report"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "2.10.3",
+    "@urbiport/icons": "workspace:*",
+    "@urbiport/ui": "workspace:*",
+    "framer-motion": "11.1.7",
+    "next": "14.2.26",
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "0.5.12",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/node": "20.4.2",
+    "@types/react": "18.2.15",
+    "autoprefixer": "10.4.14",
+    "dotenv-cli": "7.4.1",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "3.0.0",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.4.5"
+  }
+}

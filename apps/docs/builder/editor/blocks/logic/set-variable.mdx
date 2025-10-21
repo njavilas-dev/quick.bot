@@ -1,0 +1,453 @@
+---
+title: Set variable
+icon: pen
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Set Variable block allows you to create, modify, and manage variables throughout your bot
+conversation, enabling dynamic content and sophisticated data handling.
+
+<Frame>
+  <img src="/images/builder/blocks/logic/set-variable.png" alt="Set variable" />
+</Frame>
+
+## Configuration Options
+
+### Variable Selection
+
+- **Variable Dropdown**: Choose from existing variables or create new ones
+- **Variable Creation**: Automatically creates variables that don't exist
+- **Variable Scope**: Control whether variables are session-only or saved to results
+- **Type Safety**: Ensures proper variable type handling throughout the flow
+
+### Value Type Selection
+
+The Set Variable block offers 18 different ways to set variable values:
+
+#### Static Values
+
+- **Custom**: Set any text value or JavaScript expression
+- **Empty**: Reset variable to undefined state
+- **Random ID**: Generate unique identifier using CUID algorithm
+
+#### User Data (WhatsApp only)
+
+- **Phone Number**: User's WhatsApp phone number
+- **Contact Name**: User's WhatsApp display name
+
+#### Date and Time
+
+- **Now**: Current date and time in ISO format
+- **Today**: Current date without time
+- **Yesterday**: Previous day's date
+- **Tomorrow**: Next day's date
+- **Moment of the Day**: Time-based greeting (morning/afternoon/evening/night)
+
+#### System Values
+
+- **Environment Name**: Platform identifier (web/whatsapp)
+- **Result ID**: Current conversation result identifier
+- **User ID**: Unique user identifier for the session
+- **Transcript**: Complete conversation history
+
+#### Data Manipulation
+
+- **Append Value(s)**: Add values to arrays or create arrays
+- **Pop**: Remove and store last item from array
+- **Shift**: Remove and store first item from array
+- **Map Item with Same Index**: Cross-reference between related arrays
+
+### Advanced Configuration
+
+- **Save in Results**: Persist variables beyond the session
+- **Execute on Client**: Run JavaScript code in user's browser
+- **Time Zone Support**: Convert dates to specific time zones
+
+## Custom
+
+You can set your variable with any value with `Custom`. It can be any kind of plain text but also
+**Javascript code**.
+
+### Expressions with existing variables
+
+It means you can apply operations on existing variables.
+
+Add a value to your variable:
+
+```
+{{Score}} + 5
+```
+
+Compute a sum of variables:
+
+```
+{{Score}} + {{Answer}}
+```
+
+Multiply variables together:
+
+```
+{{Score}} * {{Multiplier}}
+```
+
+Compute a percentage:
+
+```
+{{Score}} * 100 / {{Max Score}}
+```
+
+Extract the first name from a full name:
+
+```
+{{Full name}}.split(' ')[0]
+```
+
+Transform existing variable to upper case or lower case:
+
+```
+{{Name}}.toUpperCase()
+```
+
+```
+{{Name}}.toLowerCase()
+```
+
+This can also be Javascript code. It will read the returned value of the code and set it to your
+variable.
+
+```js
+const name = 'John' + 'Doe'
+return name
+```
+
+If you don't provide the `return` keyword then it will be automatically prepended to the beginning
+of your code.
+
+```js
+'John' + 'Doe'
+```
+
+is the same as
+
+```js
+return 'John' + 'Doe'
+```
+
+<Info>
+Variables in script are not parsed, they are evaluated. So it should be treated as if it were real Javascript variables.
+
+So, if you write `"{{My variable}}"`, it will parse the variable ID (something like
+`vclfqgqkdf000008mh3r6xakty`). You need to remove the double quotes to properly get the variable
+content value.
+
+For example,
+
+- ❌ `"{{URL base}}/path"` => `vclfqgqkdf000008mh3r6xakty/path`
+- ✅ `{{URL base}} + '/path'` => `https://my-site.com/path`
+- ✅ `` `${{{URL base}}}/path` `` => `https://my-site.com/path`
+
+</Info>
+
+<Info>
+  Variables content can either be a string or a list of strings. Check out [Valid value
+  types](../../variables#valid-value-types) for more information.
+</Info>
+
+## Empty
+
+Resets your variable as if it was never initialized.
+
+## Append value(s)
+
+A conveniant value that automatically transform your variable into a list of strings. It will append
+the value(s) to the list.
+
+3 possible cases here:
+
+- If the variable is empty, it will create a new array with the provided value(s)
+- If the variable is not an array, it will create a new array with the existing value followed by
+  the provided value(s).
+- If the variable is an array, it will concatenate the provided value(s) to the existing array.
+
+## Environment name
+
+This will set your variable with either `web` or `whatsapp` depending on the environment.
+
+## Transcript
+
+This preset value will save the entire conversation transcript in a variable. It is super useful to
+provide context to an AI block or to send it as a recap with the
+[Send email](../integrations/send-email) block.
+
+<YoutubeVideo id="NpEaa2P7qZI" />
+
+## Result ID
+
+This will set your variable with the current result ID. The result ID is the ID that corresponds to
+a row of your [Results](../../../results/table) table. It can be considered like a User ID for
+the currently chatting user.
+
+## Yesterday, Now, Tomorrow
+
+This will set your variable with the specified date and time in ISO format. You can optionally
+provide a time zone to convert the date to the specified time zone.
+
+## Random ID
+
+This will set your variable with a random ID with the CUID algorithm.
+
+## Moment of the day
+
+It will set your variable with either one of these values based on the user's time of the day:
+`morning`, `afternoon`, `evening`, `night`.
+
+Then you can use this variable to conditionally display content:
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/blocks/logic/moment-condition.png" alt="Moment of the day condition" />
+</Frame>
+
+## Map item with same index
+
+This is a convenient value block that allows you to easily get an item from a list that has the same
+index as an item from another list.
+
+When you are pulling data from another service, sometimes, you will have 2 lists: `Labels` and
+`Ids`. Labels are the data displayed to the user and Ids are the data used for other requests to
+that external service.
+
+This value block allows you to find the `Id` from `Ids` with the same index as `Label` in `Labels`
+
+<Frame>
+  <img
+    src="/images/builder/blocks/logic/set-variable-map-item.png"
+    alt="Set variable map item with same index"
+  />
+</Frame>
+
+## Phone number
+
+Only available in WhatsApp. This will set your variable with the user's phone number.
+
+## Contact name
+
+Only available in WhatsApp. This will set your variable with the user's name.
+
+## Save in results
+
+By default, new variables are not persisted in the [Results](../../../results/table) table. They are only
+stored for the current user chat session. Enabling this option will save the variable in the
+`Results` table.
+
+## Execute on client
+
+This option is useful when you want to execute the custom code on the client side. This is only
+necessary when you need access the user's browser information. So, if you need access to `window`,
+`document`, `navigator`, etc., you should enable this option.
+
+## Get user's geo location
+
+For this you can provide the following custom code:
+
+```js
+function getLocation() {
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(`${position.coords.latitude}, ${position.coords.longitude}`),
+      (error) => resolve('error'),
+      { enableHighAccuracy: true, timeout: 5000 },
+    )
+  })
+}
+
+const coords = await getLocation()
+
+// Check for error
+if (coords === 'error') {
+  return 'Unable to get location'
+}
+
+return coords
+```
+
+This custom function can only work when it is executed on the client browser so you need to make
+sure to enable the "Execute on client" option.
+
+## Advanced Features
+
+### JavaScript Expression Engine
+
+The Custom value type provides a full JavaScript expression engine:
+
+```js
+// Mathematical calculations
+{{Price}} * {{Quantity}} * (1 - {{Discount}} / 100)
+
+// String manipulation
+{{First Name}}.toUpperCase() + ' ' + {{Last Name}}.toLowerCase()
+
+// Conditional expressions
+{{Score}} > 80 ? 'Pass' : 'Fail'
+
+// Date calculations
+new Date({{Birthday}}).getFullYear()
+
+// Array operations
+[{{Answer1}}, {{Answer2}}, {{Answer3}}].filter(a => a.length > 0)
+```
+
+### Dynamic Array Management
+
+Sophisticated array handling for complex data structures:
+
+```js
+// Create arrays from user responses
+Append Values: {{New Response}}
+// Result: ["Response1", "Response2", "Response3"]
+
+// Process survey responses
+Pop from {{Responses}} → stores last response in new variable
+Shift from {{Responses}} → stores first response in new variable
+
+// Cross-reference arrays
+Map Item: Find item in {{IDs}} at same index as {{Selection}} in {{Labels}}
+```
+
+### Client-side Capabilities
+
+Execute code in user's browser for advanced functionality:
+
+```js
+// Browser detection
+navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
+
+// Screen information
+window.screen.width + 'x' + window.screen.height
+
+// Local storage access
+localStorage.getItem('userPreference') || 'default'
+
+// URL parameters
+new URLSearchParams(window.location.search).get('utm_source')
+```
+
+### Context-Aware Variable Setting
+
+Smart variable management based on conversation context:
+
+- **Session Variables**: Temporary data that expires with the conversation
+- **Persistent Variables**: Data saved to results table for long-term storage
+- **Linked Variables**: Variables connected to user blocks for automatic updates
+- **Computed Variables**: Variables that depend on other variables and update automatically
+
+## Best Practices
+
+### Variable Management Strategy
+
+- **Naming Conventions**: Use clear, descriptive names (e.g., "User Email" not "email")
+- **Scope Planning**: Decide which variables need persistence vs session-only
+- **Type Consistency**: Keep variable types consistent throughout the flow
+- **Documentation**: Document complex variable relationships for team collaboration
+
+### Performance Optimization
+
+- **Minimal Processing**: Keep JavaScript expressions simple to avoid delays
+- **Efficient Arrays**: Use appropriate array operations (pop vs shift vs append)
+- **Client vs Server**: Choose execution environment based on requirements
+- **Variable Cleanup**: Reset or empty variables when no longer needed
+
+### Data Privacy and Security
+
+- **Sensitive Data**: Use session-only variables for passwords or tokens
+- **Input Validation**: Validate user input before storing in variables
+- **PII Handling**: Be mindful of personally identifiable information storage
+- **External APIs**: Secure API keys and sensitive endpoints in expressions
+
+### User Experience Considerations
+
+- **Loading States**: Provide feedback during complex variable calculations
+- **Error Handling**: Set fallback values for failed operations
+- **Mobile Compatibility**: Test client-side code across devices
+- **Accessibility**: Ensure variable-driven content works with screen readers
+
+## Example Use Cases
+
+### E-commerce Cart Management
+
+```js
+// Calculate total price with tax and discount
+const subtotal = {{Cart Items}}.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+const discount = {{User Type}} === 'premium' ? 0.15 : 0.05
+const tax = subtotal * 0.08
+return (subtotal * (1 - discount) + tax).toFixed(2)
+```
+
+### User Personalization
+
+```js
+// Set personalized greeting based on time and user data
+const hour = new Date().getHours()
+const name = {{User Name}} || 'there'
+const timeOfDay = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening'
+return `Good ${timeOfDay}, ${name}!`
+```
+
+### Survey Response Processing
+
+```js
+// Calculate satisfaction score from multiple responses
+const responses = [{{Q1 Rating}}, {{Q2 Rating}}, {{Q3 Rating}}]
+const validResponses = responses.filter(r => r !== null && r !== undefined)
+const average = validResponses.reduce((sum, r) => sum + parseInt(r), 0) / validResponses.length
+return Math.round(average * 10) / 10 // Round to 1 decimal
+```
+
+### Dynamic Content Selection
+
+```js
+// Select content based on user profile
+const segments = {
+  'new': 'Welcome! Here\'s what you need to know...',
+  'returning': 'Welcome back! Here\'s what\'s new...',
+  'premium': 'Welcome to your premium experience...'
+}
+return segments[{{User Segment}}] || segments['new']
+```
+
+## Troubleshooting
+
+### Common Variable Issues
+
+- **Undefined Variables**: Check that variables are created before use
+- **Type Conflicts**: Ensure consistent data types (string vs number vs array)
+- **Scope Problems**: Verify variables are accessible in their usage context
+- **Naming Conflicts**: Avoid duplicate variable names that could cause confusion
+
+### JavaScript Expression Errors
+
+- **Syntax Errors**: Validate JavaScript syntax before deployment
+- **Variable References**: Use `{{Variable Name}}` syntax correctly
+- **Return Statements**: Remember that expressions auto-prepend `return` if not present
+- **Null Handling**: Check for null/undefined values before operations
+
+### Client-side Execution Issues
+
+- **Browser Compatibility**: Test across different browsers and versions
+- **Security Restrictions**: Some browsers limit certain operations
+- **Network Dependencies**: Handle cases where external resources aren't available
+- **Mobile Limitations**: Consider mobile browser capabilities and performance
+
+### Array Operation Problems
+
+- **Empty Arrays**: Handle cases where arrays might be empty
+- **Index Errors**: Verify array indices exist before accessing
+- **Type Mixing**: Ensure array elements are compatible types
+- **Memory Usage**: Be mindful of large arrays in browser memory
+
+### Integration Challenges
+
+- **External APIs**: Handle API failures and timeout scenarios gracefully
+- **Data Format**: Ensure data formats match expected patterns
+- **Session Management**: Handle session expiration and variable persistence
+- **Cross-platform**: Test variable behavior across web and WhatsApp environments

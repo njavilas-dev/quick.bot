@@ -1,0 +1,12 @@
+{
+  "extends": "@quickbot.io/tsconfig/nextjs.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+    "esModuleInterop": true,
+    "types": ["node", "next"]
+  },
+  "include": ["next-env.d.ts", "tolgee.d.ts", "**/*.ts", "**/*.tsx"]
+}

@@ -1,0 +1,83 @@
+/* Global border radius styles for Mintlify */
+
+/* ALL BUTTONS - Comprehensive coverage */
+#topbar-cta-button a,
+button,
+.btn,
+[role='button'],
+.button,
+input[type='button'],
+input[type='submit'],
+input[type='reset'],
+.cta-button,
+a[class*='button'],
+a[class*='Button'],
+span[role='button'] {
+  border-radius: 4px !important;
+  overflow: hidden !important; /* Ensures no overflow issues */
+}
+
+/* Topbar and header buttons - specific selectors */
+header button,
+nav button,
+.topbar button,
+.header button,
+.navbar button,
+[class*='topbar'] button,
+[class*='header'] button,
+[class*='nav'] button,
+[id*='topbar'] button,
+[id*='header'] button,
+div[data-testid='topbar'] button,
+div[data-testid='header'] button {
+  border-radius: 4px !important;
+}
+
+/* CTA Button specific */
+.topbar-cta-button,
+.header-cta-button,
+a[href="https://app.quick.bot"],
+a[href*="app.quick.bot"] {
+  border-radius: 4px !important;
+}
+
+/* Universal button selector - catches everything */
+* button {
+  border-radius: 4px !important;
+}
+
+/* INPUTS */
+input,
+textarea,
+select,
+.form-control,
+.input {
+  border-radius: 4px !important;
+}
+
+input[type='search'],
+.search-input {
+  border-radius: 20px !important;
+}
+
+/* CARDS */
+.card,
+.callout,
+.admonition,
+.note,
+.warning,
+.tip,
+.info,
+div[class*='rounded-lg'] {
+  border-radius: 12px !important;
+}
+
+/* Code blocks */
+pre,
+code {
+  border-radius: 4px !important;
+}
+
+code:not(pre code) {
+  border-radius: 4px !important;
+}

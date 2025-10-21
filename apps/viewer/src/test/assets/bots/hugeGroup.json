@@ -1,0 +1,155 @@
+{
+  "id": "cl0jrltqx0037601agzjiy7t4",
+  "createdAt": "2022-03-09T16:17:51.321Z",
+  "updatedAt": "2022-03-09T16:19:07.037Z",
+  "name": "My Bot: Test Huge Group",
+  "folderId": null,
+  "version": "6",
+  "events": [
+    {
+      "id": "c6foq38xyl1a5d3j15a8o9ti",
+      "graphCoordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "start",
+      "outgoingEdgeId": "zdkl55912yrrbht848yle26h"
+    }
+  ],
+  "groups": [
+    {
+      "id": "2Vrpgk5VP9BUo3vKtM5kws",
+      "blocks": [
+        {
+          "id": "s6GezsfD612D1naKwvhDFgA",
+          "type": "text",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "content": {
+            "richText": [{ "type": "p", "children": [{ "text": "Hi what's your name?" }] }]
+          }
+        },
+        {
+          "id": "sq3mPXUrugs5t6FoME3T4t4",
+          "type": "text input",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "options": {
+            "labels": {
+              "button": "Send",
+              "placeholder": "Type your answer..."
+            },
+            "variableId": "93BD32WVM5JEQ1nmWtr2S5"
+          }
+        },
+        {
+          "id": "s57hbzfpG2sVvXefznVhbVB",
+          "type": "text",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "content": {
+            "richText": [{ "type": "p", "children": [{ "text": "How old are you?" }] }]
+          }
+        },
+        {
+          "id": "s4fFn3s7nouQk88iJ3oLgx6",
+          "type": "number input",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "options": {
+            "labels": { "button": "Send", "placeholder": "Type a number..." },
+            "variableId": "age_variable_id"
+          }
+        },
+        {
+          "id": "scR6MewJwkPNJzABYG8NEA4",
+          "type": "text",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "content": {
+            "richText": [{ "type": "p", "children": [{ "text": "Cool!" }] }]
+          }
+        },
+        {
+          "id": "s5fo1s8UTyHQ7CfqC6MRxyW",
+          "type": "text",
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "content": {
+            "richText": [{ "type": "p", "children": [{ "text": "Do you eat pizza?" }] }]
+          }
+        },
+        {
+          "id": "sxn8UjQ2MjEMuRjhkh7LWws",
+          "type": "buttons input",
+          "items": [
+            {
+              "id": "wGKXMr4mfySw1HNThND2Xd",
+              "type": 0,
+              "blockId": "sxn8UjQ2MjEMuRjhkh7LWws",
+              "content": "Yes"
+            },
+            {
+              "id": "qzqzVqMeo6TDUdMYckLZmf",
+              "type": 0,
+              "blockId": "sxn8UjQ2MjEMuRjhkh7LWws",
+              "content": "No"
+            }
+          ],
+          "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+          "options": {
+            "buttonLabel": "Send",
+            "isMultipleChoice": false,
+            "variableId": "pizza_variable_id"
+          }
+        }
+      ],
+      "title": "Group #1",
+      "graphCoordinates": { "x": 386, "y": 108 }
+    }
+  ],
+  "variables": [
+    { "id": "93BD32WVM5JEQ1nmWtr2S5", "name": "Name" },
+    { "id": "age_variable_id", "name": "Age" },
+    { "id": "pizza_variable_id", "name": "Pizza" }
+  ],
+  "edges": [
+    {
+      "from": {
+        "eventId": "c6foq38xyl1a5d3j15a8o9ti"
+      },
+      "to": {
+        "groupId": "2Vrpgk5VP9BUo3vKtM5kws",
+        "blockId": "s6GezsfD612D1naKwvhDFgA"
+      },
+      "id": "zdkl55912yrrbht848yle26h"
+    },
+    {
+      "id": "b3XsreaqtWt4CrZZmCKDpa",
+      "to": { "groupId": "2Vrpgk5VP9BUo3vKtM5kws" },
+      "from": {
+        "blockId": "u7Px8eD9MWXNJEBwxQwJCF",
+        "groupId": "dqork4dJJZk3RgKYavBpRE"
+      }
+    }
+  ],
+  "theme": {
+    "chat": {
+      "inputs": {
+        "color": "#303235",
+        "backgroundColor": "#FFFFFF",
+        "placeholderColor": "#9095A0"
+      },
+      "buttons": { "color": "#FFFFFF", "backgroundColor": "#01a952" },
+      "hostBubbles": { "color": "#303235", "backgroundColor": "#F7F8FF" },
+      "guestBubbles": { "color": "#FFFFFF", "backgroundColor": "#FF8E21" }
+    },
+    "general": { "font": "Open Sans", "background": { "type": "None" } }
+  },
+  "settings": {
+    "general": {
+      "isBrandingEnabled": true,
+      "isNewResultOnRefreshEnabled": false
+    },
+    "metadata": {
+      "description": "Build beautiful conversational forms and embed them directly in your applications without a line of code. Triple your response rate and collect answers that has more value compared to a traditional form."
+    },
+    "typingEmulation": { "speed": 300, "enabled": true, "maxDelay": 1.5 }
+  },
+  "publicId": "my-bot-zjiy7t4",
+  "customDomain": null
+}

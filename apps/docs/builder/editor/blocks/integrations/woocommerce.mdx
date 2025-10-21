@@ -1,0 +1,323 @@
+---
+title: WooCommerce
+---
+
+The **WooCommerce integration block** allows you to connect your QuickBot to a WooCommerce store and
+search for products directly within your chat flows. This enables you to create interactive shopping
+experiences, product recommendations, and automated customer support with real-time product data.
+
+---
+
+## General
+
+This block integrates with the WooCommerce REST API to provide product search functionality. After
+authentication, you can search for products by name and display formatted results with prices,
+links, and detailed information to enhance user engagement.
+
+---
+
+## Prerequisites
+
+Before configuring the WooCommerce block, ensure your WooCommerce store is properly set up:
+
+### 1. Enable REST API
+
+1. Navigate to **WooCommerce > Settings > Advanced > REST API** in your WordPress dashboard.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-api-panel.png"
+    alt="woocommerce api panel"
+  />
+</Frame>
+
+2. Click **Create an API Key** to create new API credentials.
+
+3. Configure the API key settings:
+   - **Description**: Give it a descriptive name (e.g., "QuickBot Integration")
+   - **User**: Select a user with appropriate permissions
+   - **Permissions**: Select **Read**
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-api-generation.png"
+    alt="WooCommerce REST API generation"
+  />
+</Frame>
+
+4. After creating the API key, copy the following credentials for later use:
+
+- **Consumer Key**
+- **Consumer Secret**
+- **Site URL** (your WordPress site URL)
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-api-generated.png"
+    alt="Woocommerce api generated"
+  />
+</Frame>
+
+---
+
+## Configuring the WooCommerce Block
+
+1. Grab the WooCommerce block from integrations, and drop into the flow.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-block-flow.png"
+    alt="Woocommerce block flow"
+  />
+</Frame>
+
+2. In the WooCommerce block, click **Add WooCommerce credentials** button.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-block.png"
+    alt="Woocommerce block"
+  />
+</Frame>
+
+3. Fill in the fields using the credentials generated earlier, then click **Create**.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-credentials-filled.png"
+    alt="WooCommerce Credentials"
+  />
+</Frame>
+
+---
+
+## Setting Up Variables
+
+Done with the authentication. Click on WooCommerce Block, then **Select an action** and select
+**Search Products**
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/select-action.png"
+    alt="Select Search Products Action"
+  />
+</Frame>
+
+Create a new variable for the search functionality, such as **productSearch** and assign it in
+Search Term selector
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/input-variable.png"
+    alt="Input variable"
+  />
+</Frame>
+
+Create a another variables for the result of the search, **productsResult**. Assign it in the Output
+Variable selector.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/output-variable.png"
+    alt="Output variable"
+  />
+</Frame>
+
+You can check your variables created in the flow editor sidebar, at Variables tab.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/woocommerce/variables.png" alt="Variables" />
+</Frame>
+
+---
+
+## Using the variables into the flow
+
+Now with our variables created for our WordPress block, you can start using it into the flow.
+
+1. Add a **text input component** from the **User section** in the Flow sidebar into the group. This
+   input will allow the user to search products .
+
+   Important: the Input component must be loaded before the WordPress block. To ensure this, either:
+
+   a. Place the input components above the WordPress block within the same group, or
+
+   <Frame>
+     <img
+       src="/images/builder/blocks/integrations/woocommerce/group-example1.png"
+       alt="group example 1"
+     />
+   </Frame>
+
+   b. Create a flow that first loads a group with the input components, and then a second group that
+   loads the WordPress block.
+
+   <Frame>
+     <img
+       src="/images/builder/blocks/integrations/woocommerce/group-example2.png"
+       alt="group example 2"
+     />
+   </Frame>
+
+2. Assign their respective variables in the **Save the answer in a variable** field.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/text-variable.png"
+    alt="text variable"
+  />
+</Frame>
+
+3. Add a **Text component** from the **Agent section** to your flow. Inside the message body, insert
+   the variable assigned in the Output Variable field from the WooCommerce block to display the
+   search result.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/agent-component.png"
+    alt="agent component"
+  />
+</Frame>
+
+`Note: variables need to be inside "{{}}" in text inputs.`
+
+4. Lastly, anchor the User group with the Agent group. Your flow needs to look like this:
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/woocommerce/flow-example.png" alt="flow example" />
+</Frame>
+
+And this is how it looks like in the preview.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/woocommerce/woocommerce-preview.png"
+    alt="woocommerce preview"
+  />
+</Frame>
+
+---
+
+## Advanced Features
+
+### Authentication & Security
+
+- **OAuth 1.0a Authentication**: Secure API access using HMAC-SHA1 signature method
+- **Encrypted Credentials**: Consumer keys and secrets stored with encryption
+- **Read-only Access**: Recommended permissions for safe product data retrieval
+- **SSL/HTTPS Support**: Secure connections to WooCommerce endpoints
+
+### API Capabilities
+
+#### Search Products Action
+
+- **Text-based Search**: Search products by name, description, or SKU
+- **Pagination Support**: Configure results per page (max 100 products)
+- **Multiple Format Options**: List or detailed product display formats
+- **Customizable Output**: Control price display and link inclusion
+- **Variable Integration**: Output formatted text and structured data to variables
+
+#### Get Product By ID Action
+
+- **Direct Retrieval**: Fetch specific products using WooCommerce product IDs
+- **Detailed Information**: Access complete product data including variations
+- **Custom Formatting**: Control display format and included information
+- **Error Handling**: Graceful handling of non-existent product IDs
+
+### Data Processing
+
+- **Product Formatting Service**: Automated formatting of product data for display
+- **Link Generation**: Automatic conversion of permalinks to clickable links
+- **Price Formatting**: Currency-aware price display with WooCommerce settings
+- **Template System**: Reusable formatting templates for consistent presentation
+
+### Performance Optimization
+
+- **Connection Pooling**: Efficient API connection management
+- **Request Optimization**: Optimized API calls to minimize response times
+- **Error Recovery**: Automatic retry logic for transient failures
+- **Rate Limiting**: Respect WooCommerce API rate limits
+
+---
+
+## Best Practices
+
+### Implementation Recommendations
+
+1. **API Permissions**: Use read-only permissions unless write access is specifically needed
+2. **Search Optimization**: Use specific search terms for better performance and results
+3. **Result Limiting**: Set appropriate per_page limits to balance performance and completeness
+4. **Error Handling**: Always implement fallback messages for failed API calls
+5. **Variable Management**: Use descriptive variable names for better flow organization
+
+### Security Best Practices
+
+1. **Credential Protection**: Never expose consumer keys or secrets in client-side code
+2. **HTTPS Only**: Always use HTTPS endpoints for API calls
+3. **Regular Rotation**: Periodically rotate API keys for enhanced security
+4. **Access Control**: Limit API key permissions to only what's necessary
+5. **Monitoring**: Monitor API usage for unusual patterns or potential security issues
+
+### Performance Guidelines
+
+1. **Efficient Searches**: Use specific search terms instead of broad queries
+2. **Caching Strategy**: Consider caching frequently accessed product data
+3. **Batch Operations**: Group multiple product retrievals when possible
+4. **Network Optimization**: Minimize unnecessary API calls through smart flow design
+
+### User Experience Guidelines
+
+1. **Loading States**: Provide feedback during API calls
+2. **Error Messages**: Show user-friendly error messages for failed searches
+3. **Result Presentation**: Format product information clearly and consistently
+4. **Search Guidance**: Help users understand how to search effectively
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Authentication Problems
+
+- **Invalid Consumer Key**: Verify the consumer key is correctly copied from WooCommerce
+- **Invalid Consumer Secret**: Ensure the consumer secret matches the WooCommerce settings
+- **Permission Denied**: Check that the API key has read permissions enabled
+- **SSL Certificate Issues**: Verify SSL certificates are properly configured
+
+#### API Connection Issues
+
+- **Site URL Mismatch**: Ensure the site URL matches your WordPress installation
+- **REST API Disabled**: Verify WooCommerce REST API is enabled
+- **Firewall Blocking**: Check for firewall rules blocking API access
+- **Plugin Conflicts**: Test for WordPress plugin conflicts affecting the API
+
+#### Search and Data Issues
+
+- **No Results Found**: Verify products exist and match search criteria
+- **Incomplete Data**: Check product data completeness in WooCommerce
+- **Format Issues**: Verify output format settings and variable configurations
+- **Variable Not Set**: Ensure output variables are properly configured
+
+#### Performance Issues
+
+- **Slow Responses**: Check WooCommerce server performance and optimization
+- **Timeout Errors**: Consider increasing timeout settings or optimizing queries
+- **High Memory Usage**: Monitor memory usage with large product catalogs
+- **Rate Limiting**: Implement proper rate limiting to avoid API throttling
+
+### Debugging Steps
+
+1. **Test API Directly**: Use tools like Postman to test WooCommerce API directly
+2. **Check Server Logs**: Review WordPress and server error logs
+3. **Validate Credentials**: Verify API credentials in WooCommerce settings
+4. **Network Connectivity**: Test network connectivity between QuickBot and WooCommerce
+5. **Product Data**: Verify product data exists and is properly configured
+
+### Error Messages
+
+- **"WooCommerce API credentials are not properly configured"**: Check consumer key and secret
+- **"Required parameters are missing"**: Verify all required fields are filled
+- **"Product not found"**: Check product ID exists and is published
+- **"No products found"**: Verify search term matches existing products
+- **"WooCommerce API Error"**: Check WooCommerce API status and configuration

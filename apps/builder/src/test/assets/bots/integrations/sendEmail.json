@@ -1,0 +1,94 @@
+{
+  "version": "6",
+  "id": "uk8s9o5qsbx4nv0vx0grn8jx",
+  "name": "My Bot: Test Send Email",
+  "events": [
+    {
+      "id": "kSDJqC9TmM25eAM3a2yn3o",
+      "outgoingEdgeId": "vKtpPmbmqgeGC4vwCfPEdv",
+      "graphCoordinates": { "x": 0, "y": 0 },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "b5r2MMyftV1nv9vyr6VkZh",
+      "title": "Group #2",
+      "graphCoordinates": { "x": -30.4, "y": 121.76 },
+      "blocks": [
+        {
+          "id": "sb7ibhNAKfvs8yy8fz3XRMT",
+          "type": "text",
+          "content": { "richText": [{ "type": "p", "children": [{ "text": "Send email" }] }] }
+        },
+        {
+          "id": "svM58drFcdtdJ7DaJCfTLXm",
+          "outgoingEdgeId": "ioB4s1iRBb8wXiRam8Pp4s",
+          "type": "buttons input",
+          "items": [
+            {
+              "id": "nxQEmdaQXc9eFjrbrVBavH",
+              "outgoingEdgeId": "xk23jlc7s5e7ysgzz3id79zd",
+              "content": "Go"
+            }
+          ],
+          "options": { "isMultipleChoice": false, "buttonLabel": "Send" }
+        }
+      ]
+    },
+    {
+      "id": "gnogwzf5lktirk8z23yl4lvh",
+      "title": "Group #3",
+      "graphCoordinates": { "x": 369.91, "y": 125.53 },
+      "blocks": [
+        {
+          "id": "csxjjf3cgav95blvqup88dop",
+          "type": "Email",
+          "options": { "credentialsId": "default", "isCustomBody": false, "isBodyCode": false }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "vKtpPmbmqgeGC4vwCfPEdv",
+      "from": { "eventId": "kSDJqC9TmM25eAM3a2yn3o" },
+      "to": { "groupId": "b5r2MMyftV1nv9vyr6VkZh" }
+    },
+    {
+      "id": "xk23jlc7s5e7ysgzz3id79zd",
+      "from": { "blockId": "svM58drFcdtdJ7DaJCfTLXm", "itemId": "nxQEmdaQXc9eFjrbrVBavH" },
+      "to": { "groupId": "gnogwzf5lktirk8z23yl4lvh" }
+    }
+  ],
+  "variables": [],
+  "theme": {
+    "general": { "font": "Open Sans", "background": { "type": "None" } },
+    "chat": {
+      "hostBubbles": { "backgroundColor": "#F7F8FF", "color": "#303235" },
+      "guestBubbles": { "backgroundColor": "#FF8E21", "color": "#FFFFFF" },
+      "buttons": { "backgroundColor": "#01a952", "color": "#FFFFFF" },
+      "inputs": { "backgroundColor": "#FFFFFF", "color": "#303235", "placeholderColor": "#9095A0" }
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": { "isBrandingEnabled": true },
+    "typingEmulation": { "enabled": true, "speed": 300, "maxDelay": 1.5 },
+    "metadata": {
+      "description": "Build beautiful conversational forms and embed them directly in your applications without a line of code. Triple your response rate and collect answers that has more value compared to a traditional form."
+    }
+  },
+  "createdAt": "2022-02-07T10:06:35.274Z",
+  "updatedAt": "2025-09-17T17:19:54.737Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": "my-bot-test-send-email-0grn8jx",
+  "customDomain": null,
+  "workspaceId": "unlimitedWorkspaceId",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

@@ -1,0 +1,242 @@
+{
+  "version": "6",
+  "id": "cmbibgoeq0001l8uife9lhjww",
+  "name": "Freshdesk Bot",
+  "events": [
+    {
+      "id": "cqvqojxfbdwop5qgsgjt49ob",
+      "outgoingEdgeId": "n8uyijmmvfarvqyh9t4jl0lu",
+      "graphCoordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "t4nnpbbcx1ujrfwd7siva1uv",
+      "title": "Group #1",
+      "graphCoordinates": {
+        "x": 478.27,
+        "y": 100.0
+      },
+      "blocks": [
+        {
+          "id": "cn1kiuhjuz4aa686vvfqolr6",
+          "type": "freshdesk",
+          "options": {
+            "action": "Get Ticket Types",
+            "arrayOutputVariableId": "vlo47u9goukx9jq81jdyq1ezu",
+            "outputVariableId": "vlo47u9goukx9jq81jdyq1ezu"
+          }
+        },
+        {
+          "id": "nqanam24hmpk6l57gx0f6mhh",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Select a ticket type: "
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "joe64tj0oavr573g88aoht2z",
+          "type": "buttons input",
+          "items": [
+            {
+              "id": "e88ugxy61uo9eiy3cbza88t0",
+              "content": "Click to edit‍‍‌‌‌‌‍‌‌‍‌‌‍‌‌‍‍‌"
+            }
+          ],
+          "options": {
+            "variableId": "vnuk7t8dduqvldrusi272gna1",
+            "isMultipleChoice": false,
+            "dynamicVariableId": "vlo47u9goukx9jq81jdyq1ezu"
+          }
+        },
+        {
+          "id": "j9b22tn12spttzm73u9u62st",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Ticket type selected: {{ticketTypeSelected}}"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "id": "yw6goe9dgasabuxbvjtaly1k",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Email"
+            },
+            "variableId": "vs3r1wbv9m0y7cyv4x52gcaxx"
+          }
+        },
+        {
+          "id": "k6iwzoqb74loap8ic9i8gs1s",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Subject"
+            },
+            "variableId": "vt47zuuqxvke5sfy9byn5fd3k"
+          }
+        },
+        {
+          "id": "blmgit2zvkjlyedwwb52wbq0",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Message"
+            },
+            "variableId": "vbkagp369pc1sxpiod66p8zff"
+          }
+        },
+        {
+          "id": "rlmortlr3jk4a0480vee86v5",
+          "type": "freshdesk",
+          "options": {
+            "action": "Create Ticket",
+            "subject": "",
+            "description": "",
+            "email": "",
+            "priority": "High",
+            "type": "",
+            "outputVariableId": "vv4j73y1fzh0xetcye0uk52cg",
+            "includeDetails": false
+          }
+        },
+        {
+          "id": "jv8en03ac0ry5mz913w9ukmj",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{ticketResult}}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "jfiwa4rtciwz7v9efmot05ua",
+      "title": "Group #3",
+      "graphCoordinates": {
+        "x": 70.08,
+        "y": 100.0
+      },
+      "blocks": [
+        {
+          "id": "gccdlopeb8vji1x6m8xqx2xq",
+          "outgoingEdgeId": "ohirphyj526cyetsfkqnqksz",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "Hola"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "n8uyijmmvfarvqyh9t4jl0lu",
+      "from": {
+        "eventId": "cqvqojxfbdwop5qgsgjt49ob"
+      },
+      "to": {
+        "groupId": "jfiwa4rtciwz7v9efmot05ua"
+      }
+    },
+    {
+      "id": "ohirphyj526cyetsfkqnqksz",
+      "from": {
+        "blockId": "gccdlopeb8vji1x6m8xqx2xq"
+      },
+      "to": {
+        "groupId": "t4nnpbbcx1ujrfwd7siva1uv"
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "vv4j73y1fzh0xetcye0uk52cg",
+      "name": "ticketResult",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vbkagp369pc1sxpiod66p8zff",
+      "name": "message",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vt47zuuqxvke5sfy9byn5fd3k",
+      "name": "subject",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vs3r1wbv9m0y7cyv4x52gcaxx",
+      "name": "email",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vnuk7t8dduqvldrusi272gna1",
+      "name": "ticketTypeSelected",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vlo47u9goukx9jq81jdyq1ezu",
+      "name": "ticketTypes",
+      "isSavedVariable": false
+    }
+  ],
+  "theme": {},
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "publicShare": {
+      "isEnabled": false
+    }
+  },
+  "createdAt": "2025-06-04T19:04:20.882Z",
+  "updatedAt": "2025-06-06T18:24:40.445Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": null,
+  "customDomain": null,
+  "workspaceId": "cmb6oxk6p0002l8sav1xy27e0",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

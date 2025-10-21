@@ -1,0 +1,301 @@
+---
+title: NocoDB
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The **NocoDB integration block** enables seamless database operations within your QuickBot workflows. Connect to your NocoDB database to search, create, and update records directly from chatbot interactions, providing dynamic data-driven conversations and real-time database management capabilities.
+
+<YoutubeVideo id="ViKETDQ8Sfg" />
+
+---
+
+## General
+
+NocoDB is an open-source Airtable alternative that transforms any database into a smart spreadsheet interface. The QuickBot integration leverages NocoDB's REST API to provide comprehensive database operations including record searching, creation, and updates, enabling you to build data-driven chatbot experiences with powerful filtering and data manipulation capabilities.
+
+---
+
+## Configuration Options
+
+### Prerequisites
+
+Before configuring the NocoDB block, you need:
+
+1. **NocoDB Account**: Sign up at [NocoDB](https://app.nocodb.com) or set up self-hosted instance
+2. **Database Connected**: Connect your database to NocoDB
+3. **API Token**: Generate an API token from your account settings
+4. **Table/View IDs**: Identify the specific tables and views you want to access
+
+### Authentication Setup
+
+1. Navigate to your NocoDB dashboard
+2. Go to **Account Settings** → **API Tokens**
+3. Generate a new API token or copy an existing one
+4. In QuickBot, add the NocoDB block to your flow
+5. Click **Add NocoDB credentials**
+6. Enter your Base URL (default: https://app.nocodb.com for cloud)
+7. Enter your API Token in the password field
+8. Save the credentials
+
+### Finding Table and View IDs
+
+#### Table ID
+To find your `Table ID`:
+1. Go to your NocoDB dashboard
+2. Navigate to the desired table
+3. Click the **3 dots button** next to the table name
+4. The Table ID will be displayed in the menu
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/nocodb-table-id.jpg" alt="NocoDB table ID" />
+</Frame>
+
+#### View ID
+To find your `View ID`:
+1. Navigate to the desired view within a table
+2. Click the **3 dots button** next to the view name
+3. The View ID will be displayed in the menu
+
+### Configuration Parameters
+
+- **Base URL**: NocoDB instance URL (default: https://app.nocodb.com)
+- **API Token**: Your NocoDB API token (required, stored encrypted)
+- **Table ID**: Identifier of the table to interact with (required)
+- **View ID**: Optional view identifier for filtered operations
+- **Field Mappings**: Map database fields to QuickBot variables
+- **Filter Conditions**: Advanced filtering for record operations
+
+---
+
+## Features
+
+### Core Capabilities
+
+#### Search Records
+Advanced record searching with flexible filtering options:
+- **Multi-condition Filtering**: Support for complex filter combinations
+- **Operator Support**: Equal to, Not equal, Contains, Greater than, Less than, Is set, Is empty, Starts with, Ends with
+- **Return Options**: All, First, Last, or Random records
+- **View-specific Search**: Search within specific table views
+- **Field Mapping**: Map search results to QuickBot variables
+
+#### Create Records
+Insert new records into NocoDB tables:
+- **Dynamic Field Assignment**: Set field values using variables and static content
+- **Multi-field Support**: Create records with multiple fields in a single operation
+- **Data Type Handling**: Automatic data type conversion and validation
+- **Error Validation**: Comprehensive field validation before record creation
+
+#### Update Existing Records
+Modify existing records based on search criteria:
+- **Filter-based Updates**: Update records matching specific filter conditions
+- **Batch Updates**: Update multiple records simultaneously
+- **Field-specific Updates**: Update only specified fields while preserving others
+- **Conditional Updates**: Update records based on complex filter logic
+
+### Data Handling
+
+- **Type Safety**: Automatic data type conversion and validation
+- **NULL Handling**: Proper handling of empty and null values  
+- **Large Dataset Support**: Optimized for tables with thousands of records
+- **Unicode Support**: Full support for international characters and special symbols
+
+### Variable Support
+
+- **Dynamic Filtering**: Use variables in filter conditions for dynamic searches
+- **Field Mapping**: Map database fields directly to QuickBot variables
+- **Conditional Logic**: Variable-based conditional operations
+- **Real-time Updates**: Variables updated immediately after database operations
+
+---
+
+## Advanced Features
+
+### Filtering System
+
+#### Filter Operators
+- **Equal to**: Exact match filtering
+- **Not equal**: Exclusion filtering
+- **Contains**: Partial string matching
+- **Greater than**: Numeric and date comparisons
+- **Less than**: Range filtering
+- **Is set**: Check for non-null values
+- **Is empty**: Check for null or empty values
+- **Starts with**: Prefix matching
+- **Ends with**: Suffix matching
+
+#### Complex Filtering
+- **Multiple Conditions**: Combine multiple filter conditions with AND/OR logic
+- **Nested Filters**: Support for complex nested filter structures
+- **Dynamic Values**: Use variables in filter conditions for real-time filtering
+- **View Integration**: Apply filters within specific table views
+
+### Performance Optimization
+
+- **Query Optimization**: Efficient API calls with optimized query parameters
+- **Result Limiting**: Configurable result limits to prevent oversized responses
+- **Pagination Support**: Handle large datasets with automatic pagination
+- **Connection Pooling**: Efficient connection management for high-volume operations
+
+### Error Handling
+
+- **API Error Management**: Comprehensive handling of NocoDB API errors
+- **Field Validation**: Pre-validation of field names and data types
+- **Connection Validation**: Automatic validation of database connectivity
+- **Detailed Logging**: Comprehensive error reporting with specific details
+
+### Security Features
+
+- **Encrypted Credentials**: API tokens stored with encryption
+- **Access Control**: Role-based access through NocoDB permissions
+- **SSL/TLS Support**: Secure connections to NocoDB instances
+- **Input Sanitization**: Automatic sanitization of user inputs
+
+---
+
+## Actions Reference
+
+### Search Records
+
+**Purpose**: Find and retrieve records from NocoDB tables
+
+**Required Parameters**:
+- Table ID: Identifier of the target table
+
+**Optional Parameters**:
+- View ID: Specific view to search within
+- Filter: Complex filter conditions
+- Return Type: All, First, Last, or Random
+- Response Mapping: Field-to-variable mappings
+
+**Configuration Example**:
+```
+Table ID: tbl_abc123
+View ID: viw_def456 (optional)
+Filter: Status = "Active" AND Priority > 5
+Return Type: First
+Response Mapping: 
+  - Field: "customer_name" → Variable: "customerName"
+  - Field: "order_total" → Variable: "orderAmount"
+```
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/nocodb.jpg" alt="NocoDB block example" />
+</Frame>
+
+### Create Record
+
+**Purpose**: Insert new records into NocoDB tables
+
+**Required Parameters**:
+- Table ID: Identifier of the target table
+- Fields: Array of field name-value pairs
+
+**Configuration Example**:
+```
+Table ID: tbl_abc123
+Fields:
+  - Field: "customer_name", Value: "{{customerName}}"
+  - Field: "email", Value: "{{userEmail}}"
+  - Field: "status", Value: "new"
+```
+
+### Update Existing Record
+
+**Purpose**: Modify existing records based on filter conditions
+
+**Required Parameters**:
+- Table ID: Identifier of the target table
+- Filter: Conditions to identify records to update
+- Updates: Field modifications to apply
+
+**Optional Parameters**:
+- View ID: Specific view for filtering
+
+**Configuration Example**:
+```
+Table ID: tbl_abc123
+Filter: customer_id = "{{customerId}}"
+Updates:
+  - Field: "status", Value: "completed"
+  - Field: "updated_at", Value: "{{currentTimestamp}}"
+```
+
+---
+
+## Best Practices
+
+### Implementation Recommendations
+
+1. **Field Mapping Strategy**: Plan your field-to-variable mappings before implementation
+2. **Filter Optimization**: Use specific filters to minimize data transfer and improve performance
+3. **Error Handling**: Always implement fallback logic for database operations
+4. **Data Validation**: Validate data types and formats before database operations
+
+### Security Best Practices
+
+1. **Token Management**: Regularly rotate API tokens for enhanced security
+2. **Access Control**: Use NocoDB's role-based permissions to limit access
+3. **Data Sanitization**: Always sanitize user inputs before database operations
+4. **Audit Trails**: Implement logging for all database modifications
+
+### Performance Guidelines
+
+1. **Query Optimization**: Use specific filters instead of retrieving all records
+2. **Result Limiting**: Set appropriate limits for large datasets
+3. **Field Selection**: Map only necessary fields to reduce data transfer
+4. **Connection Management**: Reuse connections when possible
+
+### Data Management Guidelines
+
+1. **Consistent Naming**: Use consistent field naming conventions
+2. **Data Types**: Ensure data types match between QuickBot and NocoDB
+3. **NULL Handling**: Plan for null and empty value scenarios
+4. **Backup Strategy**: Implement regular backups for critical data operations
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Authentication Problems
+- **Invalid API Token**: Verify the API token is correctly copied from NocoDB
+- **Expired Token**: Check if the API token has expired and needs renewal
+- **Permission Denied**: Ensure the token has necessary permissions for the target table
+- **Base URL Mismatch**: Verify the correct NocoDB instance URL
+
+#### Table and View Issues
+- **Invalid Table ID**: Verify the Table ID exists and is accessible
+- **View Not Found**: Check that the View ID is correct and accessible
+- **Field Name Mismatch**: Ensure field names match exactly with NocoDB schema
+- **Permission Errors**: Verify access permissions for the target table/view
+
+#### Data Operation Problems
+- **Filter Syntax Errors**: Check filter syntax and operator usage
+- **Data Type Mismatches**: Ensure data types match field requirements
+- **Required Field Missing**: Verify all required fields are provided
+- **Constraint Violations**: Check for database constraint violations
+
+#### Performance Issues
+- **Slow Queries**: Optimize filters and consider indexing in NocoDB
+- **Large Result Sets**: Implement pagination or result limiting
+- **Connection Timeouts**: Check network connectivity and NocoDB performance
+- **Memory Usage**: Monitor memory usage with large datasets
+
+### Debugging Steps
+
+1. **Verify Credentials**: Test API token in NocoDB API directly
+2. **Check Table Access**: Confirm table and view permissions
+3. **Validate Filters**: Test filter conditions in NocoDB interface
+4. **Review Logs**: Check QuickBot logs for detailed error messages
+5. **Test Incrementally**: Start with simple operations and add complexity
+
+### Error Messages
+
+- **"API key is required"**: Ensure API token is configured in credentials
+- **"Field [name] does not exist in the table"**: Verify field name spelling and existence
+- **"At least one filter is required"**: Add filter conditions for update operations  
+- **"Couldn't find any rows matching the filter"**: Verify filter conditions and data existence
+- **HTTP error responses**: Check NocoDB API documentation for specific error codes

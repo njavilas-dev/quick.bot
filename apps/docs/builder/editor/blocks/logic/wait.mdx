@@ -1,0 +1,188 @@
+---
+title: Wait
+icon: timer
+---
+
+The Wait block allows you to pause the conversation for a specified duration, creating natural
+conversation rhythm and controlling message timing.
+
+This is useful for emphasizing important messages, creating dramatic pauses, or ensuring users have
+time to read content before proceeding to the next step.
+
+<Info>
+  This should be used wisely. For general typing speed adjustments, use the [Typing emulation
+  settings](/builder/settings/general#typing-emulation) instead.
+</Info>
+
+## Configuration Options
+
+### Timing Control
+
+- **Seconds to Wait**: Specify the exact number of seconds to pause
+- **Variable Support**: Use variables to create dynamic wait times based on conditions
+- **Flexible Duration**: Accept decimal values for precise timing control
+- **Real-time Preview**: See the effect immediately during bot testing
+
+### Settings
+
+- **Pause the Flow**: Control whether to interrupt the natural block processing flow
+- **Processing Control**: Decide when long-running actions should be preceded by messages
+- **User Experience**: Balance between natural conversation flow and technical requirements
+
+## Features
+
+### Natural Conversation Pacing
+
+- **Message Emphasis**: Add pauses after important announcements
+- **Reading Time**: Give users adequate time to process complex information
+- **Dramatic Effect**: Create suspense or emphasis in conversation flow
+- **Rhythm Control**: Maintain natural conversation timing
+
+### Dynamic Wait Times
+
+Use variables to create contextual wait times:
+
+- **User-based Timing**: Adjust pauses based on user preferences
+- **Content-based Delays**: Longer waits for complex information
+- **Conditional Pauses**: Different timing based on conversation state
+
+### Flow Management
+
+- **Processing Control**: Manage when messages appear relative to background processes
+- **Synchronization**: Coordinate timing with external system responses
+- **User Experience**: Prevent overwhelming users with rapid-fire messages
+
+## Advanced Features
+
+### Contextual Timing
+
+```
+Short message: 1-2 seconds
+Medium message: 3-4 seconds
+Long content: 5+ seconds
+Variable timing: {{Wait Time}} seconds
+```
+
+### Flow Interruption Control
+
+The "Pause the flow" option provides granular control:
+
+- **Standard Flow**: Bot processes all blocks between inputs continuously
+- **Paused Flow**: Forces a break to display messages before continuing
+- **Long-running Actions**: Show status messages before time-consuming operations
+
+### Integration with Other Blocks
+
+- **Pre-redirect Pauses**: Ensure users read final messages before redirects
+- **API Call Delays**: Show loading messages before external API calls
+- **Form Submission**: Pause before processing to show confirmation messages
+- **Error Handling**: Controlled timing for error message sequences
+
+### Variable-Based Timing
+
+Create intelligent wait systems:
+
+```
+Wait Time Calculation:
+- Simple message: {{Base Wait Time}}
+- Complex message: {{Base Wait Time}} * 2
+- User preference: {{User Reading Speed}}
+- Content length: {{Message Length}} / 10
+```
+
+## Best Practices
+
+### Timing Guidelines
+
+- **Brief Pauses**: 1-2 seconds for emphasis or natural conversation flow
+- **Medium Pauses**: 3-5 seconds for important information absorption
+- **Longer Pauses**: 5+ seconds only for critical content or dramatic effect
+- **Avoid Excessive Waits**: Don't exceed 10 seconds without clear justification
+
+### User Experience Considerations
+
+- **Mobile Users**: Consider that mobile users may switch apps during long pauses
+- **Attention Span**: Respect user attention and avoid unnecessary delays
+- **Context Sensitivity**: Adjust timing based on conversation urgency
+- **Cultural Factors**: Consider cultural differences in conversation pacing
+
+### Strategic Placement
+
+- **After Announcements**: Pause after important information delivery
+- **Before Redirects**: Give users time to read final messages
+- **Between Topics**: Create natural breaks between conversation sections
+- **Error Recovery**: Use pauses to let users process error information
+
+### Performance Optimization
+
+- **Server Resources**: Long waits don't consume additional server resources
+- **User Sessions**: Consider session timeout implications for very long waits
+- **Analytics Impact**: Factor in wait times when analyzing conversation metrics
+- **Testing Efficiency**: Use shorter waits during development and testing
+
+## Example Use Cases
+
+### Information Emphasis
+
+```
+Bot: "Your order has been confirmed! 🎉"
+Wait: 2 seconds
+Bot: "You'll receive a confirmation email shortly."
+```
+
+### Pre-redirect Timing
+
+```
+Bot: "Thanks for completing our survey!"
+Wait: 3 seconds
+Bot: "Redirecting you to our special offers page..."
+Wait: 2 seconds
+Redirect: to offers page
+```
+
+### Processing Notifications
+
+```
+Bot: "Processing your request..."
+Wait: 2 seconds (with pause flow enabled)
+Script: Perform API call
+Bot: "Processing complete! Here are your results:"
+```
+
+### Dramatic Conversation Flow
+
+```
+Bot: "The results are in..."
+Wait: 3 seconds
+Bot: "You scored 95%! Congratulations! 🎉"
+```
+
+## Troubleshooting
+
+### Common Timing Issues
+
+- **Too Short**: Users miss important information due to insufficient reading time
+- **Too Long**: Users lose engagement or think the bot is broken
+- **Inconsistent**: Varying wait times without clear reasoning confuse users
+- **Context Mismatch**: Formal timing in casual conversations (or vice versa)
+
+### Variable-Related Problems
+
+- **Invalid Values**: Variables containing non-numeric values cause errors
+- **Negative Numbers**: Negative wait times default to zero seconds
+- **Decimal Precision**: Very precise decimals may not work as expected
+- **Empty Variables**: Undefined variables may cause unexpected behavior
+
+### Flow Control Issues
+
+- **Pause Timing**: Incorrect pause flow settings affect message sequencing
+- **Block Processing**: Long-running actions may not respect pause settings
+- **Session Timeouts**: Very long waits may cause session expiration
+- **User Abandonment**: Extended pauses may cause users to leave conversation
+
+### Platform-Specific Challenges
+
+- **Mobile Switching**: Users switching apps during waits may miss subsequent messages
+- **Network Issues**: Slow connections may compound wait time effects
+- **Browser Behavior**: Different browsers may handle timing differently
+- **Embedded Environments**: Wait behavior may vary in iframe or embedded contexts

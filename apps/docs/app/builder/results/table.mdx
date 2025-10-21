@@ -1,0 +1,328 @@
+---
+title: Submissions
+icon: table
+---
+
+Submissions (also called Results) are the individual responses and data collected from users who
+interact with your bot. This powerful interface lets you view, analyze, manage, and export all
+conversation data.
+
+## Accessing Submissions
+
+To access your bot's submissions:
+
+1. Navigate to your bot in the builder
+2. Click on the **Results** tab in the main navigation
+3. The **Submissions** tab displays by default
+4. View your data in the interactive table format
+
+## Submissions Interface
+
+The submissions interface provides comprehensive tools for managing your bot's response data:
+
+### Data Table
+
+The main table displays all submissions with the following features:
+
+**Dynamic Columns**
+
+- Automatically generated based on your bot's user blocks
+- Each input field becomes a separate column
+- System columns: ID, submission date, completion status
+- Customizable column visibility and ordering
+
+**Row Selection**
+
+- Select individual submissions using checkboxes
+- Select all submissions with the header checkbox
+- Perform bulk actions on selected items
+
+**Infinite Scrolling**
+
+- Loads data progressively as you scroll
+- Optimized for large datasets
+- Maintains performance with thousands of submissions
+
+### Table Customization
+
+#### Column Management
+
+**Reorder Columns**
+
+1. Click the settings menu (three dots) at the top right
+2. Drag columns to reorder them
+3. Changes save automatically to your preferences
+
+**Show/Hide Columns**
+
+1. Open the settings menu
+2. Toggle column visibility checkboxes
+3. Hidden columns remain in the data but don't display
+
+**Resize Columns**
+
+- Drag column borders to adjust width
+- Optimized widths save to your bot preferences
+- Responsive design adapts to different screen sizes
+
+#### Time Filtering
+
+Filter submissions by time period:
+
+- **Today**: Current day's submissions
+- **Last 7 Days**: Previous week
+- **Last 30 Days**: Monthly view (default)
+- **Month to Date**: Current month from start to today
+- **Last Month**: Complete previous month
+- **Year to Date**: Current year from January 1st
+- **All Time**: Complete historical data
+
+## Working with Submissions
+
+### Viewing Individual Submissions
+
+**Expand Submission Details**
+
+1. Click the expand icon (plus) in the "More" column
+2. View complete response details in a modal
+3. See all answers, timestamps, and session information
+
+**View Logs**
+
+1. Click the logs icon (text lines) in the "More" column
+2. Access detailed conversation flow logs
+3. Debug user paths and identify issues
+
+### Bulk Actions
+
+#### Selecting Multiple Submissions
+
+1. **Individual Selection**: Check boxes next to specific rows
+2. **Select All**: Use the header checkbox to select all visible
+3. **Range Selection**: Select first item, hold Shift, select last item
+
+#### Bulk Export
+
+**Export Selected Submissions:**
+
+1. Select desired submissions using checkboxes
+2. Selection toolbar appears showing count
+3. Click the download icon to export as CSV
+4. File downloads with current timestamp
+
+**Export Options:**
+
+- Only visible columns are exported
+- Column order matches your table preferences
+- Data includes both display text and raw values
+
+#### Bulk Delete
+
+**Delete Selected Submissions:**
+
+1. Select submissions to remove
+2. Click the delete icon (trash) in selection toolbar
+3. Confirm deletion in the modal dialog
+4. Action is permanent and cannot be undone
+
+<Warning>
+  Deleted submissions cannot be recovered. Consider exporting data before deletion for backup
+  purposes.
+</Warning>
+
+## Exporting Results
+
+### Full Export
+
+Export all submissions regardless of current table selection:
+
+1. Click the **Download** button (top right)
+2. Configure export options in the modal:
+   - **Include Deleted Blocks**: Add columns from removed bot blocks
+   - **Progress Tracking**: Monitor export progress for large datasets
+3. Click **Start Export** to generate CSV file
+
+### Export Features
+
+**Comprehensive Data**
+
+- All submission responses
+- Timestamps and metadata
+- Linked bot data (if applicable)
+- Custom variable values
+
+**Large Dataset Handling**
+
+- Progress indicator for exports over 2,000 submissions
+- Batch processing prevents timeouts
+- Automatic file naming with timestamps
+
+**Format Options**
+
+- CSV format compatible with Excel and Google Sheets
+- UTF-8 encoding supports international characters
+- Proper escaping of special characters
+
+<Note>
+  Large exports may take several minutes. The progress bar shows real-time status, and you can
+  continue using QuickBot while the export runs in the background.
+</Note>
+
+## Data Structure
+
+### Column Types
+
+**System Columns**
+
+- **ID**: Unique submission identifier
+- **Date**: Submission timestamp
+- **Status**: Completion status (started, completed, abandoned)
+
+**Input Columns** Each user block in your bot generates a column:
+
+- **Text Input**: Plain text responses
+- **Email**: Email addresses with validation
+- **Phone**: Formatted phone numbers
+- **File Upload**: Links to uploaded files
+- **Buttons/Choices**: Selected option labels
+- **Rating**: Numerical ratings
+- **Date**: Formatted date values
+
+**Custom Variables**
+
+- Set Variable blocks create dedicated columns
+- Dynamic values calculated during conversations
+- Integration data from external services
+
+### Linked Bots
+
+When using Bot Link blocks with result merging:
+
+- Linked bot responses appear as additional columns
+- Data maintains relationship to parent conversation
+- Export includes all connected bot data
+
+## Integration Features
+
+### File Uploads
+
+**File Access**
+
+- File upload responses show as clickable links
+- Links open files in new tabs
+- Original filenames preserved
+
+**File Management**
+
+- Files stored securely in QuickBot's system
+- Access controlled by workspace permissions
+- Files remain accessible until submission deletion
+
+### External Integrations
+
+**Google Sheets**
+
+- Direct integration with Google Sheets blocks
+- Submission data can trigger sheet updates
+- Bi-directional data synchronization
+
+**Webhooks**
+
+- Real-time submission notifications
+- Custom endpoint configuration
+- JSON payload with complete submission data
+
+## Submissions vs Analytics
+
+Understand the difference between these two result views:
+
+### Submissions (This Page)
+
+- **Focus**: Individual response data
+- **Data**: Specific answers, user details, timestamps
+- **Format**: Table with rows and columns
+- **Use Case**: Review individual conversations, export data
+
+### Analytics
+
+- **Focus**: Aggregate performance metrics
+- **Data**: Completion rates, user flow, drop-off points
+- **Format**: Visual graphs and charts
+- **Use Case**: Optimize bot performance and user experience
+
+<CardGroup cols={2}>
+  <Card title="View Analytics" icon="chart-line" href="/builder/results/analytics">
+    Access visual analytics and performance metrics
+  </Card>
+  <Card title="Bot Settings" icon="cog" href="/builder/settings">
+    Configure bot preferences and behavior
+  </Card>
+</CardGroup>
+
+## Best Practices
+
+### Data Management
+
+**Regular Exports**
+
+- Export data regularly as backup
+- Archive old data to maintain performance
+- Consider data retention policies for privacy compliance
+
+**Column Organization**
+
+- Order columns logically based on your workflow
+- Hide unnecessary columns to reduce clutter
+- Use consistent naming for custom variables
+
+**Performance Optimization**
+
+- Large datasets load progressively
+- Use time filters to focus on relevant periods
+- Consider archiving very old submissions
+
+### Privacy and Compliance
+
+**Data Protection**
+
+- Review submissions for sensitive information
+- Use bulk delete for data subject requests
+- Export data for compliance documentation
+
+**Access Control**
+
+- Workspace member permissions control access
+- Admin users can view all submissions
+- Member users see limited data based on roles
+
+<Tip>
+  Use the time filter to focus on recent submissions for daily monitoring, then switch to "All Time"
+  for comprehensive data exports.
+</Tip>
+
+## Troubleshooting
+
+### Common Issues
+
+**Missing Columns**
+
+- Check column visibility settings
+- Verify bot blocks have proper variable names
+- Ensure linked bots have result merging enabled
+
+**Export Problems**
+
+- Large exports may take several minutes
+- Check browser download settings
+- Try exporting smaller time periods for very large datasets
+
+**Performance Issues**
+
+- Use time filters to reduce data load
+- Clear browser cache if table loading is slow
+- Contact support for workspaces with >50,000 submissions
+
+<Warning>
+  Some older browsers may have issues with very large data exports. We recommend using the latest
+  version of Chrome, Firefox, or Safari for optimal performance.
+</Warning>

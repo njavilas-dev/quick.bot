@@ -1,0 +1,212 @@
+---
+title: Export
+icon: file-export
+---
+
+Export your bots to create backups, share configurations, or migrate between workspaces. Bot exports
+include all flow logic, settings, and configurations in a portable JSON format.
+
+## What's Included in Bot Exports
+
+When you export a bot, the following elements are included:
+
+### Flow Data
+
+- **All blocks**: Every block in your bot flow with their configurations
+- **Connections**: How blocks are linked together
+- **Variables**: All custom variables and their settings
+- **Conditional logic**: If/then conditions and routing rules
+
+### Bot Settings
+
+- **General settings**: Bot name, description, and basic configurations
+- **Theme settings**: Colors, fonts, and visual customizations
+- **Behavior settings**: Typing delays, transitions, and user experience options
+- **Integration configurations**: Block settings (but not credentials)
+
+### What's NOT Included
+
+- **Credentials**: Security credentials are never exported
+- **Response data**: User submissions and chat logs
+- **Analytics**: Performance metrics and statistics
+- **Published URLs**: Deployment-specific configurations
+
+<Note>
+  Exported bots are completely portable but will need new credentials configured when imported into
+  different workspaces.
+</Note>
+
+## How to Export a Bot
+
+### From Bot Editor
+
+1. Open the bot you want to export in the editor
+2. Click on **Settings** in the top navigation
+3. Navigate to the **Export** section
+4. Click **Export bot**
+5. Choose your export options (if available)
+6. Download the generated JSON file
+
+### From Workspace Dashboard
+
+1. Find the bot in your workspace dashboard
+2. Click the **More** menu (three dots) on the bot card
+3. Select **Export** from the dropdown menu
+4. The bot JSON file will be downloaded automatically
+
+### Export Naming
+
+Exported files are automatically named using the format:
+
+```
+[bot-name]-[timestamp].json
+```
+
+For example: `lead-generation-bot-2024-01-15.json`
+
+## Export Use Cases
+
+### Backup and Recovery
+
+Create regular backups of important bots:
+
+- **Schedule regular exports** for critical bots
+- **Store backups securely** in your preferred storage solution
+- **Version control** by including timestamps in filenames
+- **Recovery planning** in case of accidental deletions or changes
+
+### Template Creation
+
+Turn successful bots into reusable templates:
+
+- **Export proven bot designs** that work well for your use cases
+- **Create template library** for your team or organization
+- **Share best practices** by distributing successful bot configurations
+- **Rapid deployment** of similar bots using exported templates
+
+### Migration Between Workspaces
+
+Move bots between different workspaces:
+
+- **Workspace consolidation** when merging teams or projects
+- **Environment separation** (development, staging, production)
+- **Client handover** when transferring projects
+- **Cross-organization sharing** for partnerships or acquisitions
+
+### Development Workflow
+
+Support sophisticated development practices:
+
+- **Version control integration** by storing exports in Git repositories
+- **Feature branching** by exporting different bot versions
+- **Rollback capabilities** when changes don't work as expected
+- **Collaboration** by sharing bot configurations with developers
+
+## File Management
+
+### Storage Best Practices
+
+- **Organized folder structure**: Group exports by project, date, or purpose
+- **Clear naming conventions**: Include bot name, version, and date
+- **Regular cleanup**: Remove outdated exports to save storage space
+- **Secure storage**: Keep backups in secure, backed-up locations
+
+### Version Control
+
+Consider implementing version control for your bot exports:
+
+```
+/bot-exports
+  /lead-generation
+    lead-gen-v1.0-2024-01-01.json
+    lead-gen-v1.1-2024-01-15.json
+    lead-gen-v2.0-2024-02-01.json
+  /customer-support
+    support-bot-stable-2024-01-10.json
+    support-bot-testing-2024-01-20.json
+```
+
+## Technical Details
+
+### File Format
+
+Bot exports use JSON format with the following structure:
+
+- **Metadata**: Bot information and export details
+- **Blocks**: Array of all bot blocks with configurations
+- **Edges**: Connections between blocks
+- **Variables**: Custom variables and settings
+- **Theme**: Visual styling configuration
+
+### File Size
+
+Export file sizes vary based on bot complexity:
+
+- **Simple bots**: 5-50 KB
+- **Complex bots**: 100-500 KB
+- **Very complex bots**: 1-5 MB
+
+Large files are typically due to:
+
+- Many blocks and complex flows
+- Embedded media references
+- Extensive conditional logic
+- Custom styling configurations
+
+## Security Considerations
+
+### What to Protect
+
+- **Export files contain sensitive information** about your bot logic
+- **Business logic** and conversation flows may be proprietary
+- **Integration endpoints** and webhook URLs may be included
+- **Custom scripts** and advanced configurations are exported
+
+### Safe Sharing
+
+When sharing bot exports:
+
+- **Review content** before sharing with external parties
+- **Remove sensitive information** if necessary
+- **Use secure transfer methods** for confidential bot designs
+- **Consider access controls** for shared storage locations
+
+### Credential Safety
+
+- **Credentials are never exported** for security reasons
+- **API keys and tokens** must be reconfigured after import
+- **OAuth connections** need to be re-established
+- **Service integrations** require fresh authentication
+
+## Troubleshooting Export Issues
+
+### Export Fails
+
+If bot export fails:
+
+1. **Check bot validity**: Ensure the bot doesn't have configuration errors
+2. **Browser permissions**: Allow file downloads in your browser
+3. **Network connectivity**: Ensure stable internet connection
+4. **Bot size limits**: Very large bots may have export restrictions
+
+### Corrupted Exports
+
+If exported files seem corrupted:
+
+1. **Re-export the bot** to get a fresh file
+2. **Check file integrity** by attempting to import it
+3. **Validate JSON format** using online JSON validators
+4. **Contact support** if issues persist
+
+### Missing Elements
+
+If exports seem incomplete:
+
+1. **Verify all blocks are saved** in the editor before exporting
+2. **Check for unpublished changes** that might not be included
+3. **Review export scope** to ensure all elements are captured
+
+<Tip>
+  Export your most important bots regularly as part of your backup strategy. Consider it insurance
+  for your bot investments.
+</Tip>

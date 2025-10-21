@@ -1,0 +1,87 @@
+{
+  "id": "multipleChoiceFlow",
+  "name": "Buttons multiple choice",
+  "description": "Required template to enable multiple choice in WhatsApp button blocks.",
+  "template": {
+    "version": "7.2",
+    "routing_model": {
+      "multiple_choice_form": []
+    },
+    "screens": [
+      {
+        "id": "multiple_choice_form",
+        "title": "Select Options",
+        "terminal": true,
+        "data": {
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": { "type": "string" },
+                "title": { "type": "string" }
+              }
+            },
+            "__example__": [
+              {
+                "id": "option1",
+                "title": "Option 1"
+              },
+              {
+                "id": "option2",
+                "title": "Option 2"
+              }
+            ]
+          },
+          "button_label": {
+            "type": "string",
+            "__example__": "Submit"
+          },
+          "is_searchable": {
+            "type": "boolean",
+            "__example__": false
+          }
+        },
+        "layout": {
+          "type": "SingleColumnLayout",
+          "children": [
+            {
+              "type": "Form",
+              "name": "multiple_choice_form",
+              "children": [
+                {
+                  "type": "If",
+                  "condition": "${data.is_searchable}",
+                  "then": [
+                    {
+                      "type": "TextInput",
+                      "name": "search_input",
+                      "label": "Search options...",
+                      "input-type": "text"
+                    }
+                  ]
+                },
+                {
+                  "type": "CheckboxGroup",
+                  "name": "selected_options",
+                  "label": "Choose your options:",
+                  "data-source": "${data.options}"
+                },
+                {
+                  "type": "Footer",
+                  "label": "${data.button_label}",
+                  "on-click-action": {
+                    "name": "complete",
+                    "payload": {
+                      "selected_options": "${form.selected_options}"
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

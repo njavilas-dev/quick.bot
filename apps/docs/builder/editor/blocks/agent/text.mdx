@@ -1,0 +1,122 @@
+---
+title: Text
+icon: font
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Text agent block allows you to display rich text messages to your users. Text bubbles support
+rich formatting, links, variables, and can be chained together to create smooth conversational
+animations.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame style={{ maxWidth: '400px' }}>
+      <img
+        src="/images/builder/blocks/agent/3-text-bubbles.png"
+        alt="Text bubbles"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <YoutubeVideo id="NpEaa2P7qZI" />
+  </Tab>
+</Tabs>
+
+## Rich Text Features
+
+The Text block provides a rich text editor powered by Plate, offering several formatting options:
+
+### Text Formatting
+
+- **Bold** and _italic_ text styling
+- Different font weights and emphasis options
+- Variable insertion and dynamic content replacement
+
+### Link Support
+
+You can easily insert hyperlinks in your text bubbles using the link toolbar icon:
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/blocks/agent/text-link.png" alt="Text link icon" />
+</Frame>
+
+**Supported Link Types:**
+
+- `http://` and `https://` - Web links
+- `mailto:` - Email addresses
+- `tel:` - Phone numbers
+- `sms:` - SMS/text message links
+- **Variables** - Dynamic links using bot variables
+
+### URL Normalization
+
+- Links without protocols are automatically prefixed with `https://`
+- External links open in new tabs for better user experience
+- Proper URL validation ensures link functionality
+
+## Content Organization
+
+### Multiple Text Elements
+
+- Rich text content is organized as an array of elements
+- Each element can contain different formatting and content types
+- Empty content is visually indicated with reduced opacity
+
+### Chaining Text Bubbles
+
+Multiple consecutive text bubbles create smooth animations and natural conversation flow:
+
+- Each bubble appears with a typing animation
+- Users can process information in digestible chunks
+- Better engagement compared to single long messages
+
+## Variables and Dynamic Content
+
+Text bubbles fully support variable insertion:
+
+- Insert variables anywhere in your text content
+- Variables are replaced with actual values at runtime
+- Use variables in links for dynamic navigation
+- Support for both text content and link URLs
+
+## Best Practices
+
+### Content Structure
+
+- Break long messages into multiple text bubbles
+- Use formatting to emphasize important information
+- Keep individual bubbles concise and focused
+
+### Link Usage
+
+- Use descriptive text for links rather than raw URLs
+- Test variable-based links to ensure they resolve correctly
+- Consider using different link types (tel:, mailto:) for better user experience
+
+### Variable Integration
+
+- Ensure variables have fallback values or are properly validated
+- Test variable replacement in different contexts
+- Use meaningful variable names that make content self-documenting
+
+## Troubleshooting
+
+### Links Not Working
+
+- Verify the URL format includes proper protocol (http/https)
+- Check that variable-based links contain valid URLs when resolved
+- Ensure special link types (tel:, mailto:) are formatted correctly
+
+### Variables Not Displaying
+
+- Confirm variable names match exactly with defined variables
+- Check that variables have values before the text bubble is reached
+- Verify variable syntax and formatting in the rich text editor
+
+### Empty or Missing Content
+
+- Text bubbles with no content appear with reduced opacity
+- Ensure rich text content is properly saved and not accidentally cleared
+- Check that rich text elements are properly structured in the data model

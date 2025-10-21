@@ -1,0 +1,208 @@
+---
+title: Members
+icon: 'users'
+---
+
+Manage workspace membership, roles, and permissions. Control who has access to your workspace and
+what they can do within it. Members can collaborate on bots, access analytics, and contribute to
+your workspace based on their assigned role.
+
+## User Roles and Permissions
+
+There are three types of users in a QuickBot workspace:
+
+### Admins
+
+- **Full workspace control**: Can manage workspace settings and delete the workspace
+- **Member management**: Can invite, remove, and change roles for other members
+- **Bot permissions**: Full access to create, edit, publish, and delete bots
+- **Billing access**: Can manage subscription, view usage, and handle payments
+- **Analytics access**: View detailed analytics and export data
+
+### Members
+
+- **Bot creation**: Can create, edit, and collaborate on bots within the workspace
+- **Limited management**: Cannot manage workspace settings or invite other members
+- **Analytics access**: Can view bot performance and analytics
+- **Collaboration**: Can work with other members and guests on shared projects
+
+### Guests
+
+- **Bot-specific access**: Must be invited to individual bots, not the entire workspace
+- **Limited scope**: Can only access bots they're specifically invited to collaborate on
+- **View or edit permissions**: Can be granted view-only or edit access per bot
+- **No workspace access**: Cannot see other bots or workspace-level information
+
+<Note>
+  Guest access is managed at the bot level through individual bot collaboration settings, not
+  through workspace member management.
+</Note>
+
+## Workspace Members
+
+### Members Table
+
+The members table displays:
+
+- **Name**: Member's display name (if provided)
+- **Email**: Member's email address
+- **Role**: Current role (Admin or Member)
+- **Status**: Active (confirmed) or Pending (invitation sent but not accepted)
+- **Actions**: Role management and removal options (for admins)
+
+### Member Limits and Billing
+
+Workspace member limits are determined by your billing plan:
+
+- **Free plan**: Limited number of members
+- **Paid plans**: Higher member limits or unlimited members
+- **Current usage**: Displayed as "(current/limit)" in the interface
+
+When you reach your member limit:
+
+- An upgrade prompt will appear
+- New invitations will be disabled until you upgrade
+- An "Upgrade Plan" button provides quick access to billing options
+
+## Inviting New Members
+
+### Invitation Process
+
+1. **Access the invitation form** (visible only to admins)
+2. **Enter email address** of the person you want to invite
+3. **Select role** from the dropdown (Admin or Member)
+4. **Click "Invite"** to send the invitation
+
+<Tip>
+  Choose the role carefully during invitation. You can always change roles later, but it's best to
+  assign the appropriate level of access from the start.
+</Tip>
+
+### Role Selection
+
+When inviting members, you can choose:
+
+- **Admin**: Full workspace access and management capabilities
+- **Member**: Bot creation and collaboration access without administrative privileges
+
+### Invitation Status
+
+After sending an invitation:
+
+- The invitation appears in the members table with "Pending" status
+- The invitee receives an email with instructions to join
+- Once accepted, the status changes to "Active"
+- Pending invitations count toward your member limit
+
+## Managing Existing Members
+
+### Changing Member Roles
+
+To modify a member's role (admin only):
+
+1. **Click the actions menu** (three dots) next to the member
+2. **Select the new role** from the dropdown:
+   - **Admin**: Promote to administrator
+   - **Member**: Set as regular member
+3. **Changes take effect immediately**
+
+### Removing Members
+
+To remove a member from the workspace:
+
+1. **Click the actions menu** next to the member
+2. **Select "Remove"** from the dropdown
+3. **Confirm the removal** in the dialog
+
+<Warning>
+  **Immediate Effect**: Removing a member immediately revokes their access to the workspace, all
+  bots, and associated data. They will no longer be able to access any workspace resources.
+</Warning>
+
+### Managing Pending Invitations
+
+For pending invitations, you can:
+
+- **Change role**: Modify the role before the invitation is accepted
+- **Cancel invitation**: Remove the invitation entirely
+- **Resend invitation**: Send the invitation email again (if supported)
+
+## Billing and Plan Integration
+
+### Member Limits by Plan
+
+- **Starter plans**: Limited to a specific number of members
+- **Professional plans**: Higher member limits
+- **Enterprise plans**: Unlimited members or very high limits
+
+### Upgrade Notifications
+
+When approaching or reaching member limits:
+
+- **Alert banner**: Appears at the top of the members list
+- **Invitation restrictions**: New invitations are disabled
+- **Upgrade prompt**: Direct link to billing and plan upgrade options
+
+### Cost Considerations
+
+- **Per-seat billing**: Some plans charge based on the number of active members
+- **Pending invitations**: May count toward your member limit even before acceptance
+- **Role-based pricing**: Different roles may have different costs (plan-dependent)
+
+## Security and Access Control
+
+### Administrative Privileges
+
+Only workspace admins can:
+
+- View the complete members list
+- Send new member invitations
+- Change member roles
+- Remove members from the workspace
+
+### Self-Management
+
+- **Profile updates**: Members can update their own profile information
+- **Role restrictions**: Members cannot change their own role or access administrative functions
+- **Self-removal**: Members typically cannot remove themselves (admin action required)
+
+### Audit and Tracking
+
+- **Member activity**: Role changes and member additions/removals are logged
+- **Access tracking**: Member login and activity may be tracked for security
+- **Invitation history**: Records of sent invitations and their status
+
+## Best Practices
+
+### Role Assignment
+
+- **Principle of least privilege**: Assign the minimum role needed for each member's
+  responsibilities
+- **Limited admins**: Keep admin roles to trusted team members who need full access
+- **Regular review**: Periodically review member roles and access levels
+
+### Member Management
+
+- **Clear onboarding**: Provide guidance to new members about workspace structure and processes
+- **Regular cleanup**: Remove inactive members to maintain security and reduce costs
+- **Documentation**: Keep records of who has access and why
+
+### Security Considerations
+
+- **Email verification**: Ensure invitations are sent to verified email addresses
+- **Role transitions**: When team members change responsibilities, update their roles promptly
+- **Departure process**: Remove access immediately when team members leave the organization
+
+<CardGroup cols={2}>
+  <Card title="Workspace Settings" icon="gear" href="/app/workspace/settings">
+    Configure workspace name, icon, and general settings
+  </Card>
+  <Card title="Bot Collaboration" icon="robot" href="/builder/editor/invite">
+    Learn about guest collaboration on individual bots
+  </Card>
+</CardGroup>
+
+<Tip>
+  Regularly review your member list and their roles to ensure proper access control and optimize
+  your billing costs. Remove inactive members and adjust roles as team responsibilities change.
+</Tip>

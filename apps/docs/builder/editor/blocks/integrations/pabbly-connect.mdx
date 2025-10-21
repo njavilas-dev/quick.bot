@@ -1,0 +1,168 @@
+---
+title: Pabbly Connect
+---
+
+The Pabbly Connect integration block enables powerful workflow automation by triggering Pabbly Connect workflows at strategic points in your bot conversations, facilitating seamless data integration across multiple platforms and services.
+
+## Configuration Options
+
+### Basic Setup
+
+1. Insert a Pabbly Connect block where you want to trigger the workflow:
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/pabbly-connect.png" alt="Pabbly Connect block" />
+</Frame>
+
+2. In Pabbly Connect, create a new workflow with a "Webhook" trigger
+3. Copy the webhook URL provided by Pabbly Connect
+4. Paste the webhook URL into the QuickBot block configuration field
+5. The block will show "Your scenario is correctly configured 🚀" when properly set up
+
+### Webhook Configuration
+
+The Pabbly Connect integration provides a dedicated URL input field plus access to QuickBot's advanced HTTP request system:
+
+- **Webhook URL**: Direct input field for the Pabbly Connect webhook endpoint
+- **HTTP Method**: Choose from GET, POST, PUT, DELETE, or PATCH (defaults to POST)
+- **Query Parameters**: Add URL parameters for workflow filtering or API requirements
+- **Request Headers**: Configure custom headers for authentication or content specification
+- **Request Body**: Define the JSON payload structure sent to Pabbly Connect
+
+### Advanced Configuration Options
+
+Enable "Advanced Configuration" to access additional settings:
+
+- **Execute on Client**: Control whether requests execute client-side or server-side
+- **Custom Body**: Toggle manual JSON body configuration for complex data structures
+- **Request Timeout**: Set timeout values (1-300 seconds) based on workflow complexity
+- **Variable Values for Test**: Define test values for thorough integration testing
+
+## Features
+
+### Workflow Automation
+
+- **Instant Triggering**: Immediately activate Pabbly Connect workflows from bot interactions
+- **Multi-platform Integration**: Connect to 800+ apps and services through Pabbly Connect
+- **Real-time Data Sync**: Transfer conversation data, user inputs, and bot variables
+- **Conditional Workflows**: Leverage Pabbly Connect's filters and conditional logic
+
+### Data Management
+
+- **Variable Integration**: Send any bot variable as part of the webhook payload
+- **Dynamic Content**: Include user responses, conversation context, and calculated data
+- **Structured Data Transfer**: Automatic JSON formatting for Pabbly Connect processing
+- **Response Data Capture**: Receive and use data returned from Pabbly Connect workflows
+
+### Testing and Validation
+
+- **Built-in Testing**: Test webhook connectivity directly from the QuickBot interface
+- **Response Preview**: View complete responses from Pabbly Connect workflows
+- **Error Diagnostics**: Detailed error messages for quick issue identification
+- **Variable Testing**: Test workflows with specific variable values before deployment
+
+## Advanced Features
+
+### Complex Automation Workflows
+
+- **Multi-step Sequences**: Create sophisticated automation chains across multiple platforms
+- **Data Transformation**: Use Pabbly Connect's data processing and formatting capabilities
+- **External Service Integration**: Connect to CRM, email marketing, database, and analytics tools
+- **Scheduled Tasks**: Set up time-based triggers and follow-up actions
+
+### Response Data Processing
+
+Configure response variable mapping to capture data from Pabbly Connect workflows:
+
+1. Execute a test request to examine the response structure
+2. Access the "Save in Variables" section after receiving a response
+3. Map specific response fields to bot variables
+4. Use captured data in subsequent conversation blocks
+
+### Error Handling and Reliability
+
+- **Timeout Management**: Configure appropriate timeouts for different workflow complexities
+- **HTTP Status Handling**: Process various response codes and error conditions
+- **Graceful Degradation**: Continue bot conversations even if workflows fail
+- **Retry Logic**: Implement retry mechanisms within Pabbly Connect workflows
+
+## Best Practices
+
+### Workflow Design
+
+- **Strategic Positioning**: Place Pabbly Connect blocks at key decision points in conversations
+- **Data Collection**: Ensure all necessary variables are captured before triggering workflows
+- **Fallback Planning**: Design alternative conversation paths for integration failures
+- **User Communication**: Include appropriate messaging during workflow execution
+
+### Performance Optimization
+
+- **Efficient Timeouts**: Set timeouts based on workflow complexity and external service response times
+- **Payload Optimization**: Send only essential data to minimize processing time and costs
+- **Asynchronous Processing**: Utilize Pabbly Connect's async capabilities for long-running tasks
+- **Resource Monitoring**: Track Pabbly Connect task usage to optimize subscription plans
+
+### Security and Data Protection
+
+- **URL Security**: Keep webhook URLs confidential and regenerate if compromised
+- **Data Validation**: Implement data validation within Pabbly Connect workflows
+- **Access Control**: Configure appropriate permissions for connected services
+- **Audit Trails**: Monitor workflow executions and data transfers
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: Webhook test fails or times out
+- Verify the webhook URL is correctly copied from Pabbly Connect
+- Confirm the Pabbly Connect workflow is active and published
+- Check for network connectivity issues or firewall restrictions
+- Increase timeout values in advanced configuration if needed
+
+**Problem**: Pabbly Connect workflow not executing
+- Ensure the workflow has a properly configured webhook trigger
+- Verify the webhook is set to activate immediately upon receiving data
+- Check Pabbly Connect's execution history for detailed error information
+- Confirm the workflow has sufficient task allocation remaining
+
+### Data Flow Problems
+
+**Problem**: Bot variables not appearing in Pabbly Connect
+- Verify variables contain data when the webhook executes
+- Check that variable names match between bot and workflow configuration
+- Use the test functionality to preview the exact payload being sent
+- Ensure variables are properly referenced in the request body
+
+**Problem**: Response data not saving to bot variables
+- Confirm response variable mapping is correctly configured
+- Verify the response structure matches the expected data paths
+- Check that target variables exist in your bot configuration
+- Test with consistent data to isolate mapping issues
+
+### Webhook Integration Issues
+
+**Problem**: HTTP error responses (400, 401, 403, 500)
+- **400 Bad Request**: Verify request body format and required fields
+- **401 Unauthorized**: Check authentication headers and API keys
+- **403 Forbidden**: Confirm webhook URL validity and permissions
+- **500 Server Error**: Review Pabbly Connect workflow configuration for errors
+
+**Problem**: Intermittent failures or inconsistent behavior
+- Test with consistent variable values to identify patterns
+- Review Pabbly Connect execution logs for processing errors
+- Check for rate limiting or quota restrictions on connected services
+- Monitor network stability and external service availability
+
+### Workflow Configuration
+
+**Problem**: Data formatting issues in connected services
+- Use Pabbly Connect's data transformation tools to format data appropriately
+- Implement data validation steps within the workflow
+- Test with various data types and edge cases
+- Configure fallback values for missing or invalid data
+
+**Problem**: Performance issues or slow execution
+- Optimize workflow steps by removing unnecessary processing
+- Use parallel execution where possible in Pabbly Connect
+- Consider breaking complex workflows into smaller, focused sequences
+- Monitor external service response times and optimize accordingly

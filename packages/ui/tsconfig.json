@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Urbiport UI Library",
+  "include": ["**/*.ts", "**/*.tsx", "declarations.d.ts"],
+  "exclude": ["node_modules", "dist"],
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "emitDeclarationOnly": true,
+    "importHelpers": true,
+    "jsx": "react",
+    "lib": ["ES2021", "DOM"],
+    "types": ["react"],
+    "esModuleInterop": true,
+    "composite": false,
+    "declarationMap": false,
+    "forceConsistentCasingInFileNames": true,
+    "inlineSources": false,
+    "isolatedModules": true,
+    "moduleResolution": "node",
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "preserveWatchOutput": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "downlevelIteration": true,
+    "noEmit": true,
+    "module": "ESNext",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
+  }
+}

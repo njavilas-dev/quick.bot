@@ -1,0 +1,267 @@
+---
+title: Rating
+icon: star
+---
+
+The Rating user block allows you to collect user ratings with flexible scales, customizable icons,
+and various display options. It's perfect for feedback collection, satisfaction surveys, NPS scores,
+and any scenario requiring numerical evaluation from users.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/rating-flow.png"
+        alt="Rating input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/rating-bot.png"
+        alt="Rating input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Configuration Options
+
+### Scale Settings
+
+- **Maximum Rating**: Choose from 3 to 10 rating options
+- **Display Type**: Select between icons (stars) or numbers
+- **Starting Value**: For number displays, set the starting number (supports variables)
+- **Custom Range**: Create scales like 1-10, 0-5, or any custom numerical range
+
+### Visual Customization
+
+- **Icon Type**: Use default stars or custom SVG icons
+- **Custom SVG**: Upload custom icons for brand consistency
+- **Button Labels**: Add descriptive text for lowest and highest ratings
+- **Submit Button**: Customize the submission button text (supports variables)
+
+### Interaction Modes
+
+- **One-Click Submit**: Enable immediate submission upon selection
+- **Confirmation Mode**: Require explicit submit button click after selection
+- **Label Positioning**: Position descriptive labels below rating options
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the rating value
+- **Variable Labels**: Use variables in button labels and descriptions
+- **Dynamic Ranges**: Set rating ranges using variable values
+
+## Advanced Features
+
+### Custom Icon Integration
+
+Replace default star icons with custom SVG graphics:
+
+- **SVG Support**: Full SVG markup support for icons
+- **Brand Consistency**: Use your brand's iconography
+- **Multiple States**: Icons show selected/unselected states
+- **Scalable Graphics**: SVG icons scale perfectly across devices
+
+### Flexible Rating Scales
+
+Support for various rating methodologies:
+
+- **Standard Scales**: 1-5, 1-10 star ratings
+- **Custom Scales**: 0-10, 1-7, or any preferred range
+- **NPS Scale**: Built-in Net Promoter Score (0-10) configuration
+- **Percentage Scales**: Use 0-100 or other percentage-based ratings
+
+### One-Click vs. Confirmation Modes
+
+- **One-Click**: Users submit immediately upon selecting a rating
+- **Confirmation**: Users select rating then click submit button
+- **Hybrid Approach**: Toggle between modes based on context
+- **User Experience**: Choose based on form complexity and user expectations
+
+### Variable-Driven Configuration
+
+- **Dynamic Scales**: Set maximum rating using variables
+- **Contextual Labels**: Customize labels based on previous responses
+- **Conditional Display**: Show different rating scales based on user data
+- **Integration Ready**: Rating values work seamlessly with external systems
+
+## Common Use Cases
+
+### Net Promoter Score (NPS)
+
+Configure the rating block for standard NPS collection:
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame style={{ maxWidth: '400px' }}>
+      <img
+        src="/images/builder/blocks/user/nps-flow.png"
+        alt="NPS configuration"
+        className="rounded-lg w-12"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img src="/images/builder/blocks/user/nps-bot.png" alt="NPS in bot" className="rounded-lg" />
+    </Frame>
+  </Tab>
+</Tabs>
+
+- **Scale**: 0-10 numbers
+- **Left Label**: "Not likely at all"
+- **Right Label**: "Extremely likely"
+- **One-Click**: Enabled for quick feedback
+
+### Customer Satisfaction (CSAT)
+
+- **Scale**: 1-5 stars or numbers
+- **Left Label**: "Very unsatisfied"
+- **Right Label**: "Very satisfied"
+- **Custom Icons**: Use emoji or custom satisfaction icons
+
+### Product Reviews
+
+- **Scale**: 1-5 stars
+- **Left Label**: "Poor quality"
+- **Right Label**: "Excellent quality"
+- **Confirmation Mode**: Let users review their rating before submitting
+
+### Custom Icon Examples
+
+To insert a custom icon, use complete SVG markup:
+
+```xml
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+</svg>
+```
+
+Find more icons at [Feather](https://feathericons.com/), [Heroicons](https://heroicons.com/), or
+create custom SVGs.
+
+## Best Practices
+
+### Scale Selection
+
+- Use 1-5 for simple satisfaction ratings
+- Use 1-10 for more nuanced feedback collection
+- Use 0-10 for Net Promoter Score compliance
+- Consider your audience's familiarity with different scales
+
+### User Experience
+
+- Provide clear labels explaining what each rating means
+- Use consistent scales throughout your survey or application
+- Consider one-click submission for single-question surveys
+- Add confirmation mode for critical feedback collection
+
+### Data Collection
+
+- Use descriptive variable names for rating storage
+- Consider segmenting ratings by category or time period
+- Plan for rating analysis and reporting needs
+- Document rating scales for consistent interpretation
+
+### Visual Design
+
+- Choose icons that clearly represent the rating concept
+- Ensure sufficient contrast for accessibility
+- Test custom icons across different screen sizes
+- Maintain consistent visual style with your brand
+
+## Integration Examples
+
+### CRM Integration
+
+```javascript
+// Rating data with contextual information
+{
+  "feedback": {
+    "rating": "{{customerSatisfaction}}",
+    "scale": "1-5",
+    "question": "Overall satisfaction",
+    "timestamp": "current_timestamp"
+  }
+}
+```
+
+### Analytics Integration
+
+- Track rating distributions over time
+- Segment ratings by user demographics
+- Monitor rating trends and patterns
+- Set up alerts for low satisfaction scores
+
+### Follow-up Workflows
+
+1. Collect rating with Rating block
+2. Use conditional logic based on rating value
+3. Route low ratings to support workflows
+4. Route high ratings to testimonial collection
+5. Store ratings for analysis and reporting
+
+## Troubleshooting
+
+### Common Issues
+
+**Ratings not displaying correctly**
+
+- Verify the maximum rating is set appropriately (3-10)
+- Check that custom SVG icons are properly formatted
+- Ensure icon SVG includes proper viewport and stroke settings
+- Test display across different devices and screen sizes
+
+**One-click submission not working**
+
+- Confirm "One-click submit" toggle is enabled in settings
+- Verify users understand no additional submit button is needed
+- Check that rating selection triggers immediate submission
+- Test on both desktop and mobile devices
+
+**Custom icons not appearing**
+
+- Ensure SVG markup is complete with opening and closing tags
+- Check that SVG includes proper xmlns and viewBox attributes
+- Verify stroke and fill properties are set correctly
+- Test SVG markup in an SVG validator
+
+**Variable not saving ratings**
+
+- Confirm a variable is selected in "Save Answer" dropdown
+- Verify variable names don't contain special characters
+- Check that rating values are being stored as expected numbers
+- Test variable integration with subsequent blocks
+
+**Scale configuration issues**
+
+- Verify maximum rating is within 3-10 range
+- For number displays, ensure starting value is set correctly
+- Check that left and right labels are appropriate for the scale
+- Test that the complete rating range is functional
+
+### Display Problems
+
+- Test rating block appearance on various screen sizes
+- Ensure custom icons maintain proper aspect ratios
+- Check that labels don't overflow on mobile devices
+- Verify touch targets are large enough for mobile interaction
+
+### Integration Considerations
+
+- Rating values are stored as numbers (1, 2, 3, etc.)
+- Custom starting values affect the actual stored numbers
+- Multiple rating blocks should use different variables
+- Consider rating scale documentation for external integrations
+
+### Performance Tips
+
+- Simple star icons load faster than complex custom SVGs
+- Limit custom SVG file sizes for optimal performance
+- Test rating block responsiveness with various icon types
+- Monitor loading times on mobile devices and slower connections

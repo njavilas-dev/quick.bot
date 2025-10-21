@@ -1,0 +1,95 @@
+{
+  "version": "6",
+  "id": "cl0ibhv8d0130n21aw8doxhj5",
+  "name": "Another bot copy",
+  "events": [
+    {
+      "id": "c6foq38xyl1a5d3j15a8o9ti",
+      "outgoingEdgeId": "clbovazhy000s3b6ocjqtqedw",
+      "graphCoordinates": { "x": 0, "y": 0 },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "clbovazhy000r3b6onjzopbsn",
+      "title": "Group #1",
+      "graphCoordinates": { "x": 366, "y": 191 },
+      "blocks": [
+        {
+          "id": "s8ZeBL9p5za77eBmdKECLYq",
+          "outgoingEdgeId": "clbovbaw600123b6o3i4ouzoq",
+          "type": "text input",
+          "options": {
+            "labels": { "placeholder": "Type your answer...", "button": "Send" },
+            "variableId": "text_input_var_id"
+          }
+        }
+      ]
+    },
+    {
+      "id": "clbovb3vu00103b6o1pjjuagi",
+      "title": "Group #2",
+      "graphCoordinates": { "x": 740, "y": 288 },
+      "blocks": [
+        {
+          "id": "clbovb3vv00113b6oaa35zfvm",
+          "type": "text",
+          "content": { "richText": [{ "type": "p", "children": [{ "text": "Cheers!" }] }] }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "clbovazhy000s3b6ocjqtqedw",
+      "from": { "eventId": "c6foq38xyl1a5d3j15a8o9ti" },
+      "to": { "groupId": "clbovazhy000r3b6onjzopbsn" }
+    },
+    {
+      "id": "clbovbaw600123b6o3i4ouzoq",
+      "from": { "blockId": "s8ZeBL9p5za77eBmdKECLYq" },
+      "to": { "groupId": "clbovb3vu00103b6o1pjjuagi" }
+    }
+  ],
+  "variables": [
+    {
+      "id": "text_input_var_id",
+      "name": "Text Input",
+      "isSavedVariable": false
+    }
+  ],
+  "theme": {
+    "general": { "font": "Open Sans", "background": { "type": "None" } },
+    "chat": {
+      "hostAvatar": {
+        "isEnabled": true,
+        "url": "https://avatars.githubusercontent.com/u/6652831?v=4"
+      },
+      "hostBubbles": { "backgroundColor": "#F7F8FF", "color": "#303235" },
+      "guestBubbles": { "backgroundColor": "#FF8E21", "color": "#FFFFFF" },
+      "buttons": { "backgroundColor": "#01a952", "color": "#FFFFFF" },
+      "inputs": { "backgroundColor": "#FFFFFF", "color": "#303235", "placeholderColor": "#9095A0" }
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": { "isBrandingEnabled": true, "isNewResultOnRefreshEnabled": false },
+    "typingEmulation": { "enabled": true, "speed": 300, "maxDelay": 1.5 },
+    "metadata": {
+      "description": "Build beautiful conversational forms and embed them directly in your applications without a line of code. Triple your response rate and collect answers that has more value compared to a traditional form."
+    }
+  },
+  "createdAt": "2022-12-15T09:17:00.598Z",
+  "updatedAt": "2022-12-15T09:17:15.366Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": "cl0ibhv8d0130n21aw8doxhj5-public",
+  "customDomain": null,
+  "workspaceId": "unlimitedWorkspaceId",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

@@ -1,0 +1,24 @@
+{
+  "name": "@quickbot.io/zoho-crm-block",
+  "version": "1.0.0",
+  "description": "Zoho CRM integration block for Quick.bot - Manage contacts, leads, deals, and customer relationships",
+  "main": "index.ts",
+  "keywords": [
+    "zoho",
+    "crm",
+    "customer-relationship-management",
+    "sales",
+    "leads",
+    "contacts",
+    "deals",
+    "integration"
+  ],
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/react": "18.2.15",
+    "typescript": "5.4.5",
+    "@quickbot.io/lib": "workspace:*"
+  }
+}

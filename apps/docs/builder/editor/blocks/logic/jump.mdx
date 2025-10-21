@@ -1,0 +1,105 @@
+---
+title: Jump
+icon: person-to-portal
+---
+
+The jump block allows you to jump directly to a specific block or group in your bot flow. This is essential for creating clean, organized flows and implementing advanced navigation patterns.
+
+<Frame>
+  <img src="/images/builder/blocks/logic/jump.jpeg" alt="Jump block" />
+</Frame>
+
+## Configuration Options
+
+### Target Selection
+- **Group Selection**: Choose which group to jump to from available groups in your bot
+- **Block Selection**: Optionally select a specific block within the target group
+- **Current Group Exclusion**: Cannot jump to the same group where the jump block is located
+- **Visual Indicators**: Block icons help identify target block types
+
+### Navigation Behavior
+- **Direct Jump**: Instantly moves conversation to the specified location
+- **Session Continuity**: Maintains all variables and conversation state
+- **Clean Flow**: Helps organize complex conversation logic without visual clutter
+
+## Features
+
+### Smart Group Filtering
+- **Available Groups**: Only shows groups with titles (excluding empty or unnamed groups)
+- **Current Group Exclusion**: Prevents infinite loops by excluding the current group
+- **Title-Based Selection**: Groups are identified by their titles for easy navigation
+
+### Precise Block Targeting
+- **Block-Level Precision**: Jump to specific blocks within a group, not just the beginning
+- **Visual Block Identification**: Block icons and numbers help identify the target
+- **Optional Targeting**: If no specific block is selected, jumps to the first block in the group
+
+### Flow Organization Benefits
+- **Reduced Visual Complexity**: Eliminate long connecting lines across your flow canvas
+- **Modular Design**: Create reusable sections that can be accessed from multiple points
+- **Loop Creation**: Build loops and iterative flows efficiently
+
+## Advanced Features
+
+### Complex Flow Patterns
+- **Multi-Path Convergence**: Have multiple paths jump to the same target
+- **Loop Implementation**: Create repeating sections using jump blocks
+- **Conditional Jumping**: Combine with condition blocks for dynamic navigation
+- **Error Handling**: Jump to error handling sections when needed
+
+### Flow Architecture
+- **Hierarchical Organization**: Structure complex bots with clear navigation
+- **Reusable Sections**: Create utility sections accessible from anywhere
+- **Performance Optimization**: Reduce canvas size and improve editor performance
+
+### Advanced Navigation Strategies
+- **Menu Systems**: Create navigation menus that jump to different sections
+- **Back Navigation**: Implement back button functionality
+- **Skip Logic**: Allow users to skip optional sections
+- **Progressive Flows**: Build sequential flows with jump-based progression
+
+## Best Practices
+
+### Flow Design
+- **Clear Naming**: Use descriptive group titles for easy identification
+- **Logical Grouping**: Organize related blocks into coherent groups
+- **Minimal Jumping**: Use jumps sparingly to maintain flow readability
+- **Documentation**: Comment or document complex jump patterns
+
+### Navigation Patterns
+- **Consistent Structure**: Establish consistent navigation patterns across your bot
+- **User Expectations**: Jump in ways that match user mental models
+- **Clear Signaling**: Make navigation intentions clear in conversation flow
+- **Fallback Paths**: Always provide alternative paths if jumps fail
+
+### Performance Optimization
+- **Strategic Placement**: Place frequently accessed sections centrally
+- **Memory Management**: Be mindful of variable scope when jumping between sections
+- **Loading Considerations**: Ensure jumped-to sections load efficiently
+- **Testing Coverage**: Test all jump paths thoroughly
+
+## Troubleshooting
+
+### Common Configuration Issues
+- **Missing Target Groups**: Ensure target groups exist and have proper titles
+- **Empty Group Selection**: Verify target groups contain blocks to jump to
+- **Self-Reference Attempts**: Cannot jump to the same group as the jump block
+- **Block Not Found**: Ensure specified target blocks still exist in target groups
+
+### Flow Navigation Problems
+- **Infinite Loops**: Avoid creating circular jump patterns
+- **Dead Ends**: Ensure jumped-to sections have proper continuation paths
+- **Variable Scope**: Verify variables are accessible in jumped-to sections
+- **User Confusion**: Jumps should feel natural, not disorienting
+
+### Performance Issues
+- **Complex Jump Chains**: Avoid excessive chaining of jump blocks
+- **Large Group Targets**: Be cautious when jumping to very large groups
+- **Memory Leaks**: Monitor for memory issues with frequently used jumps
+- **Editor Performance**: Too many jumps can slow down the visual editor
+
+### Integration Challenges
+- **Analytics Tracking**: Ensure user path analytics account for jumps
+- **Third-party Integrations**: Verify external systems handle non-linear flows
+- **Export Functions**: Confirm flow exports maintain jump relationships
+- **Version Control**: Track changes to jump targets across bot versions

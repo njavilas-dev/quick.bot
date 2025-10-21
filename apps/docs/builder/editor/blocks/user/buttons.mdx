@@ -1,0 +1,217 @@
+---
+title: Buttons
+icon: arrow-pointer
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Buttons user block allows you to offer your user predefined choices, either single choice
+options or multiple choices. It's one of the most versatile user blocks, supporting static items,
+dynamic content, and various configuration options.
+
+## Configuration Options
+
+### Multiple Choice Toggle
+
+Enable multiple choice selection to allow users to select more than one option. When enabled:
+
+- Users can select multiple buttons before submitting
+- A custom submit button appears with configurable text
+- Selected answers are joined with commas in the saved variable
+
+### Searchable Options
+
+Enable search functionality to help users filter through many options:
+
+- Adds a search input field above the buttons
+- Allows users to type and filter available choices
+- Configurable placeholder text for the search input
+
+### Image option
+
+- **Image Upload**: Upload custom images for each choice option
+- **Title Text**: Add descriptive titles to each picture choice (supports variables)
+- **Description Text**: Include detailed descriptions below titles (supports variables)
+- **Display Conditions**: Show/hide specific options based on variable conditions
+
+
+### Button Labels
+
+- **Submit Button**: Customize the text shown on the submit button (only for multiple choice)
+- **Search Placeholder**: Set placeholder text for the search input field
+
+### Other Option
+
+Enable an "Other" option to allow alternative flows when no predefined option fits:
+
+- Adds an additional flow path for custom responses
+- Useful for collecting unexpected or custom answers
+- Can be connected to text user blocks for user-provided alternatives
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the user's selection(s)
+- **Dynamic Data**: Use a variable containing an array to populate button options dynamically
+
+## Single Choice
+
+Single choice input allows you to directly split your flow depending on what the user selects by
+linking any choice to a specific path in your flow.
+
+Link the "Default" item to determine the default path independent of what the user chooses.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/single-choice-flow.png"
+        alt="Buttons input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/single-choice-bot.png"
+        alt="Buttons input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Multiple Choices
+
+Enable multiple choice mode to allow users to select several options before submitting their
+response.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/multiple-choices-flow.png"
+        alt="Multiple choices in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <YoutubeVideo id="NpEaa2P7qZI" />
+  </Tab>
+</Tabs>
+
+## Dynamic Items
+
+Instead of adding items manually, you can also display a dynamic list of items based on a variable.
+
+<Frame>
+  <img src="/images/builder/blocks/user/buttons-dynamic.png" alt="Dynamic items list" />
+</Frame>
+
+This is useful when you want to display a list of items from another data source. For this to work,
+you first need to make sure the variable you are using contains a list of values. This list can be
+extracted from an integration block like Google Sheets.
+
+## Advanced Features
+
+### Variable Buttons
+
+Button text can include variables using the `{{variableName}}` syntax, allowing for personalized or
+dynamic button labels based on collected data.
+
+### Conditional Logic Support
+
+Button blocks work seamlessly with condition blocks to create different conversation paths based on
+user selections.
+
+### Form Validation
+
+The block automatically validates that at least one option is selected before allowing the user to
+proceed (in multiple choice mode).
+
+## Best Practices
+
+### User Experience
+
+- Keep button text concise and descriptive
+- Use no more than 5-7 options for optimal mobile experience
+- Enable search for lists with more than 10 items
+- Consider using "Other" option for comprehensive coverage
+
+### Variable Management
+
+- Use descriptive variable names for storing button responses
+- For multiple choices, remember that values are comma-separated strings
+- Consider the data format when integrating with external systems
+
+### Performance
+
+- Use dynamic buttons for data that changes frequently
+- Static buttons load faster for fixed options
+- Test on mobile devices to ensure button spacing is appropriate
+
+## How to
+
+### Add a "Other" button
+
+Sometimes you want to allow your user to enter a value that is not in the predefined choices. You
+can do this by adding a "Other" button and connect it to a "Text" user block.
+
+<Frame>
+  <img src="/images/builder/blocks/user/buttons-other.png" alt="Other button flow" />
+</Frame>
+
+### Different replies based on multiple choices
+
+If you'd like to have different replies based on the multiple choices the user selects. You will
+need to
+
+1. Save the answer into a variable.
+2. Add a "Condition" block
+3. Add comparisons based on the value of this variable
+
+<Frame>
+  <img
+    src="/images/builder/blocks/user/buttons-condition.png"
+    alt="Condition multiple button flow"
+  />
+</Frame>
+
+### Conditionally display a certain button
+
+<YoutubeVideo id="NpEaa2P7qZI" />
+
+## Troubleshooting
+
+### Common Issues
+
+**Buttons not appearing correctly**
+
+- Verify that button items have been properly added
+- Check that dynamic variable contains a valid array format
+- Ensure variable references use correct syntax: `{{variableName}}`
+
+**Multiple choice not working**
+
+- Confirm "Multiple choice" toggle is enabled in block settings
+- Verify submit button label is configured
+- Check that users are clicking the submit button after making selections
+
+**Variable not saving**
+
+- Ensure a variable is selected in the "Save Answer" dropdown
+- Verify variable names don't contain special characters
+- For multiple choices, remember the format is comma-separated values
+
+**Search functionality issues**
+
+- Enable "Searchable" toggle in block settings
+- Configure appropriate placeholder text
+- Test with sufficient button options (search is most useful with 5+ items)
+
+### Integration Considerations
+
+- When using with webhooks, parse comma-separated values for multiple choices
+- Dynamic button data should be formatted as an array of strings
+- Variable updates from other blocks may affect dynamic button display

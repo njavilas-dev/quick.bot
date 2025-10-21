@@ -1,0 +1,298 @@
+---
+title: Mistral AI
+---
+
+The Mistral AI integration provides access to Mistral's powerful language models within your
+QuickBot workflows. This block offers chat completion capabilities, streaming responses, and
+function calling with dynamic model selection.
+
+## Configuration Options
+
+### API Setup
+
+To use the Mistral AI block, configure your API credentials:
+
+1. **Account Creation**: Create your Mistral account at
+   [https://console.mistral.ai](https://console.mistral.ai)
+2. **API Key**: Generate an API key from the
+   [Mistral API Keys page](https://console.mistral.ai/api-keys)
+3. **Authentication**: The API key is securely encrypted and stored within QuickBot
+4. **Subscription**: A paid subscription is required for full access to models and higher rate
+   limits
+
+### Model Selection
+
+The Mistral AI block dynamically fetches available models from your account:
+
+- **Dynamic Loading**: Models are fetched directly from the Mistral API based on your subscription
+- **Auto-Update**: New models become available automatically as Mistral releases them
+- **Subscription-Based**: Available models depend on your Mistral subscription tier
+
+**Common Mistral Models**:
+
+- **Mistral Large** - Most capable model for complex reasoning tasks
+- **Mistral Medium** - Balanced performance for general use cases
+- **Mistral Small** - Efficient model for simple tasks
+- **Mixtral 8x7B** - Mixture of experts model for diverse capabilities
+- **Codestral** - Specialized for code generation and analysis
+
+## Features
+
+### Chat Completion
+
+The **Create chat completion** action enables you to:
+
+- Send user queries to Mistral AI models
+- Receive high-quality responses
+- Support multiple message roles (system, user, assistant)
+- Handle conversation context and history
+- Stream responses in real-time
+
+### Message Types
+
+**System Messages**: Define the AI's behavior and context
+
+- Set instructions for the AI assistant
+- Establish role and personality
+- Provide consistent formatting guidelines
+
+**User Messages**: Input from users or your bot logic
+
+- Questions and requests
+- Context and background information
+- Conversation continuity
+
+**Assistant Messages**: Previous AI responses
+
+- Maintain conversation history
+- Reference past interactions
+- Build context for follow-up queries
+
+**Dialogue Messages**: Convenient message type for passing conversation history
+
+- Reference saved dialogue variables
+- Choose starting role (user or assistant)
+- Maintain conversation flow seamlessly
+
+### Response Handling
+
+- **Variable Mapping**: Save Mistral's responses to QuickBot variables
+- **Message Content**: Extract and store generated text
+- **Streaming Support**: Real-time response delivery
+- **Error Handling**: Robust error recovery and reporting
+
+## Advanced Features
+
+### Function Calling (Tools)
+
+Mistral AI supports function calling capabilities:
+
+- **Tool Integration**: Connect Mistral with external functions and APIs
+- **Maximum Roundtrips**: Up to 10 tool call roundtrips per conversation
+- **Complex Workflows**: Chain multiple tool calls for sophisticated tasks
+- **Dynamic Execution**: Mistral can decide which tools to use and when
+
+### Streaming Responses
+
+- **Real-time Output**: Stream responses as they're generated for better user experience
+- **Tool Call Streaming**: Handle function calls seamlessly during streaming
+- **Error Recovery**: Proper error handling with HTTP status codes
+- **Performance Optimization**: Reduced perceived latency
+
+### Settings
+
+#### Temperature Control
+
+- **Range**: Adjustable temperature for response creativity
+- **Default**: Balanced setting for most use cases
+- **Optimization**: Lower values for focused responses, higher for creative tasks
+
+#### Message Formatting
+
+- **Role Support**: System, user, and assistant message roles
+- **Context Management**: Maintain conversation history effectively
+- **Variable Integration**: Dynamic content through QuickBot variables
+
+## Best Practices
+
+### Model Selection
+
+**For Complex Reasoning**: Use Mistral Large
+
+- Advanced problem solving
+- Complex analysis and synthesis
+- Detailed explanations and reasoning
+
+**For Code Tasks**: Use Codestral
+
+- Code generation and completion
+- Bug detection and fixing
+- Technical documentation
+
+**For General Use**: Use Mistral Medium
+
+- Everyday conversation
+- Content creation
+- General knowledge tasks
+
+**For Quick Tasks**: Use Mistral Small
+
+- Simple Q&A
+- Basic text processing
+- Fast response requirements
+
+### Prompt Engineering
+
+**Clear Instructions**:
+
+- Provide specific, actionable prompts
+- Use examples to illustrate desired output
+- Define response format and structure
+
+**System Message Usage**:
+
+- Set clear role definitions
+- Establish consistent behavior patterns
+- Provide context and constraints
+
+**Context Management**:
+
+- Use dialogue history for conversation continuity
+- Keep prompts focused and relevant
+- Avoid information overload
+
+### Cost Optimization
+
+**Model Efficiency**:
+
+- Choose appropriate model size for task complexity
+- Use smaller models for simple tasks
+- Monitor usage and costs regularly
+
+**Request Optimization**:
+
+- Batch similar requests when possible
+- Use caching for repeated queries
+- Implement response deduplication
+
+**Subscription Management**:
+
+- Choose appropriate tier for usage volume
+- Monitor rate limits and quotas
+- Scale subscription based on needs
+
+## Troubleshooting
+
+### Authentication Issues
+
+**HTTP 401 Errors**:
+
+- **API Key Propagation**: If you get HTTP 401 while loading models, your API key may not be
+  propagated on Mistral's side yet. Wait a few minutes and try again.
+- **Invalid API Key**: Verify your API key is correctly copied from the Mistral console
+- **Account Status**: Ensure your Mistral account is active and in good standing
+
+**Model Loading Problems**:
+
+- Confirm API key has proper permissions
+- Check if subscription includes model access
+- Verify network connectivity to Mistral API
+
+### Rate Limiting and Quotas
+
+**Rate Limit Errors (HTTP 429)**:
+
+- **Subscription Required**: Add a subscription to your Mistral account via the
+  [billing section](https://console.mistral.ai/billing/) and click the `Subscribe` button
+- **Quota Exceeded**: Upgrade your subscription tier for higher limits
+- **Request Spacing**: Implement delays between requests if hitting limits
+
+**Usage Management**:
+
+- Monitor current usage in Mistral console
+- Set up billing alerts for cost control
+- Implement exponential backoff for retries
+
+### Model and Response Issues
+
+**Model Not Available**:
+
+- Check if model exists in your subscription tier
+- Verify model name is correctly specified
+- Try refreshing the model list in QuickBot
+
+**Empty or Poor Responses**:
+
+- Review prompt clarity and specificity
+- Check temperature settings
+- Ensure adequate context is provided
+- Verify message formatting is correct
+
+**Streaming Problems**:
+
+- Check network stability
+- Monitor for timeout errors
+- Implement proper error handling
+- Verify streaming is supported for your model
+
+### Function Calling Issues
+
+**Tool Call Failures**:
+
+- Verify tool definitions are properly formatted
+- Check tool execution permissions and access
+- Monitor roundtrip limits (maximum 10)
+- Debug tool response validation
+
+**Integration Problems**:
+
+- Ensure external APIs are accessible
+- Validate tool parameter formats
+- Check authentication for external services
+- Test tools independently before integration
+
+### Performance Optimization
+
+**Response Time Issues**:
+
+- Choose appropriate model size for task
+- Optimize prompt length and complexity
+- Use streaming for longer responses
+- Consider caching for repeated queries
+
+**Error Handling**:
+
+- Implement retry logic with exponential backoff
+- Log detailed error information for debugging
+- Provide user-friendly error messages
+- Set up monitoring and alerting
+
+**API Connectivity**:
+
+- Verify DNS resolution for api.mistral.ai
+- Check firewall and proxy settings
+- Monitor API status and availability
+- Implement fallback error responses
+
+### Subscription and Billing
+
+**Payment Issues**:
+
+- Ensure payment method is valid and current
+- Check for failed payment notifications
+- Update billing information if needed
+- Contact Mistral support for billing disputes
+
+**Plan Limitations**:
+
+- Review current subscription tier limits
+- Upgrade plan for higher usage needs
+- Monitor usage against plan quotas
+- Consider usage-based vs. fixed pricing
+
+**Model Access**:
+
+- Verify subscription includes desired models
+- Check model availability by region
+- Understand model-specific limitations
+- Plan upgrades for advanced model access

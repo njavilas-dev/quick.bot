@@ -1,0 +1,44 @@
+---
+title: Theme
+icon: brush
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The theme tab allows you to customize the look of your bot.
+
+<Frame>
+  <img src="/images/builder/theme/bot-theme.png" alt="Bot theme customization" />
+</Frame>
+
+## General
+
+This section allows you to enable or disable the bot branding, change the font and the background of
+your bot.
+
+### Typography
+
+You can change the font of your bot in the Theme tab under the Global section.
+
+There, you can choose between choosing a font from Google Fonts or defining your own custom font.
+
+## Chat
+
+This section allows you to customize all the conversations components (avatars, bubbles, inputs
+etc...).
+
+## Custom CSS
+
+You can also decide to customize even further by adding any custom CSS you want. For this you
+right-click on the bot in the Theme page and inspect the element you want to customize:
+
+For example, if I want my buttons to be more rounded, and have a fancy gradient color, I can add
+this to the custom CSS:
+
+```css
+.bot-button {
+  border-radius: 40px;
+  background-image: linear-gradient(to right, #e052a0, #f15c41);
+  border: none;
+}
+```

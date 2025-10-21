@@ -1,0 +1,64 @@
+{
+  "version": "6",
+  "id": "cl0ibhi7s0018n21aarlag0cm",
+  "name": "My Bot: Merge Disabled",
+  "events": [
+    {
+      "id": "c6foq38xyl1a5d3j15a8o9ti",
+      "outgoingEdgeId": "ovUHhwr6THMhqtn8QbkjtA",
+      "graphCoordinates": { "x": 0, "y": 0 },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "wSR4VCcDNDTTsD9Szi2xH8",
+      "title": "Group #1",
+      "graphCoordinates": { "x": 363, "y": 199 },
+      "blocks": [
+        {
+          "id": "sw6nHJfkMsM4pxZxMBB6QqW",
+          "type": "Bot link",
+          "options": { "botId": "cl0ibhv8d0130n21aw8doxhj5", "mergeResults": false }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "ovUHhwr6THMhqtn8QbkjtA",
+      "from": { "eventId": "c6foq38xyl1a5d3j15a8o9ti" },
+      "to": { "groupId": "wSR4VCcDNDTTsD9Szi2xH8", "blockId": "sw6nHJfkMsM4pxZxMBB6QqW" }
+    }
+  ],
+  "variables": [],
+  "theme": {
+    "general": { "font": "Open Sans", "background": { "type": "None" } },
+    "chat": {
+      "hostBubbles": { "backgroundColor": "#F7F8FF", "color": "#303235" },
+      "guestBubbles": { "backgroundColor": "#FF8E21", "color": "#FFFFFF" },
+      "buttons": { "backgroundColor": "#01a952", "color": "#FFFFFF" },
+      "inputs": { "backgroundColor": "#FFFFFF", "color": "#303235", "placeholderColor": "#9095A0" }
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": { "isBrandingEnabled": true, "isNewResultOnRefreshEnabled": false },
+    "typingEmulation": { "enabled": true, "speed": 300, "maxDelay": 1.5 },
+    "metadata": {
+      "description": "Build beautiful conversational forms and embed them directly in your applications without a line of code. Triple your response rate and collect answers that has more value compared to a traditional form."
+    }
+  },
+  "createdAt": "2022-03-08T15:58:49.720Z",
+  "updatedAt": "2022-03-08T16:07:18.899Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": "cl0ibhi7s0018n21aarlag0cm-public",
+  "customDomain": null,
+  "workspaceId": "unlimitedWorkspaceId",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

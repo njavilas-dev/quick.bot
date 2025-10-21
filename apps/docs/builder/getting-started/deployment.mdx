@@ -1,0 +1,335 @@
+---
+title: 'Deployment Guide'
+icon: 'rocket'
+---
+
+Once your bot is built and tested, it's time to deploy it to your chosen channels. QuickBot supports
+multiple deployment options to reach your users wherever they are.
+
+## Before You Deploy
+
+### Pre-Deployment Checklist
+
+<Steps>
+  <Step title="Test Thoroughly">
+    - Test all conversation paths in preview mode - Verify variables are captured correctly - Check
+    that integrations work properly - Test on mobile and desktop
+  </Step>
+  <Step title="Configure Settings">
+    - Set up proper error handling and fallback responses - Configure business hours if needed - Add
+    contact information for human handoff - Review privacy settings
+  </Step>
+  <Step title="Optimize Performance">
+    - Keep conversation flows simple and intuitive - Minimize the number of steps to complete key
+    actions - Add typing delays for natural conversation flow - Optimize images and media files
+  </Step>
+</Steps>
+
+## Deployment Options
+
+### 1. Website Widget
+
+The most popular deployment method - embed your bot directly on your website.
+
+#### Standard Widget
+
+Add this script to your website's `<head>` section:
+
+```html
+<script type="module">
+  import QuickBot from 'https://cdn.jsdelivr.net/npm/@urbiport/js@0.3/dist/web.js'
+
+  QuickBot.initStandard({
+    botId: 'your-bot-id',
+  })
+</script>
+
+<quickbot-standard style="width: 100%; height: 600px; "></quickbot-standard>
+```
+
+#### Configuration Options
+
+```javascript
+QuickBot.init({
+  botId: 'your-bot-id',
+
+  // Widget position
+  position: 'bottom-right', // bottom-left, top-right, top-left
+
+  // Appearance
+  theme: 'auto', // light, dark, auto
+  primaryColor: '#007bff',
+
+  // Behavior
+  greeting: true, // Show greeting message
+  autoOpen: false, // Auto-open widget
+  showOnPages: ['/contact', '/support'], // Specific pages only
+  hideOnPages: ['/admin'], // Hide on certain pages
+
+  // Customization
+  buttonText: 'Need Help?',
+  headerText: 'Customer Support',
+  placeholderText: 'Type your message...',
+
+  // Advanced
+  customCSS: '.quickbot-widget { border-radius: 12px; }',
+  analytics: true,
+  debugMode: false,
+})
+```
+
+#### Full Page Integration
+
+For a full-page chat experience:
+
+```html
+<div id="quickbot-container" style="width: 100%; height: 500px;"></div>
+
+<script>
+  QuickBot.embed({
+    botId: 'your-bot-id',
+    container: '#quickbot-container',
+    fullscreen: true,
+  })
+</script>
+```
+
+### 2. WhatsApp Business
+
+Connect your bot to WhatsApp Business for messaging customers directly.
+
+#### Setup Process
+
+<Steps>
+  <Step title="WhatsApp Business Account">
+    - Create a WhatsApp Business account - Verify your business phone number - Complete business
+    verification process
+  </Step>
+  <Step title="Meta Developer Setup">
+    - Go to [Meta for Developers](https://developers.facebook.com) - Create a new app for "Business"
+    - Add WhatsApp product to your app - Configure webhook URL: `https://webhook.quick.bot/whatsapp`
+  </Step>
+  <Step title="QuickBot Integration">
+    - Go to Deploy → WhatsApp in your bot settings - Enter your WhatsApp Business Account ID - Add
+    your phone number ID - Configure your access token - Test the connection
+  </Step>
+</Steps>
+
+#### WhatsApp Features
+
+Your bot can use WhatsApp-specific features:
+
+- **Rich Media**: Send images, videos, and documents
+- **Quick Replies**: Provide button-like options
+- **List Messages**: Create structured menus
+- **Location Sharing**: Request and receive location data
+- **Contact Cards**: Share business contact information
+
+### 3. API Integration
+
+Use the QuickBot API to integrate with your existing systems.
+
+#### Start a Conversation
+
+```javascript
+// Initialize chat session
+const response = await fetch('https://api.quick.bot/v1/chat/start', {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer your-api-key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    botId: 'your-bot-id',
+    userId: 'unique-user-id',
+    variables: {
+      userName: 'John Doe',
+      userEmail: 'john@example.com',
+    },
+  }),
+})
+
+const chatSession = await response.json()
+```
+
+#### Send Messages
+
+```javascript
+// Send user message
+const messageResponse = await fetch('https://api.quick.bot/v1/chat/continue', {
+  method: 'POST',
+  headers: {
+    Authorization: 'Bearer your-api-key',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    sessionId: chatSession.sessionId,
+    message: 'Hello, I need help with my order',
+  }),
+})
+
+const botResponse = await messageResponse.json()
+```
+
+### 4. Custom Integrations
+
+#### Slack Bot
+
+Integrate with Slack using webhooks:
+
+```javascript
+// Slack slash command handler
+app.post('/slack/command', async (req, res) => {
+  const { text, user_name, channel_name } = req.body
+
+  // Send to QuickBot API
+  const botResponse = await fetch('https://api.quick.bot/v1/chat/continue', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer your-api-key',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sessionId: `slack-${req.body.user_id}`,
+      message: text,
+      variables: {
+        platform: 'slack',
+        userName: user_name,
+        channel: channel_name,
+      },
+    }),
+  })
+
+  const response = await botResponse.json()
+
+  res.json({
+    response_type: 'in_channel',
+    text: response.messages[0].text,
+  })
+})
+```
+
+#### Discord Bot
+
+```javascript
+// Discord bot integration
+client.on('messageCreate', async (message) => {
+  if (message.author.bot) return
+
+  const response = await fetch('https://api.quick.bot/v1/chat/continue', {
+    method: 'POST',
+    headers: {
+      Authorization: 'Bearer your-api-key',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sessionId: `discord-${message.author.id}`,
+      message: message.content,
+      variables: {
+        platform: 'discord',
+        userName: message.author.username,
+        serverId: message.guild.id,
+      },
+    }),
+  })
+
+  const botResponse = await response.json()
+  message.reply(botResponse.messages[0].text)
+})
+```
+
+## Advanced Deployment Features
+
+### A/B Testing
+
+Test different versions of your bot:
+
+```javascript
+QuickBot.init({
+  botId: 'your-bot-id',
+  experiments: {
+    'welcome-message': {
+      variants: ['friendly', 'professional'],
+      traffic: 0.5, // 50% traffic to each variant
+    },
+  },
+})
+```
+
+### Analytics Integration
+
+Track bot performance with Google Analytics:
+
+```javascript
+QuickBot.init({
+  botId: 'your-bot-id',
+  analytics: {
+    googleAnalytics: 'GA-TRACKING-ID',
+    customEvents: true,
+    trackConversions: true,
+  },
+})
+```
+
+## Monitoring & Maintenance
+
+### Health Checks
+
+Monitor your bot's availability:
+
+```bash
+# Check bot health
+curl -H "Authorization: Bearer your-api-key" \
+     https://api.quick.bot/v1/bots/your-bot-id/health
+```
+
+### Performance Monitoring
+
+Set up alerts for key metrics:
+
+- Response time > 2 seconds
+- Error rate > 5%
+- Conversation completion rate < 80%
+- User satisfaction score < 4.0
+
+### Regular Updates
+
+<Warning>Keep your bot updated and maintained:</Warning>
+
+- Review conversation logs weekly
+- Update responses based on common user questions
+- Test new features before deploying
+- Monitor for broken integrations
+- Update contact information and business hours
+
+## Troubleshooting Common Issues
+
+<Accordion>
+  <AccordionItem title="Widget not loading">
+    - Check that the bot ID is correct - Verify the script is loaded before initialization - Check
+    for JavaScript errors in browser console - Ensure your website allows third-party scripts
+  </AccordionItem>
+  <AccordionItem title="WhatsApp messages not sending">
+    - Verify your WhatsApp Business account is approved - Check that your webhook URL is accessible
+    - Ensure your access token hasn't expired - Confirm your phone number is verified
+  </AccordionItem>
+  <AccordionItem title="API requests failing">
+    - Verify your API key is valid and has the correct permissions - Check that you're using the
+    correct endpoint URLs - Ensure request body format matches the API documentation - Monitor rate
+    limits and implement retry logic
+  </AccordionItem>
+</Accordion>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Monitor Performance" icon="chart-line" href="/builder/results/analytics">
+    Track your bot's performance and user engagement
+  </Card>
+  <Card title="Advanced Features" icon="gear" href="/builder/editor/blocks/logic/condition">
+    Add complex logic and conditional flows
+  </Card>
+</CardGroup>
+
+Your bot is now live and ready to help your users! Remember to monitor its performance and iterate
+based on user feedback and analytics data.

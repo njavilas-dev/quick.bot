@@ -1,0 +1,139 @@
+---
+title: Flow
+icon: game-board
+---
+
+The Flow editor is the visual workspace where you design your bot's conversation flow by dragging
+and connecting [blocks](./blocks/general) together. It provides an intuitive graph-based interface
+for building complex conversational experiences.
+
+## Accessing the Flow Editor
+
+To access the Flow editor:
+
+1. Navigate to your workspace
+2. Select a bot from your bot list or create a new one
+3. The Flow editor opens by default in the main editor view
+4. You can also click the **Flow** button in the left sidebar to return to Flow view from other
+   editor sections
+
+## Main Components
+
+### Canvas Area
+
+The main canvas is where you build your conversation flow:
+
+- **Drag blocks** from the sidebar to add new conversation elements
+- **Connect blocks** by dragging from output points to input points
+- **Pan and zoom** to navigate large flows
+- **Select multiple blocks** for bulk operations
+
+### Block Library Sidebar
+
+The left sidebar contains your block library organized by categories:
+
+- **Components tab**: Contains all available block types
+  - **Bubbles**: Text, image, video, audio, and embed blocks
+  - **Inputs**: User user blocks (text, email, buttons, file upload, etc.)
+  - **Logic**: Conditional logic, redirects, variables, and flow control
+  - **Integrations**: External service connections (AI, webhooks, payments, etc.)
+- **Variables tab**: Manage and view all bot variables
+- **Search bar**: Quickly find specific block types
+
+### Graph Navigation
+
+The Flow editor supports different navigation modes based on your preferences:
+
+## Navigation Controls
+
+### Mouse Mode
+
+**Select blocks**: `Shift` + `Left click` drag to create selection box
+
+**Zoom**: `Ctrl` + `Mouse wheel` to zoom in/out
+
+**Pan**: `Left click` drag to move around, or use `Mouse wheel` for vertical pan and `Shift` +
+`Mouse wheel` for horizontal pan
+
+**Space to pan**: Hold `Space` key + drag to pan the canvas
+
+### Trackpad Mode
+
+**Select blocks**: `Click` + drag to create selection box
+
+**Zoom**: Pinch gesture to zoom in/out
+
+**Pan**: Two-finger drag to move around the canvas
+
+**Space to pan**: Hold `Space` key + drag to pan the canvas
+
+<Note>
+  You can switch between Mouse and Trackpad modes in your account preferences under the "Flow
+  Gestures" section.
+</Note>
+
+## Working with Blocks
+
+### Adding Blocks
+
+1. **Drag and drop**: Drag any block from the sidebar onto the canvas
+2. **Template selection**: Some blocks offer templates for quick setup
+3. **Automatic positioning**: New blocks are placed at your cursor location
+4. **Block configuration**: Click on a placed block to open its settings panel
+
+### Connecting Blocks
+
+1. **Source points**: Each block has output connection points
+2. **Target points**: Drag from a source to a target to create connections
+3. **Auto-connection**: The system helps align connections visually
+4. **Connection types**: Different connection types (default, conditional, etc.)
+
+### Block Organization
+
+- **Grouping**: Select multiple blocks and group them for organization
+- **Group operations**: Move, copy, or delete entire groups
+- **Visual indicators**: Different block types have distinct colors and icons
+- **Block states**: Visual feedback for validation errors or incomplete setup
+
+## Advanced Features
+
+### Multi-Selection
+
+- Use selection box to choose multiple blocks
+- Perform bulk operations (move, delete, group)
+- Group selection menu appears for multiple selected blocks
+
+### Auto-Movement
+
+When connecting blocks near screen edges, the canvas automatically pans to provide more workspace.
+
+### Zoom Controls
+
+- Use the zoom controls in the bottom toolbar
+- Zoom range: 30% to 200%
+- Zoom centers on your cursor position
+
+### Undo/Redo
+
+The Flow editor includes full undo/redo support for all operations.
+
+## Performance Tips
+
+- **Block filtering**: Use search to quickly find blocks in large libraries
+- **Billing restrictions**: Some blocks may be restricted based on your plan
+- **Organization**: Use groups to keep complex flows manageable
+- **Validation**: Check for incomplete block configurations (shown with visual indicators)
+
+<CardGroup cols={2}>
+  <Card title="Blocks" icon="cube" href="./blocks/general">
+    Learn about all available block types and their configurations
+  </Card>
+  <Card title="Variables" icon="code" href="./variables">
+    Manage data flow between blocks with variables
+  </Card>
+</CardGroup>
+
+<Tip>
+  Use keyboard shortcuts and gestures to speed up your workflow. The Space key is particularly
+  useful for quick panning while building flows.
+</Tip>

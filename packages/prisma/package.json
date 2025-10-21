@@ -1,0 +1,33 @@
+{
+  "name": "@quickbot.io/prisma",
+  "license": "AGPL-3.0-or-later",
+  "version": "0.1.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "private": true,
+  "scripts": {
+    "dev": "dotenv -e ./.env -e ../../.env -- tsx ./index.ts && cross-env BROWSER=none prisma studio --schema postgresql/schema.prisma",
+    "prisma:generate": "dotenv -e ./.env -e ../../.env -- prisma generate --schema postgresql/schema.prisma",
+    "prisma:migrate:deploy": "dotenv -e ./.env -e ../../.env -- prisma migrate deploy --schema postgresql/schema.prisma",
+    "prisma:migrate:dev": "dotenv -e ./.env -e ../../.env -- prisma migrate dev --create-only --schema postgresql/schema.prisma",
+    "prisma:migrate:fix": "dotenv -e ./.env -e ../../.env -- tsx ./cleanupFailedMigrations.ts",
+    "prisma:seed": "dotenv -e ./.env -e ../../.env -- prisma db seed --schema postgresql/schema.prisma",
+    "prisma:reset": "dotenv -e ./.env -e ../../.env -- prisma migrate reset --force --skip-generate --schema postgresql/schema.prisma"
+  },
+  "prisma": {
+    "seed": "tsx postgresql/seed.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "ts-node": "^10.9.2"
+  },
+  "devDependencies": {
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/node": "20.4.2",
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "7.4.1",
+    "prisma": "^6.8.2",
+    "tsx": "4.6.2",
+    "typescript": "^5.8.3"
+  }
+}

@@ -1,0 +1,172 @@
+---
+title: Phone
+icon: phone
+---
+
+The Phone number user block allows you to ask your user for a phone number and ensure it is properly
+formatted. It supports international phone number validation, country code selection, and stores
+numbers in a consistent format. This block provides automatic formatting validation and
+user-friendly error handling.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/phone-number-flow.png"
+        alt="Phone number input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/phone-number-bot.png"
+        alt="Phone number input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Configuration Options
+
+### Country Code Settings
+
+- **Default Country**: Select a default country code from 200+ supported countries
+- **International Mode**: Leave unset to allow users to select any country code
+- **Country Display**: Shows country names with their corresponding dial codes (e.g., "United States
+  (+1)")
+
+### Label Customization
+
+- **Placeholder Text**: Customize the input field placeholder (supports variables)
+- **Button Text**: Configure the submit button label (supports variables)
+- **Retry Message**: Set custom error message for invalid phone numbers (supports variables)
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the validated phone number
+- **Variable Support**: All text fields support variable insertion using `{{variableName}}` syntax
+
+## Advanced Features
+
+### Comprehensive Country Support
+
+The phone block supports 200+ countries and territories with their respective country codes,
+including:
+
+- Major countries (US +1, UK +44, Germany +49, etc.)
+- International territories and regions
+- Updated country code database with proper formatting
+
+### Automatic Validation
+
+- **Format Checking**: Validates phone number format based on selected country
+- **Real-time Feedback**: Provides immediate validation feedback to users
+- **Error Handling**: Shows retry message when invalid formats are entered
+- **Consistent Storage**: Normalizes phone numbers for consistent data storage
+
+### Variable Integration
+
+- **Dynamic Placeholders**: Use variables to personalize placeholder text
+- **Context-aware Labels**: Customize button and error text based on user data
+- **Integration Ready**: Formatted phone numbers work seamlessly with integrations
+
+## Best Practices
+
+### User Experience
+
+- Set appropriate default country based on your primary audience
+- Use clear, instructive placeholder text (e.g., "Enter your mobile number")
+- Provide helpful retry messages that guide users to correct formatting
+- Consider international users when choosing default settings
+
+### Data Management
+
+- Use descriptive variable names for phone number storage
+- Remember that phone numbers are stored with country codes
+- Consider privacy implications when storing phone numbers
+- Test international number formats if serving global audience
+
+### Validation Strategy
+
+- Rely on the built-in validation rather than additional checks
+- Use retry messages to educate users about expected formats
+- Consider follow-up verification via SMS for critical use cases
+- Document the phone number format in your integration specifications
+
+## Integration Examples
+
+### CRM Integration
+
+```javascript
+// Phone numbers are stored in international format
+// Example: "+1234567890" for US numbers
+{
+  "contact": {
+    "phone": "{{userPhone}}",
+    "country": "extracted from format"
+  }
+}
+```
+
+### SMS Verification Flow
+
+1. Collect phone number with Phone block
+2. Save to variable (e.g., `userPhone`)
+3. Use webhook to send SMS verification
+4. Follow up with text input for verification code
+
+### International Support
+
+- Set default country to "International" for global audiences
+- Use country-specific retry messages for better UX
+- Consider time zones when following up via phone/SMS
+- Document supported countries for your users
+
+## Troubleshooting
+
+### Common Issues
+
+**Phone numbers not validating**
+
+- Verify the selected default country matches expected format
+- Check that users are entering complete phone numbers
+- Ensure retry message is clear about expected format
+- Test with various international formats if applicable
+
+**Variable not saving phone numbers**
+
+- Confirm a variable is selected in "Save Answer" dropdown
+- Verify variable names don't contain special characters
+- Check that phone number validation passes before saving
+- Test variable integration with subsequent blocks
+
+**Country code selection issues**
+
+- Verify default country is set correctly in settings
+- Check that country list is displaying properly
+- Ensure users can change country if needed
+- Test international number entry when no default is set
+
+**Integration formatting problems**
+
+- Phone numbers are stored with country codes (e.g., "+1234567890")
+- External systems may need phone number parsing
+- Consider formatting requirements of downstream integrations
+- Test phone number format with webhooks and APIs
+
+### Error Message Customization
+
+- Customize retry messages for your specific audience
+- Use variables to make error messages more contextual
+- Test error messages with common user mistakes
+- Provide examples of correctly formatted numbers in retry messages
+
+### Performance Considerations
+
+- Country selection loads quickly with built-in list
+- Phone validation happens client-side for instant feedback
+- Consider user experience on mobile devices for number entry
+- Test input behavior across different browsers and devices

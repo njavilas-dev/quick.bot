@@ -1,0 +1,213 @@
+---
+title: 'Create Your First Bot'
+icon: 'robot'
+---
+
+In this guide, you'll build a simple customer support bot that can answer frequently asked questions
+and collect user information for complex issues.
+
+## Step 1: Create a New Bot
+
+1. Log in to your [QuickBot Dashboard](https://app.quick.bot)
+2. Click **"Create New Bot"**
+3. Choose **"Start from Scratch"** or select a template
+4. Name your bot "Customer Support Bot"
+5. Click **"Create Bot"**
+
+## Step 2: Design the Welcome Flow
+
+### Add a Welcome Message
+
+1. In the editor, you'll see a starting block
+2. Click on it to edit
+3. Change it to an **Agent Text Block**
+4. Add this welcome message:
+
+```
+👋 Hello! I'm your virtual assistant.
+How can I help you today?
+```
+
+### Add Menu Options
+
+1. Connect a **User Buttons Block** after the welcome message
+2. Add these button options:
+   - "Product Information" → `product_info`
+   - "Technical Support" → `tech_support`
+   - "Billing Questions" → `billing`
+   - "Speak to Human" → `human_agent`
+
+<Frame>
+  <img src="/images/builder/blocks/user/single-choice-flow.png" alt="Button configuration" />
+</Frame>
+
+## Step 3: Create Response Paths
+
+### Product Information Path
+
+1. Add a **Logic Condition Block**
+2. Set condition: `{{button_response}} === "product_info"`
+3. If True, connect an **Agent Text Block**:
+
+```
+Here's information about our products:
+
+🚀 **QuickBot Pro** - Advanced features for enterprises
+💼 **QuickBot Business** - Perfect for growing companies
+🌟 **QuickBot Starter** - Great for small businesses
+
+Would you like detailed pricing information?
+```
+
+4. Add **User Buttons**: "Yes, show pricing" and "No, thanks"
+
+### Technical Support Path
+
+1. Add another **Logic Condition Block**
+2. Set condition: `{{button_response}} === "tech_support"`
+3. If True, connect a **User Text Block**:
+
+   - Question: "Please describe the technical issue you're experiencing"
+   - Variable: `tech_issue_description`
+
+4. Then add an **Agent Text Block**:
+
+```
+Thank you for describing your issue. I've noted:
+"{{tech_issue_description}}"
+
+Our technical team will review this and respond within 24 hours.
+In the meantime, have you tried restarting the application?
+```
+
+## Step 4: Add Data Collection
+
+### Contact Information Form
+
+For the human agent path, collect user details:
+
+1. **User Text Block** - Name
+
+   - Question: "What's your name?"
+   - Variable: `user_name`
+
+2. **User Email Block** - Email
+
+   - Question: "What's your email address?"
+   - Variable: `user_email`
+
+3. **User Text Block** - Message
+   - Question: "Please describe how we can help you"
+   - Variable: `user_message`
+
+### Confirmation Message
+
+Add a final **Agent Text Block**:
+
+```
+Perfect! I've collected your information:
+
+👤 Name: {{user_name}}
+📧 Email: {{user_email}}
+💬 Message: {{user_message}}
+
+A human agent will contact you within 2 hours during business hours.
+Is there anything else I can help you with?
+```
+
+## Step 5: Test Your Bot
+
+### Use the Preview Feature
+
+1. Click the **"Preview"** button in the top right
+2. Test each conversation path:
+   - Try all button combinations
+   - Fill out the contact form
+   - Verify variables are captured correctly
+   - Check that messages display properly
+
+### Common Issues to Check
+
+<Accordion>
+  <AccordionItem title="Buttons not working">
+    - Verify button values match your condition logic exactly - Check for typos in variable names -
+    Ensure conditions use proper syntax: `{{ variable }} === "value"`
+  </AccordionItem>
+  <AccordionItem title="Variables not displaying">
+    - Make sure variable names are consistent throughout the flow - Check that variables are defined
+    before being used - Verify syntax: `{{ variable_name }}`
+  </AccordionItem>
+  <AccordionItem title="Flow getting stuck">
+    - Ensure all blocks are properly connected - Check that condition blocks have both True and
+    False paths - Add fallback responses for unexpected inputs
+  </AccordionItem>
+</Accordion>
+
+## Step 6: Customize the Appearance
+
+### Theme Settings
+
+1. Go to the **Theme** tab
+2. Customize colors to match your brand:
+
+   - Primary color: Your brand color
+   - Background: Light or dark theme
+   - Chat bubble colors
+
+3. Upload your logo/avatar image
+4. Adjust font settings
+
+### Custom CSS (Optional)
+
+Add custom styling for advanced customization:
+
+```css
+/* Make buttons more rounded */
+.quickbot-button {
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.quickbot-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+```
+
+## Step 7: Advanced Features
+
+### Add Integrations
+
+Enhance your bot with integrations:
+
+- **Email Integration**: Send notifications when users contact support
+- **Google Sheets**: Log all conversations for analysis
+- **Webhook**: Send data to your CRM or support system
+
+### Logic Improvements
+
+Add more sophisticated logic:
+
+- **Business Hours Check**: Route to different responses based on time
+- **User Type Detection**: Customize responses for different user segments
+- **Follow-up Questions**: Create branching conversations based on user responses
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Deploy Your Bot" icon="rocket" href="/builder/getting-started/deployment">
+    Learn how to publish your bot to your website
+  </Card>
+  <Card title="Explore Blocks" icon="blocks" href="/builder/editor/blocks/general">
+    Discover all available block types and features
+  </Card>
+  <Card title="Add Integrations" icon="plug" href="/builder/editor/blocks/integrations/webhook">
+    Connect your bot with external services
+  </Card>
+  <Card title="View Analytics" icon="chart-line" href="/builder/results/analytics">
+    Track your bot's performance and user engagement
+  </Card>
+</CardGroup>
+
+Congratulations! You've built your first QuickBot. The basic structure is now in place, and you can
+continue to enhance it with additional features and integrations.

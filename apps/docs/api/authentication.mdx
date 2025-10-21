@@ -1,0 +1,52 @@
+---
+title: 'Authentication'
+---
+
+Some API endpoints are protected, and therefore require that you authenticate using an API token.
+
+## Generate a token
+
+1. Navigate to your bot dashboard (https://app.quick.bot/dashboard)
+2. Click on Account > API Tokens
+3. Under the "API tokens" section, click on "Create"
+4. Give it a name, then click on "Create token"
+5. Copy your token.
+
+<Frame>
+  <img src="/images/api/authentication/account-api-token.png" width="900" alt="Account api token" />
+</Frame>
+
+## Use your token
+
+You can authenticate by adding an `Authorization` header to all your HTTP calls. The Authorization
+header is formatted as such: `Authorization: Bearer <token>` (replace `<token>` with your token
+previously generated).
+
+Example:
+
+```sh
+curl -L -X GET 'https://app.quick.bot/api/bots/:botId/results' \
+-H 'Accept: application/json' \
+-H 'Authorization: Bearer myAwesomeToken'
+```
+
+### How to find my `botId`
+
+If you'd like to execute the bot in preview mode, you will need to provide the ID of the building
+bot available in the editor URL:
+
+<Frame>
+  <img src="/images/api/authentication/bot-deploy-flow-url.png" alt="Get bot ID" />
+</Frame>
+
+### How to find my `publicId`
+
+For published bot execution, you need to provide the public bot ID available here:
+
+<Frame>
+  <img src="/images/api/authentication/bot-deploy-url.png" alt="Get botpublic ID" />
+</Frame>
+
+### How to find my `workspaceId`
+
+In your workspace dashboard, head over to `Workspace > Settings` and copy the workspace ID.

@@ -1,0 +1,8 @@
+packages:
+  - 'packages/*'
+  - 'packages/deprecated/*'
+  - 'packages/embeds/*'
+  - 'packages/forge/*'
+  - 'packages/forge/blocks/*'
+  - 'apps/*'
+  - 'packages/transactional/.react-email'

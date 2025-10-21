@@ -1,0 +1,8 @@
+{
+  "extends": "@quickbot.io/tsconfig/base.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"],
+  "compilerOptions": {
+    "jsx": "react"
+  }
+}

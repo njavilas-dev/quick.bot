@@ -1,0 +1,90 @@
+---
+title: Image
+icon: image
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Image agent block allows you to display images to your users. You can upload images, paste URLs,
+or choose GIFs from the Giphy integration to create visually engaging conversations.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame style={{ maxWidth: '400px' }}>
+      <img src="/images/builder/blocks/agent/image.png" alt="Image bubble" className="rounded-lg" />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <YoutubeVideo id="NpEaa2P7qZI" />
+  </Tab>
+</Tabs>
+
+## Image Source Options
+
+The Image block provides multiple ways to add visual content:
+
+- **Upload**: Upload image files directly from your device (supports common formats: PNG, JPG, GIF,
+  etc.)
+- **URL**: Paste a direct link to an image hosted elsewhere
+- **Variables**: Use variables that contain image URLs for dynamic content
+- **Giphy Integration**: Search and select GIFs directly from Giphy (excluded from this interface)
+
+## Interactive Features
+
+### Clickable Images
+
+You can make images interactive by enabling the "On Click" feature:
+
+**Click Link Configuration:**
+
+- **URL**: Define where users will be redirected when they click the image
+- **Alt Text**: Provide alternative text for accessibility and as a clickable label
+- **Variable Support**: Both URL and alt text fields support variables for dynamic content
+
+**Use Cases:**
+
+- Link to product pages from product images
+- Create image-based navigation menus
+- Connect to external resources or documentation
+- Redirect to forms or signup pages
+
+## Display Features
+
+- **Responsive Design**: Images automatically adapt to different screen sizes
+- **Rounded Corners**: Images display with rounded corners for a modern look
+- **Object Fit**: Images maintain proper proportions with cover fitting
+- **Variable Preview**: When using variables, the editor shows a variable tag instead of the actual
+  image
+
+## Best Practices
+
+### Image Optimization
+
+- Use web-optimized formats (WEBP, PNG, JPG)
+- Keep file sizes reasonable for faster loading
+- Consider using appropriate dimensions for chat interfaces
+
+### Accessibility
+
+- Always provide meaningful alt text when making images clickable
+- Use descriptive text that explains the image's purpose or destination
+
+### Variable Usage
+
+- Ensure image URL variables contain complete, valid URLs
+- Test variable images in different contexts to ensure they load correctly
+- Use fallback handling for cases where variables might be empty
+
+## Troubleshooting
+
+### Image Not Displaying
+
+- Verify the image URL is accessible and publicly available
+- Check that the image format is supported by web browsers
+- Ensure variables contain valid image URLs with proper protocols (https://)
+
+### Click Links Not Working
+
+- Confirm the click URL is properly formatted and accessible
+- Test that variables used in URLs are properly populated
+- Verify external links open in the expected manner

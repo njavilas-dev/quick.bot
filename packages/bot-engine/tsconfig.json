@@ -1,0 +1,9 @@
+{
+  "extends": "@quickbot.io/tsconfig/base.json",
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "jsx": "preserve",
+    "lib": ["ES2021", "DOM"]
+  }
+}

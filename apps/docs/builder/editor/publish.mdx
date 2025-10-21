@@ -1,0 +1,233 @@
+---
+title: Publish
+icon: globe
+---
+
+Publishing your bot makes it available to users at its public URL and enables data collection.
+QuickBot provides comprehensive deployment options including custom domains, embedded widgets, and
+multiple integration methods.
+
+## Understanding Publishing
+
+### Published vs Unpublished Bots
+
+**Unpublished bots**:
+
+- Only accessible to workspace members and invited collaborators
+- Changes are automatically saved as drafts
+- No public URL access for end users
+- Results collection is disabled
+
+**Published bots**:
+
+- Accessible via public URL to anyone
+- Results collection is active
+- Can be embedded in websites and applications
+- Version-controlled - unpublished changes don't affect live bot
+
+### Publishing Workflow
+
+1. **Build your bot** in the Flow editor
+2. **Test thoroughly** using the Preview feature
+3. **Click "Publish"** to make it live
+4. **Share the URL** or embed it in your website
+5. **Monitor results** as users interact with your bot
+
+## Publishing Your Bot
+
+### Basic Publishing
+
+To publish your bot:
+
+1. **Complete your bot design** in the Flow editor
+2. **Click the "Publish" button** in the top toolbar
+3. **Confirm publication** in the modal that appears
+4. **Your bot is now live** at its public URL
+
+The Publish button shows different states:
+
+- **"Publish"** - First time publishing or unpublished bot
+- **"Save"** - Bot has unpublished changes that need publishing
+- **"Published"** - Bot is live and up-to-date
+
+### Publishing States and Controls
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/editor/editor-publish.png" alt="Publish button and menu options" />
+</Frame>
+
+**Publishing dropdown menu options**:
+
+- **"Restore published version"** - Discard current changes and revert to the live published version
+- **"Unpublish bot"** - Take the bot offline; users will see "The bot you're looking for doesn't
+  exist"
+- **"Close bot"** - Temporarily disable the bot; users will see "This bot is now closed"
+- **"Reopen bot"** - Reactivate a closed bot
+- **"Export bot"** - Download bot configuration as JSON file
+
+### Version Management
+
+QuickBot maintains separate versions of your bot:
+
+- **Draft version**: Your current work-in-progress
+- **Published version**: The live version users see
+
+**Benefits**:
+
+- Make changes without affecting live users
+- Test changes before publishing
+- Revert to stable version if needed
+- Version history tracking
+
+## Deployment and Embedding
+
+### Accessing the Deploy Page
+
+Navigate to the **Deploy** section to access comprehensive embedding options:
+
+1. **Click "Deploy"** in the editor navigation
+2. **Configure your bot URL** and custom domain
+3. **Choose from multiple embedding methods**
+4. **Copy generated code** for your platform
+
+### Bot URL Configuration
+
+#### Public Bot ID
+
+Your bot's public URL format: `https://quickbot.co/your-bot-id`
+
+- **Auto-generated** from bot name and ID
+- **Customizable** in the Deploy settings
+- **SEO-friendly** for better discoverability
+
+#### Custom Domains
+
+For branded experiences, set up custom domains:
+
+1. **Add your domain** in the Deploy sidebar
+2. **Configure DNS settings** as provided
+3. **Verify domain ownership**
+4. **SSL certificate** automatically provisioned
+
+**Benefits**:
+
+- Professional branding (`chat.yourcompany.com`)
+- Improved trust and recognition
+- Better SEO and analytics tracking
+
+## Advanced Publishing Features
+
+### File Upload Restrictions
+
+**Free plan limitations**:
+
+- File upload blocks require paid plans
+- Upgrade prompt appears when publishing
+- Alternative input methods suggested
+
+### Version Warnings
+
+When publishing bots with version differences:
+
+- **Breaking changes alert** appears
+- **Documentation links** provided
+- **Test in preview** recommendation
+- **Confirmation required** before publishing
+
+### Billing Integration
+
+Publishing features may be restricted based on your plan:
+
+- **Custom domains**: Paid plans only
+- **Embed customization**: Advanced on higher tiers
+- **Analytics integration**: Premium features
+- **WhatsApp integration**: Enterprise plans
+
+## Best Practices
+
+### Pre-Publishing Checklist
+
+**Testing**:
+
+- Test all conversation paths in Preview
+- Verify all integrations work correctly
+- Check responsive design on mobile
+- Validate form submissions and data collection
+
+**Content Review**:
+
+- Proofread all text content
+- Ensure brand consistency
+- Check image quality and loading
+- Verify external links work
+
+**Technical Setup**:
+
+- Configure custom domain if needed
+- Set up analytics tracking
+- Test embedding on target platforms
+- Verify SSL and security settings
+
+### Performance Optimization
+
+**Bot Design**:
+
+- Keep conversation flows concise
+- Optimize image sizes
+- Minimize external integrations
+- Test loading speed
+
+**Embedding**:
+
+- Choose appropriate display mode
+- Optimize trigger conditions
+- Consider mobile experience
+- Monitor performance metrics
+
+### Maintenance
+
+**Regular Updates**:
+
+- Review and update content regularly
+- Monitor user feedback and results
+- Update integrations as needed
+- Check for broken links or issues
+
+**Version Control**:
+
+- Test changes in draft before publishing
+- Keep backups of working versions
+- Document significant changes
+- Monitor performance after updates
+
+## Troubleshooting
+
+### Publishing Issues
+
+**Bot won't publish**:
+
+- Check for incomplete blocks or missing connections
+- Verify all required fields are filled
+- Ensure no validation errors exist
+- Try refreshing the page and publishing again
+
+**Changes not appearing**:
+
+- Confirm you clicked "Publish" not just "Save"
+- Clear browser cache and reload
+- Check if bot is closed or unpublished
+- Verify correct URL is being accessed
+
+<CardGroup cols={2}>
+  <Card title="Deploy" icon="rocket" href="../deploy/client">
+    Learn about embedding and deployment options
+  </Card>
+  <Card title="Results" icon="chart-line" href="../results/table.mdx">
+    Analyze user interactions and bot performance
+  </Card>
+</CardGroup>
+
+<Tip>
+  Always test your bot thoroughly in Preview mode before publishing. Once published, changes require
+  republishing to take effect for users.
+</Tip>

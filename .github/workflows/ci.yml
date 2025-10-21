@@ -1,0 +1,317 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ['main']
+  pull_request:
+    branches: ['main']
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  NODE_OPTIONS: --no-node-snapshot --max-old-space-size=16384
+  DATABASE_URL: 'postgresql://labs:labs_pass@localhost:5432/labs'
+  DATABASE_DIRECT_URL: 'postgresql://labs:labs_pass@localhost:5432/labs'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: labs_pass
+          POSTGRES_USER: labs
+          POSTGRES_DB: labs
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install system packages
+        run: |
+          sudo apt update
+          sudo apt-get install -y openssl
+          sudo npm install -g node-gyp
+
+      - name: Install Bun globally
+        run: npm install -g bun
+
+      - name: Install dependencies
+        run: bun install --no-install-scripts=false
+
+      - name: Copy env to .env
+        run: |
+          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
+          echo "DATABASE_DIRECT_URL=${{ env.DATABASE_DIRECT_URL }}" >> .env
+          echo "ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}" >> .env
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
+          echo "NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}" >> .env
+          echo "NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}" >> .env
+          echo "VERCEL_TOKEN=${{ secrets.VERCEL_TOKEN }}" >> .env
+          echo "VERCEL_TEAM_ID=${{ secrets.VERCEL_TEAM_ID }}" >> .env
+          echo "NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}" >> .env
+          echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
+          echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
+          echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
+          echo "SMTP_SECURE=${{ secrets.SMTP_SECURE }}" >> .env
+          echo "SMTP_AUTH_DISABLED=${{ secrets.SMTP_AUTH_DISABLED }}" >> .env
+          echo "CREDENTIALS_AUTH=${{ secrets.CREDENTIALS_AUTH }}" >> .env
+          echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
+          echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
+          echo "S3_BUCKET=${{ secrets.S3_BUCKET }}" >> .env
+          echo "S3_PORT=${{ secrets.S3_PORT }}" >> .env
+          echo "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" >> .env
+          echo "S3_SSL=${{ secrets.S3_SSL }}" >> .env
+          echo "S3_REGION=${{ secrets.S3_REGION }}" >> .env
+          echo "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "STRIPE_PERSONAL_PRICE_ID=${{ secrets.STRIPE_PERSONAL_PRICE_ID }}" >> .env
+          echo "STRIPE_PERSONAL_CHATS_PRICE_ID=${{ secrets.STRIPE_PERSONAL_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_BUSINESS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_PRICE_ID }}" >> .env
+          echo "STRIPE_BUSINESS_CHATS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_ENTERPRISE_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}" >> .env
+          echo "STRIPE_ENTERPRISE_CHATS_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}" >> .env
+          echo "PLAYWRIGHT_GOOGLE_ACCESS_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}" >> .env
+          echo "PLAYWRIGHT_GOOGLE_REFRESH_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}" >> .env
+          echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" >> .env
+          echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+          echo "SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}" >> .env
+          echo "SENTRY_ORG=${{ secrets.SENTRY_ORG }}" >> .env
+          echo "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" >> .env
+          echo "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" >> .env
+          echo "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" >> .env
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> .env
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
+          echo "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" >> .env
+          echo "NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}" >> .env
+          echo "NEXT_PUBLIC_BETA_ENV=${{ secrets.NEXT_PUBLIC_BETA_ENV }}" >> .env
+          echo "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
+          echo "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
+
+      - name: Build builder
+        run: SKIP_ENV_CHECK=true bun run turbo run build --filter=builder
+
+      - name: Build viewer
+        run: SKIP_ENV_CHECK=true bun run turbo run build --filter=viewer
+
+      - name: Run Prisma migrate and seed
+        run: |
+          bun run db:migrate:deploy
+          bun run db:seed
+
+      - name: Verify builder build output
+        run: |
+          if [ ! -d "apps/builder/.next/standalone" ]; then
+            echo "Error: apps/builder/.next/standalone no fue generado"
+            exit 1
+          fi
+          echo "✓ apps/builder/.next/standalone generado correctamente"
+
+      - name: Verify viewer build output
+        run: |
+          if [ ! -d "apps/viewer/.next/standalone" ]; then
+            echo "Error: apps/viewer/.next/standalone no fue generado"
+            exit 1
+          fi
+          echo "✓ apps/viewer/.next/standalone generado correctamente"
+
+      - name: Determine tag
+        id: tag
+        run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+
+          case "$BRANCH_NAME" in
+            main)
+              echo "tag=latest" >> $GITHUB_OUTPUT
+              ;;
+            develop)
+              echo "tag=develop" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "tag=$BRANCH_NAME" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image for builder
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags:
+            ghcr.io/${{ github.repository_owner }}/quick.bot:builder-${{ steps.tag.outputs.tag }}
+          build-args: |
+            SCOPE=builder
+            NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}
+            NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+            NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}
+            NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+            NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+            NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+            ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
+            NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+            NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+
+      - name: Build and push Docker image for viewer
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/quick.bot:viewer-${{ steps.tag.outputs.tag }}
+          build-args: |
+            SCOPE=viewer
+            NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}
+            NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+            NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}
+            NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+            NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+            NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}
+            DATABASE_URL=${{ env.DATABASE_URL }}
+            ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}
+            NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+            NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
+            NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+            NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+
+      # Sobre escribir en .env
+      - name: Overwrite .env
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "DATABASE_DIRECT_URL=${{ secrets.DATABASE_DIRECT_URL }}" >> .env
+
+      # Run migrations in the builder container
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
+        run: |
+          bun run db:migrate:deploy
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    container: ghcr.io/railwayapp/cli:latest
+    strategy:
+      matrix:
+        service: [builder, viewer]
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_SERVICE_ID_BUILDER: bcaf8c66-92ad-4e18-aeff-1b0d85791585
+      RAILWAY_SERVICE_ID_VIEWER: d6410c83-e5ca-480e-a0e8-e00d96d71524
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select correct SERVICE_ID
+        id: select-service
+        run: |
+          case "${{ matrix.service }}" in
+            builder)
+              echo "RAILWAY_SERVICE_ID=${{ env.RAILWAY_SERVICE_ID_BUILDER }}" >> $GITHUB_ENV
+              ;;
+            viewer)
+              echo "RAILWAY_SERVICE_ID=${{ env.RAILWAY_SERVICE_ID_VIEWER }}" >> $GITHUB_ENV
+              ;;
+          esac
+
+      - name: Set environment variables
+        run: |
+          echo "Setting environment variables for service: ${{ matrix.service }} (${{ env.RAILWAY_SERVICE_ID }})"
+          railway variables \
+           --service=${{ env.RAILWAY_SERVICE_ID }} \
+           --set "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
+           --set "DATABASE_DIRECT_URL=${{ secrets.DATABASE_DIRECT_URL }}" \
+           --set "ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}" \
+           --set "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" \
+           --set "NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}" \
+           --set "NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}" \
+           --set "VERCEL_TOKEN=${{ secrets.VERCEL_TOKEN }}" \
+           --set "VERCEL_TEAM_ID=${{ secrets.VERCEL_TEAM_ID }}" \
+           --set "NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}" \
+           --set "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" \
+           --set "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" \
+           --set "SMTP_HOST=${{ secrets.SMTP_HOST }}" \
+           --set "SMTP_PORT=${{ secrets.SMTP_PORT }}" \
+           --set "SMTP_SECURE=${{ secrets.SMTP_SECURE }}" \
+           --set "SMTP_AUTH_DISABLED=${{ secrets.SMTP_AUTH_DISABLED }}" \
+           --set "CREDENTIALS_AUTH=${{ secrets.CREDENTIALS_AUTH }}" \
+           --set "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" \
+           --set "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" \
+           --set "S3_BUCKET=${{ secrets.S3_BUCKET }}" \
+           --set "S3_PORT=${{ secrets.S3_PORT }}" \
+           --set "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" \
+           --set "S3_SSL=${{ secrets.S3_SSL }}" \
+           --set "S3_REGION=${{ secrets.S3_REGION }}" \
+           --set "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" \
+           --set "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" \
+           --set "STRIPE_PERSONAL_PRICE_ID=${{ secrets.STRIPE_PERSONAL_PRICE_ID }}" \
+           --set "STRIPE_PERSONAL_CHATS_PRICE_ID=${{ secrets.STRIPE_PERSONAL_CHATS_PRICE_ID }}" \
+           --set "STRIPE_BUSINESS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_PRICE_ID }}" \
+           --set "STRIPE_BUSINESS_CHATS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_CHATS_PRICE_ID }}" \
+           --set "STRIPE_ENTERPRISE_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}" \
+           --set "STRIPE_ENTERPRISE_CHATS_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_CHATS_PRICE_ID }}" \
+           --set "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
+           --set "NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}" \
+           --set "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
+           --set "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+           --set "NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}" \
+           --set "PLAYWRIGHT_GOOGLE_ACCESS_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}" \
+           --set "PLAYWRIGHT_GOOGLE_REFRESH_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}" \
+           --set "PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}" \
+           --set "PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}" \
+           --set "PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}" \
+           --set "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" \
+           --set "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
+           --set "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" \
+           --set "SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}" \
+           --set "SENTRY_ORG=${{ secrets.SENTRY_ORG }}" \
+           --set "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" \
+           --set "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" \
+           --set "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" \
+           --set "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" \
+           --set "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" \
+           --set "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" \
+           --set "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" \
+           --set "NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}" \
+           --set "NEXT_PUBLIC_BETA_ENV=${{ secrets.NEXT_PUBLIC_BETA_ENV }}" \
+           --set "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" \
+           --set "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}"
+
+      - name: Deploy to Railway
+        run: |
+          echo "Deploying service: ${{ matrix.service }} (${{ env.RAILWAY_SERVICE_ID }})"
+          railway redeploy --service ${{ env.RAILWAY_SERVICE_ID }} --yes

@@ -1,0 +1,263 @@
+---
+title: FAQ
+icon: message-text
+---
+
+Find answers to the most commonly asked questions about QuickBot. If you don't find what you're
+looking for, feel free to [contact our support team](/support/contact).
+
+## Getting Started
+
+### How do I create my first bot?
+
+Navigate to your workspace and click **Create new bot**. You can start from scratch or choose from
+our template library. Our [Getting Started guide](/builder/getting-started/first-bot) walks you
+through building your first bot step by step.
+
+### What templates are available?
+
+QuickBot offers templates for:
+
+- Lead generation and qualification
+- Customer support and FAQ bots
+- AI-powered chat assistants
+- Product recommendation flows
+- Event registration and surveys
+
+Access templates from the **Templates** tab when creating a new bot.
+
+### How do I test my bot before publishing?
+
+Use the **Preview** button in the editor to test your bot in real-time. You can test both web and
+WhatsApp versions before publishing. The preview shows exactly how users will experience your bot.
+
+## Authentication & Account Management
+
+### How can I change my password?
+
+QuickBot doesn't store traditional passwords. Authentication works through:
+
+- **GitHub** - OAuth integration
+- **Google** - OAuth integration
+- **Facebook** - OAuth integration
+- **Magic Link** - Email-based passwordless login
+
+To change your login method, go to [Account Settings](/app/account/profile) and connect your
+preferred OAuth provider.
+
+### How do I delete my account?
+
+Contact our [support team](/support/contact) to permanently delete your account. This will remove
+all your bots, data, and workspace information.
+
+### Can I change my email address?
+
+Yes, update your email in [Account Profile](/app/account/profile). You'll need to verify the new
+email address before the change takes effect.
+
+## Building & Editing Bots
+
+### How can I delete a block or an edge?
+
+Right-click on any block or edge in the flow editor to open the contextual menu with delete options.
+You can also select elements and use the Delete key.
+
+### Why are some of my results empty?
+
+Your bot collects results as soon as users answer the first input. If later inputs have blank
+answers, it means users left the bot before completing those steps. Check your
+[Analytics](/builder/results/analytics) to identify where users are dropping off.
+
+### Can I set a variable with the Script block?
+
+No, the Script block is only for executing JavaScript code. To set variables using code, use the
+[Set Variable block](/builder/editor/blocks/logic/set-variable) instead, which allows both manual
+input and code-based variable assignment.
+
+### How do I use conditional logic in my bot?
+
+Use the [Condition block](/builder/editor/blocks/logic/condition) to create different paths based on
+user responses, variables, or external data. You can create multiple branches with complex logical
+expressions.
+
+### Can I duplicate a bot?
+
+Yes, from your bots list, click the three-dot menu next to any bot and select **Duplicate**. This
+creates a complete copy including all blocks, variables, and settings.
+
+## Billing & Subscription
+
+### What's included in each plan?
+
+- **FREE**: 2 bots, 2 members, 100 conversations/month
+- **PERSONAL**: Unlimited bots, 5 members, 2,000 conversations/month
+- **BUSINESS**: Everything in Personal + guest collaboration, custom branding removal, priority
+  support
+- **ENTERPRISE**: Maximum limits with dedicated support
+
+View detailed pricing at [Billing & Usage](/app/workspace/billing).
+
+### How is usage calculated?
+
+- **Members**: Each user invited to your workspace counts toward your member limit
+- **Conversations**: Each conversation session where a user interacts with your bot counts as one
+  chat
+- **Storage**: Files uploaded through your bots count toward your storage quota
+
+### What happens when I exceed my limits?
+
+- **Chat limits**: Your bots will stop responding to new users until your next billing cycle
+- **Member limits**: You can't invite additional members until you upgrade or remove existing ones
+- **Storage limits**: File uploads will be disabled until you free up space
+
+### How do I upgrade or downgrade my plan?
+
+Go to [Billing & Usage](/app/workspace/billing) and click **Change Plan**. Upgrades take effect
+immediately, while downgrades apply at your next billing cycle.
+
+## Deployment & Integration
+
+### How do I embed my bot on my website?
+
+After publishing your bot, go to the [Deploy](/builder/deploy/client) section and choose from three
+embed options:
+
+- **Standard**: Full-page chat interface
+- **Popup**: Modal overlay triggered by user action
+- **Bubble**: Floating chat bubble in corner of page
+
+Copy the provided embed code and paste it into your website's HTML.
+
+### How do I set up WhatsApp integration?
+
+Follow our [WhatsApp deployment guide](/builder/deploy/whatsapp) to:
+
+1. Connect your Meta Business account
+2. Verify your phone number
+3. Configure webhook settings
+4. Test your bot integration
+
+### Can I use multiple deployment channels?
+
+Yes, each bot can be deployed simultaneously to:
+
+- Your website (standard, popup, or bubble)
+- WhatsApp Business
+- Custom integrations via API
+- Third-party platforms through webhooks
+
+## Integrations & AI
+
+### What AI models are available?
+
+QuickBot supports:
+
+- **OpenAI**: GPT models, DALL-E, Whisper transcription
+- **Anthropic**: Claude models with vision support
+- **Mistral**: Chat completion capabilities
+- **ElevenLabs**: AI voice generation
+
+Configure AI integrations in [Workspace Credentials](/app/workspace/credentials).
+
+### How do I connect to Google Sheets?
+
+Use the [Google Sheets block](/builder/editor/blocks/integrations/google-sheets) to:
+
+1. Authenticate with your Google account
+2. Select your spreadsheet
+3. Configure read/write operations
+4. Map bot variables to sheet columns
+
+### How do I set up email notifications?
+
+Use the [Send Email block](/builder/editor/blocks/integrations/send-email) with either:
+
+- Default QuickBot email service
+- Your own SMTP server for custom branding
+
+Configure email settings in [Workspace Credentials](/app/workspace/credentials).
+
+### What payment methods does Stripe support?
+
+The [Payment block](/builder/editor/blocks/user/payment) supports all Stripe-enabled payment methods
+including:
+
+- Credit and debit cards
+- Digital wallets (Apple Pay, Google Pay)
+- Bank transfers and local payment methods
+- International payment options
+
+## Team & Workspace Management
+
+### How do I invite team members?
+
+Go to [Workspace Members](/app/workspace/members) and click **Invite Member**. Enter their email
+address and select their role (Admin or Member). They'll receive an invitation email to join your
+workspace.
+
+### What's the difference between members and admins?
+
+- **Admins**: Full workspace control, billing management, can invite/remove members, access all bots
+- **Members**: Can create and edit bots, limited workspace settings access
+- **Guests**: Bot-specific collaboration, invitation-based access to individual bots
+
+### How do I manage workspace settings?
+
+Access [Workspace Settings](/app/workspace/settings) to:
+
+- Change workspace name and icon
+- View workspace ID for API access
+- Configure default bot settings
+- Manage workspace deletion
+
+## Advanced Features & Troubleshooting
+
+### Is human takeover available on QuickBot?
+
+Live chat isn't natively integrated since QuickBot is designed for asynchronous conversations.
+However, you can implement human takeover using:
+
+- [Chatwoot integration](/builder/editor/blocks/integrations/chatwoot) for live chat handover
+- Ticketing systems like Freshdesk or Zendesk for support workflows
+- Email notifications to forward user queries to your support team
+
+### Is there an affiliate program available?
+
+No, QuickBot doesn't offer an affiliate program by design. We believe natural recommendations from
+satisfied customers carry more weight than affiliate-driven promotions. Our focus is on creating the
+best user experience possible so you'll want to recommend QuickBot organically.
+
+### My bot isn't responding - what should I check?
+
+Common troubleshooting steps:
+
+1. Verify your bot is **Published** (not just saved as draft)
+2. Check if you've exceeded your plan's chat limits
+3. Ensure all required blocks have proper connections
+4. Test integrations and API credentials in [Workspace Credentials](/app/workspace/credentials)
+5. Review error logs in the [Results](/builder/results/table) section
+
+### How do I export my bot data?
+
+Go to [Results](/builder/results/table) and click **Export** to download your data in CSV or Excel
+format. You can filter by date range and select specific columns to export.
+
+### Can I use custom code in my bot?
+
+Yes, use the [Script block](/builder/editor/blocks/logic/script) to execute custom JavaScript code.
+You can also use the [Set Variable block](/builder/editor/blocks/logic/set-variable) for code-based
+variable manipulation.
+
+<CardGroup cols={2}>
+  <Card title="Contact Support" icon="message-text" href="/support/contact">
+    Get personalized help from our support team
+  </Card>
+  <Card title="Getting Started" icon="rocket-launch" href="/app/getting-started/welcome">
+    New to QuickBot? Start with our welcome guide
+  </Card>
+</CardGroup>
+
+<Tip>
+  Can't find the answer you're looking for? Our comprehensive documentation covers every feature in
+  detail, or reach out to our support team for personalized assistance.
+</Tip>

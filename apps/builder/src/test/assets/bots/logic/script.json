@@ -1,0 +1,84 @@
+{
+  "version": "6",
+  "id": "cmei69hpt0019rx48lzhg3mf8",
+  "name": "My Bot: Test Redirect",
+  "events": [
+    {
+      "id": "tdN9VXcdBWpuh6Gpaz3w4u",
+      "outgoingEdgeId": "jqZYCYGxaL8svJbM2h1QAn",
+      "graphCoordinates": { "x": 0, "y": 0 },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "vymPUjL9AcWpkg9PkUXovk",
+      "title": "Group #1",
+      "graphCoordinates": { "x": 685, "y": 194 },
+      "blocks": [
+        { "id": "sa8WhnrMyMjYCBMeozfYRoi", "type": "script", "options": { "name": "Code snippet" } }
+      ]
+    },
+    {
+      "id": "rEJ3PhFQc7diJ23jdoF6w7",
+      "title": "Group #2",
+      "graphCoordinates": { "x": 294, "y": 201 },
+      "blocks": [
+        {
+          "id": "s7QRApVZmVFZgS53CNruBRz",
+          "type": "buttons input",
+          "items": [
+            {
+              "id": "5rWR3enRg6jZyFhtmgbPYo",
+              "outgoingEdgeId": "6aVDkPMEsadze2vf4mLiYt",
+              "content": "Trigger code"
+            }
+          ],
+          "options": { "isMultipleChoice": false, "buttonLabel": "Send" }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "jqZYCYGxaL8svJbM2h1QAn",
+      "from": { "eventId": "tdN9VXcdBWpuh6Gpaz3w4u" },
+      "to": { "groupId": "rEJ3PhFQc7diJ23jdoF6w7" }
+    },
+    {
+      "id": "6aVDkPMEsadze2vf4mLiYt",
+      "from": { "blockId": "s7QRApVZmVFZgS53CNruBRz", "itemId": "5rWR3enRg6jZyFhtmgbPYo" },
+      "to": { "groupId": "vymPUjL9AcWpkg9PkUXovk" }
+    }
+  ],
+  "variables": [],
+  "theme": {
+    "general": { "font": "Open Sans", "background": { "type": "None" } },
+    "chat": {
+      "hostBubbles": { "backgroundColor": "#F7F8FF", "color": "#303235" },
+      "guestBubbles": { "backgroundColor": "#FF8E21", "color": "#FFFFFF" },
+      "buttons": { "backgroundColor": "#01a952", "color": "#FFFFFF" },
+      "inputs": { "backgroundColor": "#FFFFFF", "color": "#303235", "placeholderColor": "#9095A0" }
+    }
+  },
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": { "isBrandingEnabled": true },
+    "typingEmulation": { "enabled": true, "speed": 300, "maxDelay": 1.5 },
+    "metadata": {
+      "description": "Build beautiful conversational forms and embed them directly in your applications without a line of code. Triple your response rate and collect answers that has more value compared to a traditional form."
+    }
+  },
+  "createdAt": "2025-08-19T06:37:54.545Z",
+  "updatedAt": "2025-08-19T06:37:54.545Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": null,
+  "customDomain": null,
+  "workspaceId": "cmdn8p5b8001crx67v9l3mpsu",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

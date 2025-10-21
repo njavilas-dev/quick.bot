@@ -1,0 +1,24 @@
+{
+  "name": "@quickbot.io/billing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "license": "UNLICENSED",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Urbiport",
+  "dependencies": {
+    "@quickbot.io/prisma": "workspace:*",
+    "@quickbot.io/schemas": "workspace:*",
+    "stripe": "12.13.0",
+    "@quickbot.io/lib": "workspace:*",
+    "@trpc/server": "10.40.0",
+    "@quickbot.io/env": "workspace:*",
+    "@quickbot.io/telemetry": "workspace:*",
+    "@quickbot.io/db-rules": "workspace:*"
+  },
+  "devDependencies": {}
+}

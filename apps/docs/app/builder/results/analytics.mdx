@@ -1,0 +1,200 @@
+---
+title: Analytics
+icon: chart-line
+---
+
+Analytics provides powerful insights into your bot's performance, user behavior, and engagement
+patterns. Use these visual analytics to understand how users interact with your bot and optimize the
+conversation flow.
+
+## Accessing Analytics
+
+To access analytics for your bot:
+
+1. Navigate to your bot in the builder
+2. Click on the **Results** tab in the main navigation
+3. Click on the **Analytics** tab in the results interface
+4. Ensure your workspace has analytics enabled in your billing plan
+
+<Note>
+  Analytics is a premium feature that requires a paid billing plan. If you don't see the Analytics
+  tab, check your workspace billing settings.
+</Note>
+
+## Analytics Interface
+
+The analytics interface is divided into two main sections:
+
+### Analytics Graph
+
+The main canvas displays a visual representation of your bot flow with overlay data showing:
+
+- **User path visualization**: See how users move through your bot
+- **Drop-off points**: Identify where users abandon the conversation
+- **Block completion rates**: View how many users complete each block
+- **Edge traversal data**: Understand which paths are most popular
+
+### Analytics Sidebar
+
+The sidebar provides detailed metrics and controls:
+
+#### Key Metrics Dashboard
+
+**Views**
+
+- Total number of times your bot was loaded
+- Includes all page visits, even if users don't interact
+
+**Starts**
+
+- Number of users who began interacting with your bot
+- Excludes users who only viewed without engaging
+
+**Completed**
+
+- Users who completed the entire bot conversation
+- Based on reaching designated completion points
+
+**Abandonment Rate**
+
+- Percentage of viewers who left without starting: `(Views - Starts) / Views × 100`
+- Helps identify initial engagement issues
+
+**Completion Rate**
+
+- Percentage of starters who completed: `Completed / Starts × 100`
+- Measures overall conversation effectiveness
+
+## Time Filtering
+
+Filter your analytics data by different time periods:
+
+- **Today**: Current day's data
+- **Last 7 Days**: Previous week's performance
+- **Last 30 Days**: Monthly overview (default)
+- **Month to Date**: Current month from start to today
+- **Last Month**: Complete previous month
+- **Year to Date**: Current year from January 1st
+- **All Time**: Complete historical data
+
+<Tip>
+  Use shorter time periods like "Today" or "Last 7 Days" to monitor recent changes or A/B test
+  results.
+</Tip>
+
+## Understanding Analytics Data
+
+### User Flow Visualization
+
+The analytics graph overlays quantitative data on your bot's visual flow:
+
+1. **Entry Points**: See where users start their journey
+2. **Decision Points**: View which choices users make at button/choice blocks
+3. **Input Completion**: Track how many users complete each input field
+4. **Exit Points**: Identify where users typically leave the conversation
+
+### Interpreting Metrics
+
+**High Abandonment Rate Solutions:**
+
+- Simplify your opening message
+- Reduce initial friction
+- Improve value proposition clarity
+- Test different conversation starters
+
+**Low Completion Rate Solutions:**
+
+- Identify drop-off points in the flow graph
+- Simplify complex sections
+- Reduce conversation length
+- Add engagement elements
+
+**Input Block Analysis:**
+
+- Monitor which questions users skip
+- Identify confusing or problematic inputs
+- Optimize question wording and format
+
+## Analytics vs Submissions
+
+Analytics and Submissions work together to provide complete insight:
+
+### Analytics Tab
+
+- **Focus**: Overall performance and user behavior
+- **Data**: Views, completion rates, abandonment analysis
+- **Visual**: Flow-based graph with overlay metrics
+- **Use Case**: Understanding user journey and optimizing flow
+
+### Submissions Tab
+
+- **Focus**: Individual response data
+- **Data**: Specific answers, user details, submission timestamps
+- **Visual**: Table-based data view
+- **Use Case**: Reviewing and analyzing individual conversations
+
+<CardGroup cols={2}>
+  <Card title="View Submissions" icon="table" href="/builder/results/table">
+    Access detailed submission data and individual responses
+  </Card>
+  <Card title="Export Data" icon="download" href="/builder/results/table#exporting-results">
+    Learn how to export your results data
+  </Card>
+</CardGroup>
+
+## Billing and Plan Requirements
+
+Analytics features are tied to your workspace billing plan:
+
+- **Free Plan**: No analytics access
+- **Paid Plans**: Full analytics with visual flow data
+- **Usage Limits**: Based on your plan's analytics allowance
+
+Check your workspace billing settings to ensure analytics access.
+
+### Bot Optimization
+
+Use analytics data to:
+
+- Restructure conversation flow
+- Improve question clarity
+- Reduce abandonment points
+- Enhance user engagement
+
+### A/B Testing
+
+Analytics help evaluate changes:
+
+- Compare before/after metrics
+- Monitor completion rate improvements
+- Track user behavior changes
+
+## Best Practices
+
+### Regular Monitoring
+
+- Check analytics weekly for ongoing bots
+- Monitor after making significant changes
+- Track seasonal or campaign-related trends
+
+### Data-Driven Optimization
+
+- Focus on the biggest drop-off points first
+- Test one change at a time to isolate impact
+- Use completion rate as your primary success metric
+
+### Time Period Selection
+
+- Use "Last 30 Days" for general performance review
+- Use "Today" or "Last 7 Days" when testing changes
+- Use "All Time" for long-term trend analysis
+
+<Warning>
+  Analytics data may take a few minutes to update after bot interactions. For real-time testing, use
+  the Preview feature instead.
+</Warning>
+
+<Tip>
+  High view counts with low start rates often indicate issues with your bot's opening message or
+  initial value proposition. Consider A/B testing different introductions.
+</Tip>

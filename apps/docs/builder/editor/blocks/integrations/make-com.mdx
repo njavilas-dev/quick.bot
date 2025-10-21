@@ -1,0 +1,178 @@
+---
+title: Make.com
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Make.com integration block allows you to trigger complex automation scenarios within your bot
+flows, enabling seamless data exchange and workflow automation between QuickBot and Make.com.
+
+## Configuration Options
+
+### Basic Setup
+
+1. Insert a Make.com block where you want to trigger the scenario:
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/make-com.png" alt="Make.com block" />
+</Frame>
+
+2. In Make.com, create a new scenario and add a "Webhook" trigger module
+3. Copy the webhook URL provided by Make.com
+4. The Make.com block will automatically detect when the webhook URL is configured and show "Your
+   scenario is correctly configured 🚀"
+
+### Webhook Configuration
+
+The Make.com integration uses QuickBot's advanced HTTP request system, providing comprehensive
+webhook configuration options:
+
+- **URL**: The webhook endpoint provided by Make.com (automatically configured)
+- **Method**: HTTP method (GET, POST, PUT, DELETE, PATCH) - defaults to POST
+- **Query Parameters**: Add URL parameters for data filtering or API requirements
+- **Headers**: Custom headers for authentication or content type specification
+- **Request Body**: JSON payload sent to Make.com with bot data
+
+### Advanced Configuration Options
+
+Enable "Advanced Configuration" to access:
+
+- **Execute on Client**: Choose whether the request runs on the client-side or server-side
+- **Custom Body**: Toggle to manually configure the JSON request body
+- **Timeout**: Set request timeout (1-300 seconds, default varies by plan)
+- **Variable Values for Test**: Define test values for variables when testing the integration
+
+## Features
+
+### Automation Capabilities
+
+- **Scenario Triggering**: Instantly trigger Make.com scenarios from your bot flow
+- **Real-time Data Transfer**: Send bot conversation data, user inputs, and variables to Make.com
+- **Multi-step Workflows**: Chain complex automation sequences across multiple platforms
+- **Conditional Logic**: Use Make.com's filters and routers for advanced workflow control
+
+### Data Transfer
+
+- **Variable Support**: Send any bot variable as part of the webhook payload
+- **Dynamic Content**: Include user responses, conversation context, and calculated values
+- **Structured Data**: Automatically format data as JSON for Make.com processing
+- **Response Handling**: Capture and use data returned from Make.com scenarios
+
+### Integration Testing
+
+- **Test Request Button**: Built-in testing functionality to verify webhook connectivity
+- **Response Preview**: View the exact response received from Make.com
+- **Debug Information**: Detailed error messages for troubleshooting connection issues
+- **Variable Testing**: Test scenarios with specific variable values
+
+## Advanced Features
+
+### Complex Workflows
+
+- **Multi-stage Automation**: Create workflows spanning multiple platforms through Make.com
+- **Data Transformation**: Use Make.com's data processing capabilities to transform bot data
+- **External API Integration**: Connect to hundreds of services through Make.com's integrations
+- **Scheduled Actions**: Trigger time-based actions and follow-ups
+
+### Response Data Mapping
+
+Configure response variable mapping to capture data returned by Make.com:
+
+1. Execute a test request to see the response structure
+2. Use the "Save in Variables" section to map response fields to bot variables
+3. Reference returned data in subsequent bot blocks
+
+### Error Handling
+
+- **Timeout Configuration**: Prevent hanging requests with configurable timeouts
+- **Status Code Handling**: Process different HTTP response codes appropriately
+- **Fallback Logic**: Continue bot flow even if Make.com request fails
+- **Retry Mechanisms**: Configure retry logic in Make.com scenarios
+
+## Best Practices
+
+### Workflow Design
+
+- **Strategic Placement**: Position Make.com blocks at logical workflow transition points
+- **Data Preparation**: Ensure all required variables are collected before triggering scenarios
+- **Error Paths**: Design alternative conversation flows for integration failures
+- **User Experience**: Consider adding loading messages during webhook execution
+
+### Performance Optimization
+
+- **Timeout Settings**: Set appropriate timeouts based on scenario complexity
+- **Payload Optimization**: Send only necessary data to reduce processing time
+- **Async Processing**: Use Make.com's asynchronous capabilities for long-running tasks
+- **Resource Management**: Monitor Make.com operation usage to avoid limits
+
+### Security and Reliability
+
+- **Webhook Security**: Keep webhook URLs confidential and regenerate if compromised
+- **Data Validation**: Validate data in Make.com scenarios before processing
+- **Monitoring**: Set up Make.com notifications for failed scenario executions
+- **Backup Flows**: Design alternative workflows for critical integrations
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: "Test request" fails or times out
+
+- Verify the webhook URL is correctly copied from Make.com
+- Check that the Make.com scenario is active and published
+- Ensure no network firewalls are blocking the connection
+- Try increasing the timeout value in Settings
+
+**Problem**: Make.com scenario not triggering
+
+- Confirm the scenario has a webhook trigger module
+- Verify the webhook is set to receive data immediately
+- Check Make.com's execution history for error details
+
+### Data Flow Problems
+
+**Problem**: Variables not appearing in Make.com
+
+- Ensure variables have values when the webhook executes
+- Check that the request body includes the necessary variable references
+- Use the test functionality to preview the exact data being sent
+
+**Problem**: Response data not saving to variables
+
+- Verify response variable mapping configuration
+- Check that the response structure matches the mapped paths
+- Ensure target variables exist in your bot
+
+### Webhook Troubleshooting
+
+**Problem**: HTTP error codes (400, 401, 403, 500)
+
+- **400 Bad Request**: Check request body format and required fields
+- **401 Unauthorized**: Verify authentication headers if required
+- **403 Forbidden**: Confirm webhook URL and permissions
+- **500 Server Error**: Check Make.com scenario for configuration errors
+
+**Problem**: Inconsistent behavior
+
+- Test with consistent variable values to isolate issues
+- Review Make.com execution logs for processing errors
+- Check for rate limiting or quota restrictions
+
+## Return Data from Make.com
+
+To capture data returned by Make.com scenarios, add a "Webhook response" module at the end of your
+scenario:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/make-com-return.png"
+    alt="Make.com block webhook response module"
+  />
+</Frame>
+
+Configure the response module to return the data you need in your bot, then use response variable
+mapping to save this data to bot variables for use in subsequent blocks.
+
+## Video Tutorial
+
+<YoutubeVideo id="NpEaa2P7qZI" />

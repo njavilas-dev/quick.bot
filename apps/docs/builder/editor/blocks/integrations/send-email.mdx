@@ -1,0 +1,301 @@
+---
+title: Send email
+---
+
+The Send Email integration allows you to automatically send emails during your bot flow. Whether you want to notify yourself when a user completes the bot, send a recap to the user, or trigger any other email-based workflow, this block provides comprehensive email delivery capabilities.
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/blocks/integrations/email.png" alt="Email block example" />
+</Frame>
+
+## Configuration Options
+
+### Basic Email Settings
+
+**Recipients (To:)**
+- Add multiple email addresses separated by commas
+- Supports variable insertion to dynamically set recipients
+- Example: `user@example.com, {{Contact Email}}, admin@company.com`
+
+**Subject Line**
+- Set a custom subject for your emails
+- Supports variable insertion for dynamic subject lines
+- Example: `Thank you {{Name}} for completing our bot!`
+
+### SMTP Configuration
+
+The Send Email block supports two delivery methods:
+
+#### Default SMTP (Quick.bot)
+By default, emails are sent from `notifications@quick.bot` using Quick.bot's SMTP infrastructure. This requires no configuration and works immediately.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/default-email.png" alt="Default email example" />
+</Frame>
+
+#### Custom SMTP Configuration
+Configure your own SMTP server for branded email delivery:
+
+**Required Settings:**
+- **From Email**: The sender's email address (e.g., `noreply@yourcompany.com`)
+- **From Name**: Display name for the sender (e.g., `Your Company Name`)
+- **Host**: SMTP server hostname (e.g., `smtp.gmail.com`, `smtp.sendgrid.net`)
+- **Username**: SMTP authentication username
+- **Password**: SMTP authentication password
+- **Port**: SMTP server port (common values: 25, 587, 465)
+
+**Security Settings:**
+- **TLS/SSL**: Enable secure connection (recommended for ports 587/465)
+
+### Advanced Email Options
+
+**Reply-To Address**
+- Set a different email address for replies
+- Useful for directing responses to a specific inbox
+- Supports variable insertion
+
+**Carbon Copy (CC)**
+- Send copies to additional recipients
+- Multiple addresses supported (comma-separated)
+- Recipients can see other CC addresses
+
+**Blind Carbon Copy (BCC)**
+- Send hidden copies to recipients
+- Other recipients cannot see BCC addresses
+- Useful for internal notifications
+
+## Email Content Features
+
+### Content Modes
+
+**Default Content Mode**
+- Automatically generates a recap of user responses
+- Includes all collected variables and answers
+- Professionally formatted HTML template
+- Includes a link to view full results in the dashboard
+
+**Custom Content Mode**
+Toggle "Custom content?" to create personalized email content:
+
+**Text Mode**
+- Simple plain text emails
+- Supports variable insertion
+- Automatic line break handling
+- Best for simple notifications
+
+**Code/HTML Mode**
+- Full HTML email composition
+- Advanced styling capabilities
+- Variable insertion with `{{Variable Name}}` syntax
+- Supports complex layouts and formatting
+
+### Variable Integration
+
+All email fields support variable insertion:
+- Use `{{Variable Name}}` syntax to insert collected data
+- Variables are automatically parsed and replaced with user responses
+- HTML variables are properly escaped in text mode
+- Raw HTML is preserved in code mode
+
+### File Attachments
+
+**Attachment Configuration:**
+- Select a variable containing file uploads
+- Variable must be linked to a File Upload input block
+- Supports multiple file attachments
+- Files are included as email attachments with original names
+
+**Supported File Sources:**
+- File upload blocks from the bot flow
+- Variables containing file URLs
+- Multiple files from a single variable
+
+## Advanced Features
+
+### SMTP Provider Compatibility
+
+The Send Email integration works with popular SMTP providers:
+
+**Gmail/Google Workspace**
+- Host: `smtp.gmail.com`
+- Port: 587 (TLS) or 465 (SSL)
+- Use App Passwords for enhanced security
+
+**SendGrid**
+- Host: `smtp.sendgrid.net`
+- Port: 587
+- Use API key as password
+
+**Mailgun**
+- Host: `smtp.mailgun.org`
+- Port: 587
+- Use Mailgun SMTP credentials
+
+**AWS SES**
+- Host: Regional endpoint (e.g., `email-smtp.us-east-1.amazonaws.com`)
+- Port: 587 or 25
+- Use SES SMTP credentials
+
+### Security Features
+
+**Credential Encryption**
+- All SMTP credentials are encrypted at rest
+- Passwords are never logged or displayed
+- Secure credential storage with AES encryption
+
+**Connection Security**
+- TLS/SSL support for encrypted transmission
+- Authentication required for all custom SMTP configs
+- Secure credential validation during setup
+
+### Email Testing
+
+**SMTP Configuration Validation**
+- Test SMTP settings before saving
+- Automatic test email sent to your account
+- Real-time validation of connection parameters
+- Clear error messages for troubleshooting
+
+**Preview Mode Protection**
+- Emails are not sent during bot preview
+- Clear indication when running in preview mode
+- Prevents accidental email sending during testing
+
+## Best Practices
+
+### Email Deliverability
+
+**Sender Reputation**
+- Use consistent "From" addresses
+- Authenticate your domain with SPF, DKIM, and DMARC records
+- Maintain low bounce rates by validating email addresses
+
+**Content Guidelines**
+- Use clear, relevant subject lines
+- Include both HTML and text versions when possible
+- Avoid spam trigger words and excessive formatting
+- Include unsubscribe links for marketing emails
+
+**Rate Limiting**
+- Be mindful of SMTP provider sending limits
+- Implement delays for high-volume sending
+- Monitor bounce and complaint rates
+
+### Security Best Practices
+
+**SMTP Configuration**
+- Use dedicated SMTP credentials (not personal email passwords)
+- Enable two-factor authentication on email accounts
+- Use App Passwords for Gmail and similar providers
+- Regularly rotate SMTP passwords
+
+**Data Protection**
+- Avoid including sensitive information in email content
+- Use HTTPS links for any embedded URLs
+- Consider data retention policies for email logs
+- Implement proper access controls for SMTP credentials
+
+### Email Formatting
+
+**HTML Best Practices**
+- Use table-based layouts for maximum compatibility
+- Test across different email clients
+- Include alt text for images
+- Use inline CSS for styling
+
+**Variable Usage**
+- Validate variable names before using in templates
+- Provide fallback text for optional variables
+- Test with various user input scenarios
+- Escape special characters appropriately
+
+## Troubleshooting
+
+### SMTP Configuration Issues
+
+**Connection Problems**
+```
+Error: Unable to connect to SMTP server
+```
+- Verify host and port settings
+- Check firewall/network restrictions
+- Confirm TLS/SSL settings match provider requirements
+- Test with telnet: `telnet smtp.provider.com 587`
+
+**Authentication Failures**
+```
+Error: Invalid login credentials
+```
+- Verify username and password accuracy
+- Use App Passwords for Gmail (not account password)
+- Check if two-factor authentication requires special credentials
+- Confirm account has SMTP access enabled
+
+**TLS/SSL Issues**
+```
+Error: TLS negotiation failed
+```
+- Try different security settings (TLS vs SSL vs none)
+- Verify port matches security setting (587 for TLS, 465 for SSL)
+- Check if provider requires specific TLS versions
+- Test with different port numbers
+
+### Email Delivery Problems
+
+**Emails Not Received**
+1. Check spam/junk folders
+2. Verify recipient email addresses are correct
+3. Review email logs in the bot results
+4. Test SMTP configuration with simple test email
+5. Check sender reputation and domain authentication
+
+**Attachment Issues**
+- Ensure file variable contains valid file URLs
+- Check file size limits (most providers limit to 25MB)
+- Verify file types are allowed by recipient email system
+- Test with different file formats
+
+**Variable Replacement Problems**
+- Confirm variable names match exactly (case-sensitive)
+- Check that variables have been collected before the email block
+- Test variable values in other parts of the bot
+- Review variable scope and availability
+
+### Performance Optimization
+
+**Slow Email Sending**
+- Check SMTP provider response times
+- Consider using dedicated IP addresses for high volume
+- Implement connection pooling for multiple emails
+- Monitor server resources during email processing
+
+**Rate Limiting**
+- Respect provider sending limits
+- Implement delays between emails if needed
+- Consider queuing emails for large batches
+- Monitor bounce rates and delivery statistics
+
+### Debugging Tools
+
+**Email Logs**
+Access detailed email logs in the [bot results table](/builder/results/table#logs):
+- SMTP connection details
+- Email content and recipients
+- Error messages and stack traces
+- Delivery status and timing information
+
+**SMTP Testing**
+Use the built-in SMTP test feature:
+1. Configure SMTP settings in the email block
+2. Click "Create" to test the configuration
+3. Check for test email delivery
+4. Review any error messages in the interface
+
+**Log Analysis**
+Common log entries:
+- `Email successfully sent`: Email delivered to SMTP server
+- `Email not sent`: General delivery failure
+- `Emails are not sent in preview mode`: Preview mode protection active
+- Connection timeout or authentication errors: SMTP configuration issues
+
+For additional support, check the logs first, then contact support through the chat button in the application.

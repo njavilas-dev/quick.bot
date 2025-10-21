@@ -1,0 +1,258 @@
+---
+title: Script block
+icon: code
+---
+
+The Script block allows you to execute custom JavaScript code within your bot flow, enabling advanced logic, external API calls, and browser interactions.
+
+<Info>This block doesn't allow you to create a custom visual block</Info>
+
+<Frame>
+  <img src="/images/builder/blocks/logic/code.png" width="600" alt="Code block" />
+</Frame>
+
+## Configuration Options
+
+### Execution Environment
+- **Execute on Client**: Toggle between server-side and client-side execution
+- **Script Name**: Optional identifier for organizing and debugging scripts
+- **Code Editor**: Full-featured JavaScript editor with syntax highlighting and variable support
+- **Variable Integration**: Direct access to bot variables within your code
+
+### Server vs Client Execution
+- **Server-side (Default)**: Secure, isolated environment with limited APIs
+- **Client-side**: Full browser access but requires user's browser capabilities
+- **Security Considerations**: Server-side prevents malicious code execution
+
+<Info>
+Variables in script are not parsed, they are evaluated. So it should be treated as if it were real javascript variables.
+
+You need to write `console.log({{My variable}})` instead of `console.log("{{My variable}}")`
+</Info>
+
+## Features
+
+### Variable Management
+Use the `setVariable` function to modify bot variables programmatically:
+
+```js
+if({{My variable}} === 'foo') {
+  setVariable('My variable', 'bar')
+} else {
+  setVariable('My variable', 'other')
+}
+```
+
+**Important**: `setVariable` is only available in server-side execution, not when "Execute on client" is enabled.
+
+### API Integration
+Make HTTP requests to external services using the built-in fetch function:
+
+```js
+// Server-side fetch (simplified response handling)
+const data = await fetch('https://api.example.com/data')
+const parsed = JSON.parse(data) // If response is JSON
+
+// Set results in variables
+setVariable('API Response', parsed.result)
+```
+
+### Conditional Logic
+Implement complex business logic that's difficult to achieve with standard blocks:
+
+```js
+// Complex conditional logic
+const score = parseInt({{User Score}})
+const category = {{User Category}}
+
+if (score > 80 && category === 'premium') {
+  setVariable('Qualification', 'gold')
+  setVariable('Discount', 25)
+} else if (score > 60) {
+  setVariable('Qualification', 'silver')
+  setVariable('Discount', 15)
+} else {
+  setVariable('Qualification', 'bronze')
+  setVariable('Discount', 5)
+}
+```
+
+## Advanced Features
+
+### External API Calls
+Integrate with third-party services and APIs:
+
+```js
+// CRM integration example
+const customerData = {
+  name: {{Customer Name}},
+  email: {{Customer Email}},
+  score: {{Lead Score}}
+}
+
+const response = await fetch('https://api.crm.com/leads', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY'
+  },
+  body: JSON.stringify(customerData)
+})
+
+const result = JSON.parse(response)
+setVariable('CRM Lead ID', result.id)
+```
+
+### Data Processing
+Process and transform user data:
+
+```js
+// Process array data
+const responses = {{Survey Responses}} || []
+const processed = responses
+  .filter(item => item.length > 0)
+  .map(item => item.toUpperCase())
+  .join(', ')
+
+setVariable('Processed Responses', processed)
+```
+
+### Browser Interactions (Client-side)
+Access browser APIs when "Execute on client" is enabled:
+
+```js
+// Get user's location
+navigator.geolocation.getCurrentPosition(
+  (position) => {
+    setVariable('User Latitude', position.coords.latitude)
+    setVariable('User Longitude', position.coords.longitude)
+  },
+  (error) => {
+    setVariable('Location Error', error.message)
+  }
+)
+```
+
+## Server-side Limitations
+
+Because server scripts run in an isolated, secure environment:
+
+### Unavailable APIs
+- **Console Functions**: `console.log`, `setTimeout`, `setInterval` not available
+- **Browser APIs**: No access to `window`, `document`, `localStorage`, etc.
+- **Node.js Modules**: Cannot use `import` or `require` statements
+- **Global Objects**: Limited global scope compared to browser environment
+
+### Modified Fetch Behavior
+The `fetch` function works differently on the server:
+
+```js
+// ❌ Standard fetch pattern doesn't work
+const response = await fetch('https://api.example.com/data')
+const data = await response.json() // This will fail
+
+// ✅ Simplified server-side fetch
+const data = await fetch('https://api.example.com/data')
+const parsed = JSON.parse(data) // Parse manually if JSON
+```
+
+Response is always returned as a string, even for JSON responses.
+
+## Best Practices
+
+### Code Organization
+- **Single Responsibility**: Keep scripts focused on specific tasks
+- **Error Handling**: Always include try-catch blocks for external calls
+- **Variable Naming**: Use clear, descriptive variable names
+- **Comments**: Document complex logic for team collaboration
+
+### Performance Optimization
+- **Minimal Processing**: Keep scripts lightweight to avoid delays
+- **Async Operations**: Use await appropriately for API calls
+- **Caching**: Store results in variables to avoid repeated API calls
+- **Timeout Handling**: Implement proper error handling for slow operations
+
+### Security Considerations
+- **Input Validation**: Validate variable data before processing
+- **API Key Management**: Use environment variables for sensitive data
+- **Data Sanitization**: Clean user input before external API calls
+- **Error Messages**: Avoid exposing sensitive information in error messages
+
+### Client vs Server Decision
+- **Use Server-side for**: API calls, data processing, security-sensitive operations
+- **Use Client-side for**: Browser APIs, user interactions, real-time features
+- **Consider Performance**: Client-side reduces server load but depends on user's device
+
+## Example Use Cases
+
+### CRM Integration
+```js
+// Update CRM with form data
+const leadData = {
+  name: {{Full Name}},
+  email: {{Email}},
+  phone: {{Phone Number}},
+  source: 'chatbot'
+}
+
+const response = await fetch('https://api.yourcrm.com/leads', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(leadData)
+})
+
+setVariable('CRM Updated', response.success)
+```
+
+### Dynamic Pricing
+```js
+// Calculate dynamic pricing
+const basePrice = 100
+const userType = {{User Type}}
+const volume = parseInt({{Order Volume}}) || 1
+
+let discount = 0
+if (userType === 'premium') discount = 0.2
+else if (userType === 'standard') discount = 0.1
+
+if (volume > 10) discount += 0.05
+
+const finalPrice = basePrice * volume * (1 - discount)
+setVariable('Final Price', finalPrice.toFixed(2))
+```
+
+### Browser Page Control (Client-side)
+```js
+// Redirect based on conditions
+if({{Category}} === 'qualified') {
+  window.location.href = 'https://my-site.com/qualified'
+} else {
+  window.location.href = 'https://my-site.com/info'
+}
+```
+
+## Troubleshooting
+
+### Common Script Errors
+- **Variable Access**: Ensure variables exist and contain expected data types
+- **Syntax Errors**: Check JavaScript syntax and bracket matching
+- **Async Issues**: Use await with Promise-based operations
+- **Type Errors**: Validate variable types before processing
+
+### Server-side Issues
+- **Fetch Errors**: Remember server-side fetch returns strings directly
+- **Missing Functions**: Global browser functions aren't available
+- **API Timeouts**: Implement proper error handling for external calls
+- **Memory Limits**: Keep scripts efficient to avoid timeout issues
+
+### Client-side Issues
+- **Browser Compatibility**: Test across different browsers and devices
+- **Security Restrictions**: Some browsers block certain operations
+- **Network Issues**: Handle offline scenarios gracefully
+- **Mobile Limitations**: Consider mobile browser capabilities
+
+### Performance Problems
+- **Slow Execution**: Optimize loops and reduce API calls
+- **Memory Usage**: Clean up variables and avoid memory leaks
+- **Network Delays**: Implement reasonable timeouts for external calls
+- **Error Recovery**: Provide fallbacks when scripts fail

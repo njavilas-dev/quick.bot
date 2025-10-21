@@ -1,0 +1,184 @@
+---
+title: Settings
+icon: gear
+---
+
+Manage your workspace configuration, including basic information, branding, and workspace lifecycle.
+Workspace settings control how your workspace appears to members and define its core identity.
+
+## Accessing Workspace Settings
+
+To access your workspace settings:
+
+1. Navigate to your workspace dashboard
+2. Click the **Settings** menu tab
+
+## Basic Configuration
+
+### Workspace Name
+
+The workspace name is displayed throughout the application and helps identify your workspace to
+members and collaborators.
+
+To update your workspace name:
+
+1. Navigate to workspace settings
+2. Modify the name in the **Workspace Name** field
+3. Changes are saved automatically as you type
+
+<Note>
+  The workspace name is visible to all members and appears in the workspace dropdown, member
+  invitations, and throughout the interface.
+</Note>
+
+### Workspace Icon
+
+Customize your workspace with a visual identifier that appears in the workspace dropdown and
+throughout the interface.
+
+To change your workspace icon:
+
+1. Click on the current workspace icon in settings
+2. Choose from available options:
+   - **Upload custom image**: Upload your own icon or logo
+   - **Select emoji**: Choose from available emoji options
+   - **Use initials**: Automatically generated from workspace name
+
+<Tip>
+  Use a recognizable icon or logo to help members quickly identify your workspace, especially when
+  switching between multiple workspaces.
+</Tip>
+
+## Workspace Identity
+
+### Workspace ID
+
+Every workspace has a unique identifier used for API integrations and technical configurations.
+
+**Workspace ID Features:**
+
+- **Read-only**: Cannot be modified after creation
+- **API Integration**: Required for QuickBot API authentication
+- **Technical Reference**: Used in webhooks and third-party integrations
+- **Permanent**: Remains constant throughout workspace lifetime
+
+The workspace ID is displayed as a copyable field in your workspace settings for easy access when
+configuring integrations.
+
+## Workspace Management
+
+### Deleting a Workspace
+
+Workspace deletion is a permanent action that removes all associated data and cannot be undone.
+
+**What gets deleted:**
+
+- All bots and their configurations
+- Response data and analytics
+- Member access and collaborations
+- Billing subscriptions and invoices
+- Custom domains and integrations
+- Uploaded files and assets
+
+**Deletion Process:**
+
+1. Navigate to workspace settings
+2. Scroll to the bottom and click **Delete Workspace**
+3. Confirm the deletion in the popup dialog
+4. Type the workspace name to confirm (if required)
+
+<Warning>
+  **Permanent Action**: Deleting a workspace cannot be undone. All bots, data, analytics, and member
+  access will be permanently removed. Published bots will immediately stop working.
+</Warning>
+
+### Deletion Restrictions
+
+#### Single Workspace Protection
+
+If you only have one workspace, the deletion option will be disabled with an advisory message. You
+cannot delete your last remaining workspace.
+
+#### Admin Requirements
+
+Only workspace administrators can delete workspaces. Members and guests cannot perform this action.
+
+#### Active Subscriptions
+
+When a workspace with an active billing subscription is deleted:
+
+- The Stripe subscription is automatically canceled
+- No further charges will be applied
+- Access to paid features is immediately revoked
+
+## Billing Integration
+
+Workspace settings integrate with your billing configuration:
+
+### Billing Information
+
+Additional billing fields may be available in workspace settings:
+
+- **Billing Email**: Contact email for billing notifications
+- **Billing Company**: Company name for invoices
+- **VAT Information**: Tax identification for applicable regions
+
+### Plan Limitations
+
+Certain workspace settings may be restricted based on your billing plan:
+
+- **Custom branding**: Available on paid plans
+- **Advanced integrations**: May require specific plan tiers
+- **Member limits**: Based on subscription level
+
+<CardGroup cols={2}>
+  <Card title="Billing & Usage" icon="credit-card" href="/app/workspace/billing">
+    Manage your workspace subscription, view usage, and handle payments
+  </Card>
+  <Card title="Members" icon="users" href="/app/workspace/members">
+    Invite and manage workspace members, admins, and guest collaborators
+  </Card>
+</CardGroup>
+
+## Security and Access Control
+
+### Administrative Access
+
+Workspace settings require administrative privileges:
+
+- **Workspace Admins**: Can modify all settings and delete workspace
+- **Members**: Cannot access workspace settings
+- **Guests**: Cannot access workspace settings
+
+### Audit Trail
+
+Workspace modifications are tracked for security:
+
+- **Setting changes**: Name and icon updates are logged
+- **Deletion events**: Workspace deletion is tracked with telemetry
+- **Member activity**: Admin actions are recorded for auditing
+
+## Best Practices
+
+### Workspace Organization
+
+- **Clear naming**: Use descriptive workspace names that reflect purpose
+- **Consistent branding**: Maintain visual consistency with your organization
+- **Regular review**: Periodically review workspace settings for accuracy
+
+### Security Management
+
+- **Limited admin access**: Only assign admin roles to trusted team members
+- **Regular audits**: Review workspace settings and member access periodically
+- **Backup considerations**: Export important bots before making major changes
+
+### Lifecycle Management
+
+- **Workspace consolidation**: Consider merging underutilized workspaces
+- **Clean deletion**: Ensure proper handoff of critical bots before deletion
+- **Migration planning**: Plan workspace transitions carefully to avoid disruption
+
+<Tip>
+  Keep your workspace name and icon up to date to maintain a professional appearance and help team
+  members easily identify the correct workspace when collaborating across multiple projects.
+</Tip>

@@ -1,0 +1,301 @@
+---
+title: Text input
+icon: text
+---
+
+The Text user block allows you to collect text responses from users, supporting both short and long
+text inputs, file attachments, and audio recordings. This versatile block is essential for gathering
+detailed user feedback, collecting documents, and enabling multimedia communication.
+
+## Configuration Options
+
+### Input Types
+
+- **Short Text**: Single-line input for brief responses (names, emails, short answers)
+- **Long Text**: Multi-line textarea for detailed responses (feedback, descriptions, stories)
+- **Toggle Option**: Switch between short and long text modes easily
+
+### Label Customization
+
+- **Placeholder Text**: Guide users with helpful input hints (supports variables)
+- **Button Text**: Customize the submit button label (supports variables)
+- **Dynamic Labels**: Use variables to personalize placeholder and button text
+
+### File Attachments
+
+- **Enable Attachments**: Allow users to upload files with their text responses
+- **File URL Storage**: Save attachment URLs to a separate variable
+- **Visibility Control**: Set attachment visibility to Public or Private
+- **Multiple Files**: Support for multiple file uploads per response
+
+### Audio Recording
+
+- **Enable Audio Clips**: Add voice message capability to text inputs
+- **Audio URL Storage**: Save audio file URLs to dedicated variables
+- **File Format**: Automatic WebM/MP4 format selection based on browser support
+- **Visibility Control**: Manage audio file access permissions
+
+### Variable Integration
+
+- **Save Text**: Store text responses in designated variables
+- **Save Files**: Store file URLs in separate variables for attachments
+- **Save Audio**: Store audio URLs in dedicated variables for voice messages
+
+## Short Text Input
+
+By default, the text input expects short, single-line responses:
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/short-text-flow.png"
+        alt="Text input"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/short-text-bot.png"
+        alt="Text input"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+Perfect for:
+
+- Names and contact information
+- Brief answers and responses
+- Single-word or phrase inputs
+- Form field completion
+- Quick feedback collection
+
+## Long Text Input
+
+Enable long text mode for detailed responses and multi-line input:
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/long-text-flow.png"
+        alt="Long text input flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <img
+      src="/images/builder/blocks/user/long-text-bot.png"
+      alt="Long text input bot"
+      className="rounded-lg"
+    />
+  </Tab>
+</Tabs>
+
+Ideal for:
+
+- Detailed feedback and reviews
+- Story or experience sharing
+- Problem descriptions
+- Open-ended survey responses
+- Support ticket details
+
+## Advanced Features
+
+### File Attachment System
+
+Enable file attachments to collect documents, images, and other files:
+
+- **Upload Interface**: Intuitive drag-and-drop or click-to-upload
+- **Multiple Files**: Users can attach multiple files to one response
+- **URL Storage**: Each attachment URL is saved to your specified variable
+- **File Types**: Support for common file formats (images, documents, videos)
+- **Size Management**: Automatic file size optimization and limits
+
+**Visibility Options:**
+
+- **Public**: Anyone with the link can access files
+- **Private**: Only workspace members can access files
+
+This feature is useful when you want to:
+
+- Collect documentation or certificates
+- Receive image submissions or screenshots
+- Allow users to upload supporting materials
+- Gather file-based evidence or examples
+
+### Audio Recording Capability
+
+Enable voice message recording for enhanced user interaction:
+
+- **Microphone Interface**: Appears when text input is empty
+- **Recording Controls**: Start, stop, and review recording functionality
+- **Format Selection**: Automatic WebM/MP4 format based on browser capability
+- **URL Storage**: Audio file URLs saved to designated variables
+
+<Note>
+  Audio files are recorded as WebM format when supported by the browser, or MP4 format (Safari and
+  other browsers with limited WebM support).
+</Note>
+
+**Audio Features:**
+
+- **Quality Optimization**: Automatic audio compression for faster upload
+- **Duration Limits**: Configurable maximum recording length
+- **Playback Preview**: Users can review recordings before sending
+- **Mobile Support**: Full functionality on mobile devices
+
+Perfect for:
+
+- Voice feedback and testimonials
+- Pronunciation or language learning
+- Audio diary entries
+- Accessibility for users who prefer speaking
+- Personal message collection
+
+### Variable Integration Strategies
+
+**Text Response Storage:**
+
+- Store user text in a primary variable
+- Use descriptive names like `userFeedback` or `customerStory`
+- Text supports full Unicode including emojis and special characters
+
+**Attachment Management:**
+
+- Store attachment URLs in separate variables
+- Array format for multiple files: `["url1.jpg", "url2.pdf"]`
+- Integrate with external storage systems via webhooks
+
+**Audio File Handling:**
+
+- Dedicated variables for audio URLs
+- Format metadata available for processing
+- Duration and size information accessible
+
+## Best Practices
+
+### User Experience
+
+- Use appropriate input type (short vs. long) based on expected response length
+- Provide clear, helpful placeholder text to guide users
+- Enable attachments only when necessary to avoid interface clutter
+- Consider mobile users when enabling audio recording features
+
+### Content Management
+
+- Use descriptive variable names for different types of content
+- Plan storage strategy for uploaded files and audio
+- Consider file retention policies and privacy requirements
+- Test upload limits and file size restrictions
+
+### Accessibility
+
+- Provide alternative input methods (text + audio) for inclusive design
+- Use clear labels and instructions for all features
+- Test voice recording functionality across different devices
+- Ensure file upload interfaces work with assistive technologies
+
+### Performance Considerations
+
+- Monitor file upload sizes and implement reasonable limits
+- Consider bandwidth usage for audio recording features
+- Test performance on mobile devices and slower connections
+- Implement progressive enhancement for advanced features
+
+## Integration Examples
+
+### Customer Support Workflow
+
+```javascript
+{
+  "support_ticket": {
+    "description": "{{userProblem}}",
+    "attachments": "{{supportFiles}}",
+    "audio_description": "{{voiceMessage}}",
+    "priority": "determined by content analysis"
+  }
+}
+```
+
+### Content Collection System
+
+1. Collect text content with Text Input block
+2. Allow file attachments for supporting materials
+3. Enable audio for personal testimonials
+4. Process all content types in downstream integrations
+5. Store in content management system via webhook
+
+### Survey and Feedback
+
+- Use short text for demographic information
+- Enable long text for detailed feedback
+- Allow attachments for evidence or examples
+- Record audio for emotional context and tone
+
+## Troubleshooting
+
+### Common Issues
+
+**File uploads not working**
+
+- Check file size limits and format restrictions
+- Verify browser support for file upload APIs
+- Test upload functionality across different devices
+- Ensure proper network connectivity for large files
+
+**Audio recording issues**
+
+- Verify microphone permissions are granted
+- Check browser support for MediaRecorder API
+- Test audio recording on different devices and browsers
+- Ensure users understand how to start/stop recording
+
+**Variable not saving content**
+
+- Confirm variables are properly selected for each content type
+- Check that text, file, and audio use separate variables
+- Verify variable names don't contain special characters
+- Test variable integration with subsequent blocks
+
+**Long text display problems**
+
+- Verify long text toggle is enabled correctly
+- Check text area sizing on mobile devices
+- Test with various text lengths and formatting
+- Ensure proper responsive behavior
+
+### File Management Issues
+
+**Attachment visibility problems**
+
+- Verify visibility settings match intended access level
+- Check workspace permissions for private files
+- Test file access from different user contexts
+- Ensure proper authentication for private content
+
+**Audio format compatibility**
+
+- Test audio playback across different browsers
+- Verify WebM vs MP4 format selection logic
+- Check audio quality and compression settings
+- Test file size and duration limits
+
+### Integration Considerations
+
+- File URLs may change over time; plan for link management
+- Audio files require transcription for text-based processing
+- Multiple attachments create array data that needs proper parsing
+- Consider storage costs for uploaded content
+
+### Performance Optimization
+
+- Implement file size limits appropriate for your use case
+- Consider content delivery network (CDN) for file distribution
+- Monitor storage usage and implement cleanup policies
+- Test upload performance under various network conditions

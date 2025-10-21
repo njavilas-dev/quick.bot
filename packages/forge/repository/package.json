@@ -1,0 +1,29 @@
+{
+  "name": "@quickbot.io/forge-repository",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/openai-block": "workspace:*",
+    "@quickbot.io/cal-com-block": "workspace:*",
+    "@quickbot.io/chat-node-block": "workspace:*",
+    "@quickbot.io/qrcode-block": "workspace:*",
+    "@quickbot.io/dify-ai-block": "workspace:*",
+    "@quickbot.io/mistral-block": "workspace:*",
+    "@quickbot.io/elevenlabs-block": "workspace:*",
+    "@quickbot.io/anthropic-block": "workspace:*",
+    "@quickbot.io/together-ai-block": "workspace:*",
+    "@quickbot.io/open-router-block": "workspace:*",
+    "@quickbot.io/nocodb-block": "workspace:*",
+    "@quickbot.io/segment-block": "workspace:*",
+    "@quickbot.io/groq-block": "workspace:*",
+    "@quickbot.io/twilio-com-block": "workspace:*",
+    "@quickbot.io/woocommerce-block": "workspace:*",
+    "@quickbot.io/freshdesk-block": "workspace:*",
+    "@quickbot.io/wordpress-block": "workspace:*",
+    "@quickbot.io/zoho-crm-block": "workspace:*"
+  }
+}

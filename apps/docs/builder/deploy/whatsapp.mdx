@@ -1,0 +1,130 @@
+---
+title: WhatsApp
+icon: 'whatsapp'
+---
+
+You can deploy your bot to a **WhatsApp** environment, but there are important limitations you
+should consider when designing it:
+
+- **Unsupported file formats**: GIF and SVG images are not supported and will not display.
+- **Video support**: Only `.mp4` format is supported. See
+  [Supported Media Types](https://developers.facebook.com/docs/whatsapp/cloud-api/reference/media#supported-media-types)
+  for full details.
+- **Button text limit**: Each button can have a maximum of **20 characters**. Longer text will be
+  truncated automatically.
+- **Button quantity limit**: WhatsApp allows a maximum of **3 buttons** at a time. QuickBot handles
+  this by showing additional buttons in a follow-up message with `"..."`.
+- **Incompatible blocks**: The following block types are not supported in WhatsApp. If present, they
+  will be skipped:
+  - Stripe block
+  - Chatwoot block
+  - Script or Set Variable block with `Execute on client` enabled
+  - Google Analytics block
+  - Meta Pixel block
+  - Cal.com block
+
+---
+
+## Deploying your bot on WhatsApp
+
+1. Go to your bot’s **Deploy** tab.
+2. Click the **WhatsApp** button to open the integration instructions.
+
+---
+
+## Step 1 — Create a Meta App
+
+### 1. Create a Facebook Business Account
+
+1. Visit [Meta Business](https://business.facebook.com) and log in.
+2. Create a new Business Account from the left sidebar.
+
+<Info>
+  Meta may automatically restrict your newly created Business Account. If this happens, you’ll need
+  to verify your identity before proceeding.
+</Info>
+
+<Info>
+  Helpful Meta resources: - [Business
+  Verification](https://business.facebook.com/business/help/159334372093366) - [Domain
+  Verification](https://business.facebook.com/business/help/286768115176155?id=199156230960298) -
+  [Add a Phone Number to WhatsApp Business
+  API](https://business.facebook.com/business/help/2058515294227817?id=180505742745347)
+</Info>
+
+---
+
+### 2. Create a Meta App
+
+1. Go to [Meta for Developers](https://developers.facebook.com/apps).
+2. Click **Create App**.
+3. For “What do you want your app to do?”, select **Other**.
+4. Select **Business** as the app type.
+5. Give your app a name and link it to your newly created Business Account.
+6. On the app dashboard, find the **WhatsApp** product and enable it.
+
+---
+
+## Step 2 — Set up credentials
+
+Follow the on-screen instructions in the **Deploy** tab to connect your Meta App to QuickBot.
+
+- Click the **Connect** button.
+- Complete the steps in the WhatsApp credentials modal.
+
+---
+
+## Step 3 — Configure your bot
+
+In the **Configure integration** section, you can customize how your bot behaves on WhatsApp.
+
+<Frame>
+  <img src="/images/builder/deploy/deploy-whatsapp.png" alt="WhatsApp configure integration" />
+</Frame>
+
+**Session expiration timeout**:  
+Set a value between **0 and 48 hours**. This defines how long a session remains active without user
+interaction.  
+If the timeout is reached, the session will expire and a new chat will start when the user sends
+another message.  
+Default: **2 hours**.
+
+---
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="How many WhatsApp numbers can I use?">
+    You can integrate as many numbers as you need. QuickBot does not provide these numbers — you
+    must use your own Meta application. See [Step 2 — Create a Meta
+    App](./whatsapp#2-create-a-meta-app) for setup instructions.
+  </Accordion>
+
+{' '}
+
+<Accordion title="Can I link multiple bots to the same WhatsApp number?">
+  Yes. You’ll need to configure a **Start bot condition** for each bot so the correct one triggers
+  when a user starts a conversation.
+</Accordion>
+
+{' '}
+
+<Accordion title="Does WhatsApp integration require a paid API?">
+  Integration uses the official **WhatsApp Business Platform** from Meta. Currently, the first
+  **1,000 service conversations per month** are free. More details:{' '}
+  <a
+    href="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started#pricing---payment-methods"
+    target="_blank"
+  >
+    Meta Pricing Documentation
+  </a>
+  .
+</Accordion>
+
+  <Accordion title="I receive the initial preview message, but the bot doesn’t reply">
+    This may be caused by a mismatch between the WhatsApp number shown in your WhatsApp profile
+    settings and the number entered in QuickBot. For example, in Brazil some users have two numbers:
+    one with 8 digits and another with 9. You must enter the exact number displayed in your WhatsApp
+    profile for the bot to work correctly.
+  </Accordion>
+</AccordionGroup>

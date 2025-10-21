@@ -1,0 +1,126 @@
+---
+title: Bots
+icon: robot
+---
+
+In the **Bots** section, you can create, view, and manage all the bots in your QuickBot workspace.
+
+---
+
+## 1. Creating a Bot
+
+To create a new bot, click the **Create** button in the top-right corner and choose one of the
+options:
+
+- **Start from scratch** → Build a bot from the ground up.
+- **Use template** → Start from a pre-built template (e.g., Lead Generation, Customer Support, AI
+  Chat).
+- **Import** → Upload a `.json` file exported from another workspace or backup.
+
+<Tip>Templates are fully editable after creation.</Tip>
+
+---
+
+## 2. Bot List
+
+In the main table, you will see all your workspace bots with the following columns:
+
+- **Avatar** → The bot’s identifying icon.
+- **Name** → The name assigned to the bot.
+- **Views** → Number of times the bot was viewed.
+- **Starts** → Number of times the bot was started.
+- **Completed** → Number of completed conversations.
+- **Status** → Current state (Live or Draft).
+- **Publish** → Toggle to enable or disable the bot.
+- **Actions** → Menu with all available bot operations.
+
+You can filter by **Status** or search by name using the search bar.
+
+---
+
+## 3. Bot Actions
+
+In the **Actions** menu (three dots), each bot offers:
+
+- **Flow** → Open the flow editor to design the conversation.
+- **Settings** → Configure general bot settings (name, avatar, preferences).
+- **Theme** → Customize the bot’s appearance.
+- **Deploy** → Get the embed code or integrate the bot into other channels.
+- **Results** → View statistics and collected responses.
+- **Duplicate** → Create an exact copy of the bot to modify without affecting the original.
+- **Delete** → Permanently remove the bot.
+
+<Warning>
+  Deleting a bot immediately stops it from functioning if it is live, and cannot be undone.
+</Warning>
+
+---
+
+## 4. Bot Status Management
+
+Bots can have different states:
+
+- **Draft**
+
+  - Not yet published.
+  - Only visible to workspace members.
+  - Can be tested in preview mode.
+  - Freely editable without affecting any live bot.
+
+- **Live**
+  - Published and available to end users.
+  - Deployed through your selected channels.
+  - Collecting analytics and conversation data.
+  - Updates require republishing to take effect.
+
+---
+
+## 5. Importing Bots
+
+When importing a bot from a `.json` file, QuickBot recreates the entire bot flow, theme, and
+configuration.
+
+### Considerations when importing:
+
+- **Credentials are not preserved** → API keys, OAuth tokens, and service credentials must be
+  re-entered.
+- **External integrations require reconfiguration** → For example:
+  - Email/SMTP
+  - Payment processing
+  - Google Sheets
+  - WhatsApp
+  - AI services
+- **URLs and webhooks may need updates** → Ensure references point to the correct workspace or
+  environment.
+- **Assets** → Review images or file URLs to ensure they are still accessible.
+- **Bot ID changes** → The imported bot is a separate entity and does not overwrite the source bot.
+
+<Tip>Always test the imported bot in draft mode before going live.</Tip>
+
+---
+
+## Best Practices
+
+- Use clear, descriptive bot names.
+- Duplicate bots before making major changes.
+- Keep unpublished bots in draft mode while developing.
+- Regularly review bot analytics to improve performance.
+
+## Learn by doing
+
+The best way to learn is by doing. That’s why we invite you to check out our quick guides.
+
+<CardGroup cols={2}>
+  <Card
+    title="Build your first bot"
+    icon="graduation-cap"
+    href="/builder/getting-started/first-bot"
+  >
+    Learn how QuickBot works and how to use it to build your first chatbot
+  </Card>
+  <Card title="Deploy your bots" icon="comment" href="/builder/deploy/client">
+    Explore the different ways you can deploy your bot.
+  </Card>
+</CardGroup>
+
+<Note>Read about [General Data Protection Regulation](http://localhost:3004/gdpr-rules "gdpr").</Note>

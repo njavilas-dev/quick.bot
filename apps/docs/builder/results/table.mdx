@@ -1,0 +1,127 @@
+---
+title: Table
+icon: table
+---
+
+Once your bot is [published](/builder/editor/publish) you start to collect results from your users. You can see all the results in the `Results` tab of your bot.
+
+<Note>
+  You might be surprised to see partially filled results. This is normal and expected. Your bot collects the answers as soon as they are filled by the user, even if the user doesn't complete the whole conversation. This is useful to understand where users are dropping off and to improve your bot. This is one of QuickBot's greatest features.
+</Note>
+
+## Accessing the Results Table
+
+Navigate to your bot and click the `Results` tab to view all collected responses in a comprehensive table format.
+
+## Table Features
+
+### Column Management
+
+**Hide/Show Columns**
+Click the more options button (three dots) in the table header to access column settings. You can:
+- Toggle column visibility using the eye icon
+- Drag columns to reorder them using the drag handle
+- Customize your view to focus on the most relevant data
+
+<Frame>
+  <img src="/images/builder/results/bot-results-columns.png" alt="Column settings" />
+</Frame>
+
+**Column Resizing**
+Drag the column borders to adjust column widths. Your preferences are automatically saved and will persist across sessions.
+
+### Row Selection and Bulk Actions
+
+**Select Individual Results**
+Use the checkbox in each row to select specific results for bulk operations.
+
+**Select All Results**
+Use the checkbox in the header row to select all visible results at once.
+
+**Bulk Export**
+When you have results selected, use the download button in the selection toolbar to export only the selected results as a CSV file.
+
+**Bulk Delete**
+When you have results selected, use the delete button in the selection toolbar to remove multiple results at once. A confirmation dialog will appear before deletion.
+
+### Export Functionality
+
+**Export All Results**
+Click the download icon in the table header to export all results to a CSV file. The export includes:
+- All visible columns based on your current column settings
+- Option to include deleted blocks (answers from blocks that no longer exist in your bot)
+- Progress indicator for large datasets
+- Automatic filename with current date
+
+**Export Selected Results**
+Select specific results using checkboxes and click the download button in the selection toolbar to export only those results.
+
+**Export Options**
+- **Include deleted blocks**: When enabled, includes answers from blocks that were part of previous versions of your bot but no longer exist
+- **Column filtering**: Only visible columns are included in the export
+- **Progress tracking**: For large datasets (2000+ results), a progress bar shows export status
+
+### Result Details and Logs
+
+**View Full Result**
+Click the expand button (plus icon) in the "More" column to view complete result details in a modal window.
+
+**View Execution Logs**
+Click the logs button (text lines icon) in the "More" column to see detailed logs for each result. Logs show:
+- Integration execution status (success, warning, error)
+- Detailed error messages for failed integrations
+- Step-by-step execution information
+- Expandable details for troubleshooting
+
+**Log Status Types**
+- **Success** (green): Integration executed successfully
+- **Info** (blue): Informational messages about execution
+- **Warning** (yellow): Non-critical issues during execution
+- **Error** (red): Failed integrations with detailed error information
+
+<Frame>
+  <img src="/images/builder/results/bot-results-log.png" alt="See logs buttons" />
+</Frame>
+
+### Table Navigation
+
+**Infinite Scroll**
+The table automatically loads more results as you scroll to the bottom, ensuring smooth navigation through large datasets.
+
+**Search and Filtering**
+Results are loaded with pagination in the background. The table shows the most recent results first.
+
+## Performance and Limitations
+
+**Large Datasets**
+- Results load progressively as you scroll
+- Export of large datasets (2000+ results) includes progress tracking
+- Column preferences are saved automatically
+
+**Real-time Updates**
+- New results appear automatically as users complete your bot
+- Table refreshes when results are deleted or updated
+
+## Troubleshooting
+
+**Missing Results**
+If expected results don't appear, check if they might be filtered out by date ranges or other settings in the parent Results page.
+
+**Export Issues**
+If export fails, check your browser's download settings and ensure you have sufficient storage space.
+
+**Log Details**
+If integration logs show errors, the detailed error messages can help you troubleshoot connection issues with external services like email providers, Google Sheets, or webhooks.
+
+<CardGroup cols={2}>
+  <Card title="Analytics" icon="chart-line" href="./analytics">
+    View detailed analytics and insights about your bot performance
+  </Card>
+  <Card title="Results Overview" icon="table-cells" href="/builder/results">
+    Learn about the complete results system and other views
+  </Card>
+</CardGroup>
+
+<Tip>
+  Results are collected in real-time as users interact with your bot, even if they don't complete the entire conversation. This partial data collection is valuable for understanding user behavior and optimizing your bot's flow.
+</Tip>

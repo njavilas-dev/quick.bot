@@ -1,0 +1,345 @@
+---
+title: Google Sheets
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Google Sheets integration block enables comprehensive data management with Google Spreadsheets, supporting create, read, update operations with advanced filtering, data mapping, and OAuth authentication. This powerful integration allows you to manage spreadsheet data seamlessly within your bot workflows.
+
+<YoutubeVideo id="NpEaa2P7qZI" />
+
+## Configuration Options
+
+### Authentication Setup
+
+The Google Sheets integration uses OAuth 2.0 authentication for secure access to your Google Sheets:
+
+1. **OAuth Flow**: Click "Select Sheets account" to initiate OAuth consent
+2. **Account Selection**: Choose from previously authenticated Google accounts
+3. **Permissions**: Grants read/write access to your Google Sheets
+4. **Secure Storage**: Credentials are encrypted and securely stored
+
+### Spreadsheet Selection
+
+After authentication, configure your target spreadsheet:
+
+1. **Spreadsheet Picker**: Browse and select from your available Google Sheets
+2. **Sheet Selection**: Choose specific sheets (tabs) within the spreadsheet
+3. **Column Detection**: Automatically detects header columns from the first row
+4. **Real-time Updates**: Sheet structure updates are cached for 5-10 minutes
+
+### Operation Configuration
+
+Select from three primary operations:
+
+- **Insert a row**: Add new data to the spreadsheet
+- **Update a row**: Modify existing rows based on filter criteria  
+- **Get data from sheet**: Retrieve and filter spreadsheet data
+
+## Features
+
+### CRUD Operations
+
+#### Insert Row Operation
+Add new records to your spreadsheet with full variable support:
+
+- **Column Mapping**: Map bot variables to specific spreadsheet columns
+- **Dynamic Values**: Use variables, static text, or expressions
+- **Header Validation**: Ensures columns exist before insertion
+- **Batch Support**: Insert multiple values in a single operation
+
+#### Update Row Operation
+Modify existing spreadsheet data with advanced filtering:
+
+- **Filter Criteria**: Define complex filter rules to identify target rows
+- **Logical Operators**: Combine filters with AND/OR operations
+- **Selective Updates**: Update only specific columns while preserving others
+- **Batch Updates**: Update multiple rows matching filter criteria
+
+#### Get Data Operation
+Retrieve and filter spreadsheet data with flexible options:
+
+- **Row Selection**: Extract All, First, Last, or Random matching rows
+- **Advanced Filtering**: Complex filter rules with multiple comparison operators
+- **Column Extraction**: Select specific columns to retrieve
+- **Variable Mapping**: Save extracted data to bot variables for reuse
+
+### Data Filtering System
+
+The Google Sheets integration provides a sophisticated filtering system for precise data operations:
+
+#### Comparison Operators
+- **Equal to**: Exact value matching
+- **Not equal to**: Value exclusion
+- **Contains**: Substring matching (case-insensitive)
+- **Greater than**: Numeric comparison
+- **Less than**: Numeric comparison
+- **Is set**: Check for non-empty values
+
+#### Logical Operations
+- **AND Logic**: All filter conditions must match
+- **OR Logic**: Any filter condition can match
+- **Mixed Logic**: Combine multiple filter rules with different operators
+
+#### Example Filter Configuration
+```
+Email [Equal to] {{User_Email}} 
+AND
+Status [Not equal to] "inactive"
+OR
+Last_Login [Greater than] {{30_Days_Ago}}
+```
+
+### Variable Integration
+
+The Google Sheets block provides comprehensive variable support:
+
+#### Input Variables
+Use bot variables in all configuration fields:
+- Column values for insert/update operations
+- Filter criteria for row matching
+- Dynamic sheet selection
+
+#### Output Variables
+Extract data from spreadsheet responses:
+- Individual column values
+- Complete row data
+- Calculated results
+- Row count information
+
+## Advanced Features
+
+### Complex Data Mapping
+
+The integration supports sophisticated data mapping scenarios:
+
+#### Nested Variable References
+```
+Customer_Info: {{First_Name}} {{Last_Name}} ({{Email}})
+Order_Date: {{Now}}
+Custom_ID: BOT_{{Bot_ID}}_{{Random_Number}}
+```
+
+#### Conditional Data Processing
+Combine with Condition blocks for advanced data logic:
+- Validate data before insertion
+- Route different data types to different sheets
+- Implement data transformation workflows
+
+### Error Handling and Validation
+
+#### Authentication Error Management
+- **Token Refresh**: Automatic OAuth token renewal
+- **Permission Validation**: Checks spreadsheet access rights
+- **Credential Fallback**: Multiple account support for redundancy
+
+#### Data Validation
+- **Header Verification**: Validates column names exist
+- **Type Checking**: Ensures data compatibility
+- **Constraint Validation**: Checks data format requirements
+
+#### Operational Error Recovery
+- **Network Timeout**: Configurable timeout handling
+- **Rate Limiting**: Automatic retry with exponential backoff
+- **Data Conflicts**: Handles concurrent modification scenarios
+
+### Performance Optimization
+
+#### Caching Strategy
+- **Sheet Structure**: Caches column headers for 5-10 minutes
+- **Connection Reuse**: Maintains authenticated sessions
+- **Batch Operations**: Groups multiple operations for efficiency
+
+#### Request Optimization
+- **Minimal Data Transfer**: Retrieves only required columns
+- **Selective Updates**: Updates only modified fields
+- **Connection Pooling**: Reuses Google API connections
+
+## Best Practices
+
+### Data Structure Requirements
+
+#### Header Row Configuration
+Your spreadsheet must follow these requirements for optimal functionality:
+
+1. **First Row as Headers**: The first row must contain column names
+2. **Unique Column Names**: All header names must be unique
+3. **Consistent Naming**: Use consistent column naming across operations
+4. **No Empty Headers**: Avoid blank header cells
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/spreadsheet-format.png"
+    alt="Google Sheets proper formatting"
+  />
+</Frame>
+
+#### Recommended Sheet Structure
+```
+| Email          | First_Name | Last_Name | Registration_Date | Status    |
+|----------------|------------|-----------|-------------------|-----------|
+| user@email.com | John       | Doe       | 2024-01-15        | Active    |
+```
+
+### Performance Considerations
+
+#### Efficient Filtering
+- **Index Columns**: Use indexed columns (like Email) for primary filters
+- **Minimize Filters**: Use only necessary filter conditions
+- **Batch Operations**: Group related operations together
+
+#### Data Volume Management
+- **Pagination**: Use "First" or "Last" options for large datasets
+- **Selective Columns**: Extract only required columns
+- **Archive Strategy**: Move old data to separate sheets
+
+### Security Best Practices
+
+#### Access Control
+- **Principle of Least Privilege**: Grant minimum necessary permissions
+- **Account Segregation**: Use dedicated service accounts for production
+- **Regular Audits**: Review spreadsheet access permissions
+
+#### Data Protection
+- **Sensitive Data**: Avoid storing sensitive information in variables
+- **Encryption**: Leverage Google's built-in encryption
+- **Backup Strategy**: Implement regular data backups
+
+### Integration Patterns
+
+#### Common Use Cases
+
+##### Customer Data Management
+```
+1. Insert Row: Add new customer registration
+2. Update Row: Update customer status based on email
+3. Get Data: Retrieve customer information for personalization
+```
+
+##### Order Processing Workflow
+```
+1. Get Data: Check product availability
+2. Insert Row: Create new order record
+3. Update Row: Update inventory counts
+```
+
+##### Lead Scoring System
+```
+1. Get Data: Retrieve lead information
+2. Update Row: Update lead score based on activity
+3. Insert Row: Log scoring events for analytics
+```
+
+## Troubleshooting
+
+### Common Integration Issues
+
+#### Authentication Problems
+**Issue**: "Couldn't find credentials in database"
+- **Solution**: Re-authenticate your Google account
+- **Prevention**: Check OAuth token expiration regularly
+- **Details**: This occurs when OAuth tokens expire or are revoked
+
+#### Sheet Access Errors
+**Issue**: "Sheet not found" or permission denied
+- **Solution**: Verify spreadsheet sharing permissions
+- **Prevention**: Use consistent spreadsheet IDs across environments
+- **Details**: Ensure the authenticated account has edit access to the target sheet
+
+#### Data Operation Failures
+**Issue**: Insert/Update operations fail silently
+- **Solution**: Check the [bot logs](/builder/results/table#logs) for detailed error messages
+- **Prevention**: Validate column names and data formats before operations
+- **Details**: Most failures are due to mismatched column names or data type conflicts
+
+### Filter Configuration Issues
+
+#### No Matching Rows
+**Problem**: Get/Update operations return no results despite data existing
+**Solutions**:
+- Verify filter column names match spreadsheet headers exactly
+- Check for case sensitivity in comparison values
+- Ensure logical operators (AND/OR) are configured correctly
+- Test with simpler filter criteria first
+
+#### Performance Issues
+**Problem**: Operations timeout or run slowly
+**Solutions**:
+- Reduce the number of filter conditions
+- Use "First" or "Last" instead of "All" for large datasets
+- Implement pagination for large result sets
+- Cache frequently accessed data in bot variables
+
+### Data Integrity Issues
+
+#### Duplicate Entries
+**Problem**: Multiple rows created when expecting updates
+**Solution**: 
+- Use Update operation with proper filter criteria instead of Insert
+- Implement unique identifier columns for reliable row matching
+- Add existence checks using Get operation before Insert
+
+#### Missing Data
+**Problem**: Expected data not appearing in spreadsheet
+**Solution**:
+- Verify bot variables contain expected values
+- Check spreadsheet permissions for write access
+- Review operation logs for completion status
+- Ensure column mapping is correctly configured
+
+### Advanced Troubleshooting
+
+#### Debug Mode
+Enable detailed logging by checking bot execution logs:
+1. Navigate to Results table
+2. Enable "Show logs" option  
+3. Review Google Sheets operation details
+4. Check variable values at execution time
+
+#### Common Error Messages
+- **"No rows found matching criteria"**: Normal behavior when filters don't match data
+- **"Header row not found"**: Ensure first row contains column headers
+- **"Invalid column name"**: Verify column names match exactly (case-sensitive)
+- **"Authentication failed"**: Re-authenticate Google account
+
+## Advanced Use Cases
+
+### Date and Time Management
+
+#### Adding Timestamps
+Use the "Now" system variable to add submission timestamps:
+
+1. **Create Date Variable**: Set variable with "Now" value before Google Sheets block
+2. **Map to Column**: Use the variable in Insert/Update column mapping
+3. **Format Options**: "Now" automatically formats as ISO datetime
+
+### Multi-Sheet Operations
+
+#### Cross-Sheet Data Management
+```
+Workflow Example:
+1. Get Data from "Customers" sheet to validate user
+2. Insert Row in "Orders" sheet to create new order  
+3. Update Row in "Inventory" sheet to adjust stock levels
+```
+
+#### Sheet Selection Strategy
+- **Production Sheets**: Use for live data operations
+- **Staging Sheets**: Use for testing and development
+- **Archive Sheets**: Use for historical data storage
+
+### Advanced Variable Techniques
+
+#### Computed Values
+Create complex data combinations using variables:
+```
+Full_Name: {{First_Name}} {{Last_Name}}
+Customer_ID: CUST_{{Email}}_{{Registration_Date}}
+Order_Total: ${{Subtotal}} + ${{Tax}} = ${{Total}}
+```
+
+#### Conditional Logic Integration
+Combine with Condition blocks for smart data processing:
+- Route data to different sheets based on criteria
+- Validate data before spreadsheet operations
+- Implement approval workflows with status updates

@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 
+ * Sistema de temas centralizado para el viewer
+ * Estilos base del sistema
+ */
+
+@layer base {
+  body {
+    @apply m-0 overflow-hidden;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+      'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  }
+}
+
+/* 
+ * IMPORTANTE: Todos los estilos deben venir del sistema de temas
+ * ubicado en: src/theme/
+ * 
+ * Para agregar nuevos estilos:
+ * 1. Agregar tokens en tailwind.config.js
+ * 2. Crear clases en src/theme/components.ts
+ * 3. Usar themeClasses en componentes
+ */

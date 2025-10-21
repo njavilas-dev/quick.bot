@@ -1,0 +1,253 @@
+---
+title: Dify.AI
+---
+
+The **Dify.AI integration block** enables seamless integration with Dify's AI-powered conversational platform, allowing you to leverage advanced AI assistants, knowledge bases, and workflow automation directly within your QuickBot conversations. This integration supports both streaming and non-streaming responses for optimal user experience.
+
+---
+
+## General
+
+Dify.AI is an LLMOps platform that enables developers to create production-ready AI applications with powerful features like knowledge bases, workflows, and multi-model support. The QuickBot integration connects to Dify's Chat API, allowing you to incorporate sophisticated AI assistants with memory, custom instructions, and document knowledge into your chatbot flows.
+
+---
+
+## Configuration Options
+
+### Prerequisites
+
+Before configuring the Dify.AI block, you need:
+
+1. **Dify.AI Account**: Sign up at [Dify.AI](https://dify.ai) or set up self-hosted instance
+2. **Published AI Application**: Create and publish an AI app in Dify
+3. **API Key**: Generate an App API key for your application
+4. **API Endpoint**: Identify your Dify instance API endpoint
+
+### Authentication Setup
+
+1. Navigate to your Dify.AI dashboard
+2. Go to your published application
+3. Navigate to **API Access** section
+4. Copy the **App API Key** (not the App ID)
+5. Note the **API Base URL** (default: https://api.dify.ai for cloud)
+6. In QuickBot, add the Dify.AI block to your flow
+7. Click **Add Dify.AI credentials**
+8. Enter your API Endpoint URL
+9. Enter your App API Key in the password field
+10. Save the credentials
+
+### Configuration Parameters
+
+- **API Endpoint**: Dify instance URL (default: https://api.dify.ai)
+- **App API Key**: Your Dify application API key (required, stored encrypted)
+- **Query**: User message to send to the AI assistant (supports variables)
+- **Conversation ID**: Optional conversation identifier for context persistence
+- **User**: Unique user identifier for conversation tracking
+- **Inputs**: Custom inputs for your Dify application variables
+
+---
+
+## Features
+
+### Core Capabilities
+
+#### Create Chat Message
+Advanced conversational AI integration with comprehensive features:
+- **Streaming Responses**: Real-time message streaming for immediate user feedback
+- **Context Persistence**: Maintain conversation context across multiple interactions
+- **Custom Inputs**: Send custom variables and parameters to your Dify app
+- **Multi-format Support**: Handle text, markdown, and rich content responses
+- **Token Tracking**: Monitor and track AI model token usage
+
+#### Conversation Management
+- **Automatic ID Generation**: Automatically creates new conversation IDs when needed
+- **Context Continuity**: Maintains conversation history for contextual responses
+- **User Identification**: Track and associate conversations with specific users
+- **Session Handling**: Manage long-running conversations and session state
+
+#### Variable Integration
+- **Dynamic Queries**: Support variable substitution in user queries
+- **Response Mapping**: Map AI responses to multiple QuickBot variables
+- **Structured Outputs**: Extract specific data points from AI responses
+- **Real-time Updates**: Variables updated immediately during streaming responses
+
+### Data Handling
+
+- **Stream Processing**: Real-time processing of streaming AI responses
+- **Link Detection**: Automatic conversion of URLs to markdown links
+- **Text Formatting**: Preserve formatting and structure in AI responses
+- **Error Recovery**: Graceful handling of API failures and network issues
+
+### Advanced AI Features
+
+- **Knowledge Base Integration**: Leverage Dify's document knowledge capabilities
+- **Workflow Automation**: Trigger complex AI workflows from simple queries
+- **Multi-model Support**: Access various AI models through Dify's platform
+- **Custom Instructions**: Use pre-configured AI assistant personalities and behaviors
+
+---
+
+## Advanced Features
+
+### Streaming Architecture
+
+- **Real-time Responses**: Stream AI responses as they're generated
+- **Progressive Display**: Show partial responses to users immediately
+- **Connection Management**: Robust handling of streaming connections
+- **Buffer Management**: Efficient processing of streamed data chunks
+
+### Conversation Persistence
+
+- **Context Memory**: AI assistants remember previous conversation context
+- **Cross-session Continuity**: Maintain conversations across bot restarts
+- **User-specific Contexts**: Separate conversation contexts per user
+- **Variable Persistence**: Automatic conversation ID management
+
+### Error Handling & Reliability
+
+- **HTTP Error Management**: Comprehensive handling of API errors
+- **Stream Error Recovery**: Graceful handling of streaming interruptions
+- **Retry Logic**: Automatic retry for transient failures
+- **Detailed Logging**: Comprehensive error reporting and debugging information
+
+### Performance Optimization
+
+- **Efficient Streaming**: Optimized stream processing for minimal latency
+- **Connection Pooling**: Efficient API connection management
+- **Response Caching**: Optional caching for frequently used responses
+- **Token Optimization**: Monitor and optimize AI model token usage
+
+---
+
+## Actions Reference
+
+### Create Chat Message
+
+**Purpose**: Send user queries to Dify.AI assistants and retrieve AI-powered responses
+
+**Required Parameters**:
+- Query: The user message or question to send to the AI assistant
+
+**Optional Parameters**:
+- Conversation ID: Variable to store/retrieve conversation context
+- User: Unique identifier for the user (for conversation tracking)
+- Inputs: Custom key-value pairs for Dify app variables
+- Response Mapping: Map different response elements to QuickBot variables
+
+**Response Elements**:
+- **Answer**: The main AI response content
+- **Conversation ID**: Unique identifier for the conversation session
+- **Total Tokens**: Token count used by the AI model
+
+**Configuration Example**:
+```
+Query: "{{userQuestion}}"
+Conversation ID: conversationId (variable)
+User: "{{userEmail}}"
+Inputs:
+  - Key: "context", Value: "{{previousContext}}"
+  - Key: "language", Value: "{{userLanguage}}"
+Response Mapping:
+  - Answer → aiResponse
+  - Conversation ID → conversationId
+  - Total Tokens → tokenUsage
+```
+
+### Streaming vs Non-Streaming
+
+**Streaming Mode** (Default):
+- Real-time response display
+- Progressive user feedback
+- Better user experience for long responses
+- Immediate variable updates
+
+**Non-Streaming Mode**:
+- Complete response before display
+- Simpler integration for basic use cases
+- Better for short responses
+- Batch variable updates
+
+---
+
+## Best Practices
+
+### Implementation Recommendations
+
+1. **Conversation Design**: Design conversation flows that leverage AI context effectively
+2. **User Identification**: Use consistent user identifiers for conversation continuity
+3. **Input Optimization**: Structure custom inputs to maximize AI assistant performance
+4. **Response Handling**: Plan for variable-length AI responses in your flow design
+
+### Security Best Practices
+
+1. **API Key Protection**: Never expose App API keys in client-side code
+2. **User Privacy**: Be mindful of user data sent to AI services
+3. **Data Retention**: Understand Dify's data retention policies
+4. **Access Control**: Use appropriate API key permissions and restrictions
+
+### Performance Guidelines
+
+1. **Query Optimization**: Write clear, specific queries for better AI responses
+2. **Context Management**: Balance conversation context with performance
+3. **Token Monitoring**: Monitor token usage to manage costs effectively
+4. **Streaming Benefits**: Use streaming for better user experience with longer responses
+
+### AI Assistant Guidelines
+
+1. **Clear Instructions**: Provide clear instructions in your Dify app configuration
+2. **Knowledge Base**: Optimize your knowledge base for relevant, accurate responses
+3. **Testing**: Thoroughly test AI responses across different scenarios
+4. **Fallback Handling**: Implement fallbacks for when AI responses are unclear
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Authentication Problems
+- **Invalid API Key**: Verify the App API key is correctly copied from Dify
+- **Wrong Endpoint**: Ensure the API endpoint matches your Dify instance
+- **App Not Published**: Verify your Dify application is published and accessible
+- **Permission Denied**: Check API key permissions and app access settings
+
+#### Connection and Streaming Issues
+- **Stream Interruption**: Check network stability and connection reliability
+- **Timeout Errors**: Verify network connectivity to Dify API endpoints
+- **Incomplete Responses**: Check for streaming connection issues
+- **Connection Refused**: Verify Dify service availability and endpoint correctness
+
+#### AI Response Issues
+- **Poor Response Quality**: Review AI assistant instructions and knowledge base
+- **Context Loss**: Check conversation ID persistence and variable handling
+- **Irrelevant Responses**: Optimize knowledge base and AI assistant training
+- **Response Length Issues**: Adjust AI assistant settings for response length
+
+#### Variable and Integration Issues
+- **Variables Not Set**: Verify response mapping configuration
+- **Conversation ID Problems**: Check conversation variable persistence
+- **Input Parameter Issues**: Verify custom input format and content
+- **Token Tracking Issues**: Check token usage tracking and limits
+
+### Debugging Steps
+
+1. **Test API Access**: Verify API key and endpoint access directly
+2. **Check Dify App**: Confirm your Dify application is working properly
+3. **Review Logs**: Check QuickBot logs for detailed error messages
+4. **Validate Inputs**: Ensure all input parameters are properly formatted
+5. **Test Streaming**: Verify streaming functionality with simple queries
+
+### Error Messages
+
+- **"Failed to read response stream"**: Check network connectivity and API status
+- **HTTP error responses**: Check Dify API documentation for specific error codes
+- **"API key is required"**: Ensure App API key is configured in credentials
+- **Stream processing errors**: Check for network interruptions during streaming
+- **Conversation context errors**: Verify conversation ID variable configuration
+
+### Performance Issues
+
+- **Slow AI Responses**: Check Dify service status and AI model performance
+- **High Token Usage**: Optimize queries and conversation context management
+- **Memory Issues**: Monitor conversation context size and cleanup old conversations
+- **Connection Timeouts**: Implement appropriate timeout settings for AI responses

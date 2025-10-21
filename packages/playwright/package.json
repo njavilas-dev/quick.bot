@@ -1,0 +1,20 @@
+{
+  "name": "@quickbot.io/playwright",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {},
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@playwright/test": "1.45.2",
+    "@quickbot.io/lib": "workspace:*",
+    "@quickbot.io/prisma": "workspace:*",
+    "@quickbot.io/schemas": "workspace:*",
+    "@quickbot.io/env": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "20.4.2",
+    "@quickbot.io/tsconfig": "workspace:*"
+  }
+}

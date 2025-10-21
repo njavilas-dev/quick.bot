@@ -1,0 +1,226 @@
+---
+title: Chatwoot
+---
+
+The Chatwoot integration block allows you to seamlessly integrate live chat functionality into your bot flow. It provides a bridge between your automated bot conversations and human agents, enabling users to escalate to live support when needed.
+
+## Configuration Options
+
+### Connection Setup
+
+To set up the Chatwoot integration, you'll need:
+
+1. **Chatwoot Account**: Create a Chatwoot account at [chatwoot.com](https://chatwoot.com)
+2. **Website Inbox**: Create a "Website" type inbox in your Chatwoot dashboard
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/chatwoot/website-inbox.png"
+    alt="Create website inbox"
+  />
+</Frame>
+
+### Authentication Configuration
+
+The integration requires two key configuration parameters:
+
+**Base URL** (Required)
+- Default: `https://app.chatwoot.com`
+- For self-hosted instances, replace with your custom domain
+- Supports variable interpolation for dynamic URLs
+
+**Website Token** (Required)
+- Found in Chatwoot under Settings > Inboxes > Settings > Configuration
+- Located within the JavaScript code snippet
+- This token connects your bot to the specific Chatwoot inbox
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/chatwoot/website-token.png"
+    alt="Find website token"
+  />
+</Frame>
+
+### Task Configuration
+
+The Chatwoot block supports two main tasks:
+
+- **Show widget** (Default): Opens the Chatwoot chat widget
+- **Close widget**: Closes and hides the Chatwoot chat widget
+
+## Features
+
+### User Information Pre-filling
+
+The integration supports comprehensive user data transfer:
+
+**Supported User Fields:**
+- **ID**: Unique identifier for the user (optional)
+- **Name**: User's display name
+- **Email**: User's email address 
+- **Avatar URL**: Profile picture URL
+- **Phone Number**: Contact phone number
+
+**Variable Support:**
+All user fields support QuickBot variables, allowing dynamic population from collected bot data.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/chatwoot/options.png" alt="Chatwoot block" />
+</Frame>
+
+### Automatic Context Transfer
+
+The integration automatically passes context between your bot and Chatwoot:
+
+**Custom Attributes Automatically Set:**
+- `bot_result_url`: Direct link to the current bot session results
+- Any additional custom attributes you've configured in Chatwoot
+
+### User Identity Management
+
+**Smart ID Resolution:**
+- If no ID is provided, the system uses the email address as the user identifier
+- If neither ID nor email is provided, falls back to the bot result ID
+- This prevents duplicate contacts and ensures proper conversation continuity
+
+## Advanced Features
+
+### Dynamic Configuration
+
+**Variable Interpolation:**
+- Base URL supports variables for multi-tenant setups
+- Website tokens can be dynamically selected based on bot logic
+- All user fields support real-time variable substitution
+
+### Session Continuity
+
+**Cross-Platform Support:**
+- Seamless handoff between bot and human agents
+- Conversation history preservation
+- User context maintained across sessions
+
+### Client-Side Execution
+
+**Performance Optimization:**
+- Widget loads asynchronously on the client side
+- No server-side processing delays
+- Instant widget appearance for users
+
+## Best Practices
+
+### Integration Patterns
+
+**Escalation Triggers:**
+Place Chatwoot blocks at natural escalation points:
+- After failed automated resolution attempts
+- When users request human assistance
+- For complex queries requiring human expertise
+
+**User Data Collection:**
+Collect relevant user information before triggering Chatwoot:
+```
+Name → Email → Issue Description → Chatwoot Block
+```
+
+### Performance Optimization
+
+**Conditional Loading:**
+Use condition blocks to determine when to show Chatwoot:
+- Business hours checking
+- Agent availability status
+- User subscription level
+
+**Resource Management:**
+- Close widgets when not needed to free resources
+- Use the "Close widget" task strategically
+
+### Data Privacy
+
+**Information Handling:**
+- Only pass necessary user information to Chatwoot
+- Ensure GDPR compliance when transferring personal data
+- Use encrypted connections (HTTPS) for sensitive data
+
+## Troubleshooting
+
+### Connection Issues
+
+**Invalid Website Token:**
+- Verify token is correctly copied from Chatwoot dashboard
+- Check for extra spaces or characters
+- Ensure token corresponds to the correct inbox
+
+**Base URL Problems:**
+- Confirm URL format (include https://)
+- For self-hosted instances, verify domain accessibility
+- Test URL accessibility from your deployment environment
+
+**Widget Not Appearing:**
+- Check browser console for JavaScript errors
+- Verify Chatwoot SDK loads correctly
+- Confirm website domain is whitelisted in Chatwoot
+
+### Data Flow Problems
+
+**User Information Not Displaying:**
+- Verify user fields contain valid data
+- Check variable names and mappings
+- Ensure data types match expected formats
+
+**Missing Custom Attributes:**
+- Confirm custom attributes are created in Chatwoot
+- Check attribute names match exactly (case-sensitive)
+- Verify attribute types are compatible
+
+### Preview Limitations
+
+**Testing Environment:**
+- Chatwoot blocks show "not supported in preview" message
+- Use published bot for full testing
+- Verify integration in live environment
+
+**Debug Information:**
+Monitor browser console for:
+- Chatwoot SDK loading errors
+- Authentication failures
+- Custom attribute setting issues
+
+### Performance Issues
+
+**Slow Widget Loading:**
+- Check network connectivity to Chatwoot servers
+- Verify Base URL accessibility
+- Consider CDN or caching configurations
+
+**Multiple Widget Instances:**
+- Ensure proper widget cleanup between sessions
+- Use "Close widget" task when transitioning flows
+- Avoid multiple simultaneous Chatwoot blocks
+
+## Custom Attributes Setup
+
+### Result URL Tracking
+
+Create a custom attribute in Chatwoot to track bot sessions:
+
+1. Go to Settings > Custom Attributes
+2. Create new attribute:
+   - **Attribute Key**: `bot_result_url`
+   - **Attribute Type**: Link
+   - **Attribute Display Name**: Bot Result URL
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/chatwoot/custom-attribute.png"
+    alt="Chatwoot custom attribute"
+  />
+</Frame>
+
+This automatically links each conversation to the bot session for agent context.
+
+### Additional Context Attributes
+
+Consider adding these custom attributes for enhanced agent context:
+- `bot_flow_path`: Track which bot flow triggered the escalation
+- `user_intent`: Capture the user's primary goal or need
+- `previous_responses`: Key information collected by the bot

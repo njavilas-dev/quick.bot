@@ -1,0 +1,14 @@
+{
+  "name": "@quickbot.io/radar",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@quickbot.io/env": "workspace:*",
+    "typescript": "5.4.5"
+  }
+}

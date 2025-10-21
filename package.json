@@ -1,0 +1,79 @@
+{
+  "version": "1.0.0",
+  "name": "quick-bot",
+  "private": true,
+  "engines": {
+    "node": "22.x"
+  },
+  "workspaces": [
+    "packages/*",
+    "packages/embeds/*",
+    "packages/forge/*",
+    "packages/forge/blocks/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "docker:up": "docker compose -f docker-compose.dev.yml up -d && sleep 5",
+    "docker:nuke": "docker compose -f docker-compose.dev.yml down --volumes --remove-orphans",
+    "build": "turbo build --filter=builder... --filter=viewer... --filter=landing-page... --filter=docs...",
+    "predev": "bun run db:generate",
+    "dev": "turbo dev --filter=builder... --filter=viewer... --concurrency=11",
+    "db:generate": "cd packages/prisma && bun run prisma:generate",
+    "db:migrate:dev": "cd packages/prisma && bun run prisma:migrate:dev",
+    "db:migrate:deploy": "cd packages/prisma && bun run prisma:migrate:deploy",
+    "db:migrate:fix": "cd packages/prisma && bun run prisma:migrate:fix",
+    "db:seed": "cd packages/prisma && bun run prisma:seed",
+    "db:reset": "cd packages/prisma && bun run prisma:reset",
+    "generate-change-log": "git fetch --all && bun run gitmoji-changelog",
+    "locales:sync": "tolgee sync --continue-on-warning --remove-unused --patterns './apps/builder/src/**/*.ts?(x)' --backup './.tolgee/backup'",
+    "locales:pull": "tolgee pull && prettier --write ./apps/builder/src/i18n",
+    "create-new-block": "cd packages/forge/cli && bun start",
+    "format:write": "bun run turbo run format:write",
+    "format:check": "bun run turbo run format:check",
+    "patch-embed-libs": "bun run scripts/patch-embed-libs.ts",
+    "clean": "bun pm cache rm && bun run scripts/clean-cache-folders.js",
+    "stripe": "bun run scripts/start-stripe-cli.js",
+    "act:prepare:mac": "brew install act",
+    "act:run:mac": "bun run ./scripts/run-act-mac.js",
+    "act:run:win": "bun run ./scripts/run-act-win.js",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "@tolgee/cli": "2.1.5",
+    "cross-env": "7.0.3",
+    "cz-emoji": "1.3.2-canary.2",
+    "dotenv": "16.4.5",
+    "husky": "^9.1.7",
+    "prettier": "2.8.8",
+    "turbo": "2.4.4",
+    "@sentry/cli": "^2.41.1",
+    "tsx": "4.6.2"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-emoji"
+    }
+  },
+  "packageManager": "bun@1.2.7",
+  "overrides": {
+    "mjml": "4.15.3",
+    "get-intrinsic": "^1.3.0"
+  },
+  "dependencies": {
+    "axios-oauth-1.0a": "^0.4.0",
+    "quick-bot": "."
+  },
+  "trustedDependencies": [
+    "@parcel/watcher",
+    "@prisma/client",
+    "@prisma/engines",
+    "@sentry/cli",
+    "core-js",
+    "esbuild",
+    "isolated-vm",
+    "prisma",
+    "puppeteer",
+    "sharp",
+    "unrs-resolver"
+  ]
+}

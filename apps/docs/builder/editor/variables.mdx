@@ -1,0 +1,272 @@
+---
+title: Variables
+icon: brackets-curly
+---
+
+Variables are placeholders for dynamic content that you can use throughout your bot to create
+personalized user experiences. They store data collected from user inputs, external integrations, or
+predefined values, making your conversations interactive and context-aware.
+
+<Frame>
+  <img src="/images/builder/variables/bot-variables.png" alt="Bot variables panel" />
+</Frame>
+
+## Understanding Variables
+
+Variables in QuickBot serve as data containers that can store:
+
+- **User responses** from user blocks (text, email, choices, etc.)
+- **External data** from integrations (APIs, databases, etc.)
+- **System values** (timestamps, user IDs, random values, etc.)
+- **Calculated values** from custom scripts or logic blocks
+
+<Frame>
+  <img src="/images/builder/variables/bot-variables-usage.png" alt="Bot variables usage" />
+</Frame>
+
+### Accessing Variables
+
+In the flow editor blocks, you'll find some fields with a {} icon. This field allows you to view the
+variables dropdown. This dropdown shows all available variables for use in the bot.
+
+- **View all variables**: See every variable declared in your bot.
+- **Search variables**: Use the search bar to quickly find specific variables.
+- **Create new variables**: Click the plus icon or type a new name to create variables.
+- **Insert variables**: Click the variable and it will be inserted into the field.
+- **Edit variables**: Click the edit icon to modify variable properties.
+- **Delete variables**: Click the delete icon to remove the variable.
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/variables/bot-variables-add.png" alt="Bot variables add" />
+</Frame>
+
+## Creating Variables
+
+### From Input Blocks
+
+The most common way to create variables is by configuring user blocks:
+
+1. **Add an user block** (Text Input, Email, Buttons, etc.)
+2. **Open the block settings**
+3. **Select "Save answer in a variable"**
+4. **Choose an existing variable** or type a new name to create one
+5. **User responses** will automatically be stored in the variable
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/variables/bot-variables-create.png" alt="Bot variables create" />
+</Frame>
+
+### From Variables Panel
+
+Create variables directly in the Variables tab:
+
+1. **Open Variables tab** in the Flow editor sidebar
+2. **Type a new variable name** in the search box
+3. **Click "Create variable"** when prompted
+4. **Configure variable properties** in the edit modal
+
+<Frame style={{ maxWidth: '400px' }}>
+  <img src="/images/builder/variables/bot-variables-dropdown.png" alt="Bot variables create" />
+</Frame>
+
+### Using Set Variable Block
+
+For advanced variable management, use the Set Variable logic block:
+
+1. **Drag a Set Variable block** onto the canvas
+2. **Choose or create a variable** to modify
+3. **Select the value type**:
+   - **Custom**: Text or JavaScript expressions
+   - **System values**: Current date, user ID, random values, etc.
+   - **List operations**: Append, pop, or manipulate arrays
+   - **Data mapping**: Transform data from other variables
+
+## Using Variables in Your Bot
+
+### Basic Variable Syntax
+
+Display variable content using double curly braces:
+
+```
+{{varName}}
+```
+
+**Example**: "Hello `{{varName}}`, welcome back!"
+
+### Inline Variable Formatting
+
+Transform variables using JavaScript expressions:
+
+```
+{{={{varName}}.toUpperCase()=}}
+```
+
+**Common transformations**:
+
+- **Uppercase**: `{{={{Name}}.toUpperCase()=}}`
+- **Lowercase**: `{{={{Name}}.toLowerCase()=}}`
+- **First item of list**: `{{={{Items}}[0]=}}` or `{{={{Items}}.at(0)=}}`
+- **Last item of list**: `{{={{Items}}.at(-1)=}}`
+- **List length**: `{{={{Items}}.length=}}`
+- **Date formatting**: `{{=new Date({{Date}}).toLocaleDateString()=}}`
+
+### Variable Types and Operations
+
+Variables support these data types:
+
+- **String**: Single text values
+- **Array**: Lists of text values
+- **Mixed**: Automatically converted to string representation
+
+## Variable Properties
+
+### Save in Results
+
+Control whether variables appear in your results export:
+
+- **Enabled**: Variable values appear as columns in results
+- **Disabled**: Variables are used internally but not exported
+- **Use case**: Enable for important data, disable for temporary calculations
+
+### Secret Variables
+
+Mark variables as secret to protect sensitive information:
+
+- **Secret variables** are not saved in results
+- **Cannot be exported** or viewed in the results panel
+- **Ideal for**: API keys, personal data, temporary tokens
+- **Visual indicator**: Lock icon appears next to secret variables
+
+## Advanced Variable Concepts
+
+### Prefilled Variables
+
+Initialize variables before the conversation starts:
+
+**URL Parameters**:
+
+```
+https://quick.bot/my-bot?Email=john@gmail.com&First%20name=John
+```
+
+(Note: Replace spaces with `%20` in URLs)
+
+**Embed Library**:
+
+```js
+QuickBot.initBubble({
+  botId: 'your-bot-id',
+  prefilledVariables: {
+    Email: 'john@gmail.com',
+    'First Name': 'John',
+    'User ID': '12345',
+  },
+})
+```
+
+### Save variables in results
+
+You can also use save variables in results for internal tracking like:
+
+- **Marketing**: UTM parameters, campaign IDs
+- **User context**: Session IDs, referrer information
+- **System data**: Timestamps, environment variables
+- **Analytics**: Custom event tracking, user segments
+
+**Use cases**:
+
+- Track marketing campaign effectiveness
+- Store user authentication data
+- Maintain session context across conversations
+- Collect analytics without user input
+
+### Variable Validation and Types
+
+Variables automatically handle type conversion:
+
+**Valid types**:
+
+```ts
+// ✅ Recommended
+'Hello World'[('option1', 'option2')] // String // String array
+;('123') // Number as string
+;('true') // Boolean as string
+```
+
+**Auto-conversion**:
+
+```ts
+// These are automatically converted
+123 → '123'
+true → 'true'
+{ name: 'John' } → '{"name":"John"}'
+```
+
+**Complex data handling**:
+
+```ts
+// Store complex objects as JSON strings
+Use: {{=JSON.stringify({name: 'John', age: 30})=}}
+
+// Parse back to objects when needed
+Use: {{=JSON.parse({{User Data}}).name=}}
+```
+
+## Variable Best Practices
+
+### Naming Conventions
+
+- **Use descriptive names**: "User Email" instead of "email"
+- **Be consistent**: Use the same case style throughout
+- **Avoid special characters**: Stick to letters, numbers, and spaces
+- **Group related variables**: "Address Line 1", "Address Line 2"
+
+### Organization
+
+- **Delete unused variables** to keep your bot clean
+- **Use secret variables** for sensitive data
+- **Enable "Save in Results"** only for variables you need to export
+- **Group variables logically** in your variable names
+
+### Performance
+
+- **Avoid deeply nested objects** in variables
+- **Use arrays efficiently** with proper indexing
+- **Clean up temporary variables** when no longer needed
+- **Test variable transformations** to ensure correct output
+
+## Troubleshooting Variables
+
+### Common Issues
+
+**Variable not displaying**:
+
+- Check variable name spelling and case
+- Ensure variable has been created and assigned a value
+- Verify variable syntax: `{{varName}}`
+
+**Incorrect formatting**:
+
+- Test JavaScript expressions in Set Variable block first
+- Check for typos in transformation code
+- Ensure proper escape characters for special content
+
+**Missing in results**:
+
+- Enable "Save in Results" in variable properties
+- Check that variable isn't marked as secret
+- Verify variable has collected values from users
+
+<CardGroup cols={2}>
+  <Card title="Set Variable Block" icon="code" href="./blocks/logic/set-variable">
+    Learn how to manipulate and calculate variable values
+  </Card>
+  <Card title="Logic Blocks" icon="sitemap" href="./blocks/logic">
+    Use variables in conditional logic and flow control
+  </Card>
+</CardGroup>
+
+<Tip>
+  Use the Variables tab frequently while building your bot. It provides a centralized view of all
+  your data and makes it easy to manage complex bots with many variables.
+</Tip>

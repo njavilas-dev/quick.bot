@@ -1,0 +1,141 @@
+{
+  "version": "6",
+  "id": "cmay873190001l3e6szaqcgri",
+  "name": "WooCommerce Bot",
+  "events": [
+    {
+      "id": "diybnlmu0jjwtpigvlv05hvr",
+      "outgoingEdgeId": "sjc4uw2c86u16mn62nor0y3p",
+      "graphCoordinates": {
+        "x": 0,
+        "y": 0
+      },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "g3rod62dcmnfzn69grxmwtbs",
+      "title": "Group #1",
+      "graphCoordinates": {
+        "x": 199,
+        "y": 129
+      },
+      "blocks": [
+        {
+          "id": "rlxl67q8j5jix0wda0dqc34t",
+          "outgoingEdgeId": "uyg9p8czdnm8tu3d2v1tgzz4",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Type tearm search",
+              "button": "Search"
+            },
+            "variableId": "vhzcmmu8yas6rtwwkgz4jrpzj"
+          }
+        }
+      ]
+    },
+    {
+      "id": "rbhum6u81y2mqhwztj7n45rf",
+      "title": "Group #2",
+      "graphCoordinates": {
+        "x": 196.6,
+        "y": 314.15
+      },
+      "blocks": [
+        {
+          "id": "b0fsybyyl5k68mhpx17irepi",
+          "outgoingEdgeId": "a6t5p707660qkkez3ttjohcx",
+          "type": "woocommerce"
+        }
+      ]
+    },
+    {
+      "id": "cpf6xsys54id51e8ystasp5y",
+      "title": "Group #3",
+      "graphCoordinates": {
+        "x": 200.43,
+        "y": 488.57
+      },
+      "blocks": [
+        {
+          "id": "qap5y25h9f22dg9e04krqy3c",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{searchResult}}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "sjc4uw2c86u16mn62nor0y3p",
+      "from": {
+        "eventId": "diybnlmu0jjwtpigvlv05hvr"
+      },
+      "to": {
+        "groupId": "g3rod62dcmnfzn69grxmwtbs"
+      }
+    },
+    {
+      "id": "uyg9p8czdnm8tu3d2v1tgzz4",
+      "from": {
+        "blockId": "rlxl67q8j5jix0wda0dqc34t"
+      },
+      "to": {
+        "groupId": "rbhum6u81y2mqhwztj7n45rf"
+      }
+    },
+    {
+      "id": "a6t5p707660qkkez3ttjohcx",
+      "from": {
+        "blockId": "b0fsybyyl5k68mhpx17irepi"
+      },
+      "to": {
+        "groupId": "cpf6xsys54id51e8ystasp5y"
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "vwjtr74cqm56dpeyl5lvv3d1l",
+      "name": "wooSearchResults",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vhzcmmu8yas6rtwwkgz4jrpzj",
+      "name": "wooSearchTerm",
+      "isSavedVariable": false
+    }
+  ],
+  "theme": {},
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": {
+      "isBrandingEnabled": true
+    }
+  },
+  "createdAt": "2025-05-21T17:37:30.908Z",
+  "updatedAt": "2025-05-21T17:40:19.050Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": null,
+  "customDomain": null,
+  "workspaceId": "cma4deppd001vl8x9hfn4vybj",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

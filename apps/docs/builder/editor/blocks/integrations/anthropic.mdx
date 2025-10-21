@@ -1,0 +1,288 @@
+---
+title: Anthropic
+---
+
+The Anthropic integration enables you to leverage Claude AI models within your QuickBot workflows.
+This block provides access to Anthropic's powerful language models with features like vision
+support, streaming responses, and function calling.
+
+## Configuration Options
+
+### API Setup
+
+To use the Anthropic block, you need to configure your API credentials:
+
+1. **API Key**: Generate an API key from the
+   [Anthropic Console](https://console.anthropic.com/settings/keys)
+2. **Authentication**: The API key is securely encrypted and stored within QuickBot
+3. **Format**: API keys start with `sk-` followed by your unique identifier
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/anthropic/general.png" alt="Anthropic block" />
+</Frame>
+
+### Model Selection
+
+The Anthropic block supports multiple Claude models with different capabilities:
+
+#### Current Models
+
+- **Claude 3.5 Sonnet** (`claude-3-5-sonnet-20240620`) - Most capable model for complex tasks
+- **Claude 3.0 Opus** (`claude-3-opus-20240229`) - Highest performance for demanding tasks
+- **Claude 3.0 Sonnet** (`claude-3-sonnet-20240229`) - Balanced performance and speed
+- **Claude 3.0 Haiku** (`claude-3-haiku-20240307`) - Fastest for simple tasks
+
+#### Legacy Models
+
+- Claude 2.1, Claude 2.0, and Claude Instant 1.2 (deprecated but still available)
+
+## Features
+
+### Chat Completion
+
+The primary action **Create Chat Message** allows you to:
+
+- Send user queries to Claude AI models
+- Receive structured responses
+- Support multiple message roles (user, assistant)
+- Handle conversation context and history
+
+### Message Types
+
+**Dialogue Messages**: A convenient message type that allows you to easily pass a sequence of saved
+assistant/user message history to Claude AI:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/anthropic/append-to-history.png"
+    alt="Claude AI messages sequence"
+  />
+</Frame>
+
+Access the dialogue sequence in your Claude AI block:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/anthropic/dialogue-usage.png"
+    alt="Claude AI messages sequence"
+  />
+</Frame>
+
+Save assistant responses to variables for chat history and bot display:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/anthropic/assistant-message.png"
+    alt="Claude AI assistant message variable"
+  />
+</Frame>
+
+### Response Handling
+
+- **Variable Mapping**: Save Claude's responses to QuickBot variables
+- **Streaming Support**: Real-time response streaming for better user experience
+- **Message Content**: Extract and store the generated text content
+
+## Advanced Features
+
+### Vision Support
+
+Claude 3 models support image analysis capabilities:
+
+- **Automatic Detection**: QuickBot automatically detects image URLs in user messages
+- **Supported Formats**: PNG, JPEG, GIF, WebP image formats
+- **Model Compatibility**: Vision features work with Claude 3.x models (not legacy models)
+
+**Usage Example:**
+
+```
+What's in this picture?
+
+https://my-site.com/image.png
+```
+
+**Important**: The image URL must be isolated from other text to be properly detected. If the
+selected model is [not compatible with vision](https://docs.anthropic.com/en/docs/vision), the image
+URL will be parsed as plain text.
+
+### Function Calling (Tools)
+
+- **Tool Integration**: Connect Claude with external functions and APIs
+- **Maximum Roundtrips**: Up to 10 tool call roundtrips per conversation
+- **Dynamic Execution**: Claude can call multiple tools in sequence to complete complex tasks
+
+### Streaming Responses
+
+- **Real-time Output**: Stream responses as they're generated
+- **Tool Call Handling**: Seamlessly handle tool calls during streaming
+- **Error Recovery**: Robust error handling with proper HTTP status codes
+
+### Settings
+
+#### Temperature Control
+
+- **Range**: 0-2 (default: 1)
+- **Purpose**: Controls randomness in responses
+- **Usage**: Lower values (0.2-0.5) for focused responses, higher values (1.2-1.8) for creative
+  tasks
+
+#### Token Limits
+
+- **Max Tokens**: Maximum response length (default: 1024)
+- **Optimization**: Adjust based on your use case requirements
+- **Cost Management**: Shorter limits reduce API costs
+
+#### System Prompts
+
+- **Purpose**: Provide consistent instructions and context
+- **Placement**: System messages guide Claude's behavior throughout the conversation
+- **Best Practice**: Use for role definition and consistent formatting
+
+## Best Practices
+
+### Model Selection
+
+**For Complex Analysis**: Use Claude 3.5 Sonnet or Claude 3.0 Opus
+
+- Deep reasoning tasks
+- Code analysis and generation
+- Complex document processing
+
+**For Quick Interactions**: Use Claude 3.0 Haiku
+
+- Simple Q&A
+- Content summarization
+- Basic text processing
+
+**For Balanced Use Cases**: Use Claude 3.0 Sonnet
+
+- General conversation
+- Mixed content types
+- Moderate complexity tasks
+
+### Prompt Engineering
+
+**Clear Instructions**:
+
+- Provide specific, detailed prompts
+- Use examples when possible
+- Define expected output format
+
+**Context Management**:
+
+- Leverage dialogue history for continuity
+- Keep conversations focused
+- Use system prompts for consistent behavior
+
+**Vision Tasks**:
+
+- Ensure image quality is sufficient
+- Provide clear questions about images
+- Use supported image formats only
+
+### Cost Optimization
+
+**Token Management**:
+
+- Set appropriate max token limits
+- Use shorter prompts when possible
+- Monitor usage through response mapping
+
+**Model Efficiency**:
+
+- Use Haiku for simple tasks
+- Reserve Opus/Sonnet for complex work
+- Batch similar requests when possible
+
+**Caching Strategies**:
+
+- Store frequently used responses
+- Reuse dialogue history efficiently
+- Implement response deduplication
+
+## Troubleshooting
+
+### Authentication Issues
+
+**API Key Problems**:
+
+- Verify key format starts with `sk-`
+- Check key is not expired in Anthropic Console
+- Ensure key has proper permissions
+- Regenerate key if authentication fails
+
+**HTTP 401 Errors**:
+
+- API key is invalid or missing
+- Key may not be properly configured in QuickBot
+- Account may have insufficient permissions
+
+### Model and Response Issues
+
+**Model Not Found**:
+
+- Verify model name spelling
+- Check if model is still available
+- Default to supported model if custom model fails
+
+**Empty or Incomplete Responses**:
+
+- Check max token settings
+- Review temperature configuration
+- Ensure proper message formatting
+- Verify system prompt doesn't conflict
+
+**Vision Processing Failures**:
+
+- Confirm model supports vision (Claude 3.x only)
+- Check image URL accessibility
+- Verify image format compatibility
+- Ensure image is properly isolated in message
+
+### Streaming and Performance
+
+**Streaming Interruptions**:
+
+- Check network connectivity
+- Verify API rate limits not exceeded
+- Monitor for timeout errors
+- Implement proper error handling
+
+**Tool Call Issues**:
+
+- Verify tool definitions are correct
+- Check tool execution permissions
+- Monitor roundtrip limits (max 10)
+- Debug tool response formatting
+
+### Rate Limiting and Quotas
+
+**Rate Limit Errors (HTTP 429)**:
+
+- Implement exponential backoff
+- Monitor usage against quotas
+- Consider upgrading API plan
+- Distribute requests over time
+
+**Quota Exceeded**:
+
+- Check current usage in Anthropic Console
+- Upgrade plan if needed
+- Implement usage monitoring
+- Set up billing alerts
+
+### Error Handling
+
+**Connection Errors**:
+
+- Implement retry logic with backoff
+- Check network and DNS resolution
+- Verify API endpoint accessibility
+- Monitor service status
+
+**API Response Errors**:
+
+- Parse error messages for specific issues
+- Log errors for debugging
+- Provide user-friendly error messages
+- Implement fallback responses

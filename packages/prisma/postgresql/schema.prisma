@@ -1,0 +1,491 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "../../../node_modules/.prisma/client"
+  previewFeatures = ["metrics", "driverAdapters", "postgresqlExtensions"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  // directUrl = env("DATABASE_DIRECT_URL")
+}
+
+model UserAuth {
+  id                       String   @id @default(cuid())
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  /// This is required for OAuth and Next-Auth.
+  refresh_token            String?
+  /// This is required for OAuth and Next-Auth.
+  access_token             String?
+  expires_at               Int?
+  token_type               String?
+  username                 String?
+  password                 String?
+  /// Recovery token for password reset. Set to null after successful use.
+  recovery_password_token  String?
+  is_verified              Boolean?
+  /// Verification token for email confirmation. Set to null after successful use.
+  verify_token             String?
+  scope                    String?
+  /// This is required for OAuth and Next-Auth.
+  id_token                 String?
+  session_state            String?
+  /// This is required for OAuth and Next-Auth.
+  oauth_token_secret       String?
+  /// This is required for OAuth and Next-Auth.
+  oauth_token              String?
+  refresh_token_expires_in Int?
+  user                     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model UserSession {
+  id           String   @id @default(cuid())
+  userId       String
+  sessionToken String   @unique
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserVerificationToken {
+  id         String   @id @default(uuid())
+  botId      String
+  bot        Bot      @relation(fields: [botId], references: [id])
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([botId, token])
+}
+
+model UserNotification {
+  id                      String  @id @default(cuid())
+  userId                  String  @unique
+  almostReachedChatsLimit Boolean @default(true)
+  reachedChatsLimit       Boolean @default(true)
+  botAnswersResult        Boolean @default(true)
+  user                    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id                          String             @id @default(cuid())
+  createdAt                   DateTime           @default(now())
+  updatedAt                   DateTime           @default(now()) @updatedAt
+  lastActivityAt              DateTime           @default(now())
+  name                        String?
+  email                       String?            @unique
+  emailVerified               DateTime?
+  image                       String?
+  company                     String?
+  preferredAppAppearance      String?
+  onboardingCategories        Json
+  referral                    String?
+  displayedInAppNotifications Json?
+  accounts                    UserAuth[]
+  apiTokens                   UserApiToken[]
+  botCollaborators            BotCollaborator[]
+  workspaces                  WorkspaceMember[]
+  sessions                    UserSession[]
+  bannedIps                   UserBannedIp[]
+  notifications               UserNotification[]
+  changeRequests              ChangeRequest[]
+}
+
+model UserApiToken {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  userId    String
+  token     String   @unique
+  name      String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ChangeRequestStatus {
+  PENDING
+  CONFIRMED
+  EXPIRED
+  CANCELLED
+}
+
+enum ChangeRequestType {
+  EMAIL
+  PASSWORD
+}
+
+enum TypeConfirmation {
+  EMAIL
+  TWO_FACTOR
+  SECURITY_KEY
+}
+
+model ChangeRequest {
+  id               String              @id @default(cuid())
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @default(now()) @updatedAt
+  userId           String
+  type             ChangeRequestType
+  status           ChangeRequestStatus @default(PENDING)
+  typeConfirmation TypeConfirmation    @default(EMAIL)
+  token            String              @unique
+  expiresAt        DateTime
+  confirmedAt      DateTime?
+  newValue         String
+  oldValue         String
+  user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([status, expiresAt])
+  @@index([type])
+  @@index([type, status])
+  @@index([newValue])
+  @@index([oldValue])
+}
+
+model Workspace {
+  id                            String                     @id @default(cuid())
+  createdAt                     DateTime                   @default(now())
+  updatedAt                     DateTime                   @default(now()) @updatedAt
+  name                          String
+  icon                          String?
+  stripeId                      String?                    @unique
+  billingPlanId                 String
+  billingEmail                  String?
+  billingCompany                String?
+  billingVatType                String?
+  billingVatValue               String?
+  additionalChatsIndex          Int                        @default(0)
+  additionalStorageIndex        Int                        @default(0)
+  chatsLimitFirstEmailSentAt    DateTime?
+  storageLimitFirstEmailSentAt  DateTime?
+  chatsLimitSecondEmailSentAt   DateTime?
+  storageLimitSecondEmailSentAt DateTime?
+  isQuarantined                 Boolean                    @default(false)
+  isSuspended                   Boolean                    @default(false)
+  isPastDue                     Boolean                    @default(false)
+  isVerified                    Boolean?
+  billingPlan                   WorkspaceBillingPlan       @relation(fields: [billingPlanId], references: [id])
+  credentials                   WorkspaceCredential[]
+  customDomains                 WorkspaceCustomDomain[]
+  folders                       WorkspaceDashboardFolder[]
+  members                       WorkspaceMember[]
+  bots                          Bot[]
+  invitations                   WorkspaceInvitation[]
+  botThemeTemplates             BotThemeTemplate[]
+}
+
+model WorkspaceMember {
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  userId      String
+  workspaceId String
+  role        WorkspaceRole
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+  @@index([workspaceId])
+}
+
+model WorkspaceInvitation {
+  id          String        @id @default(cuid())
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @default(now()) @updatedAt
+  email       String
+  type        WorkspaceRole
+  workspaceId String
+  workspace   Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@index([workspaceId])
+}
+
+model WorkspaceCustomDomain {
+  name        String    @id
+  createdAt   DateTime  @default(now())
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model WorkspaceCredential {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  workspaceId String
+  data        String
+  name        String
+  type        String
+  iv          String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model WorkspaceDashboardFolder {
+  id             String                     @id @default(cuid())
+  createdAt      DateTime                   @default(now())
+  updatedAt      DateTime                   @default(now()) @updatedAt
+  parentFolderId String?
+  workspaceId    String
+  name           String
+  parentFolder   WorkspaceDashboardFolder?  @relation("ParentChild", fields: [parentFolderId], references: [id])
+  childrenFolder WorkspaceDashboardFolder[] @relation("ParentChild")
+  workspace      Workspace                  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  bots           Bot[]
+}
+
+model Bot {
+  id                      String                    @id @default(cuid())
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now()) @updatedAt
+  workspaceId             String
+  folderId                String?
+  selectedThemeTemplateId String?
+  whatsAppCredentialsId   String?
+  icon                    String?
+  name                    String
+  version                 String?
+  groups                  Json
+  variables               Json
+  edges                   Json
+  theme                   Json
+  settings                Json
+  publicId                String?                   @unique
+  customDomain            String?                   @unique
+  resultsTablePreferences Json?
+  riskLevel               Int?
+  isArchived              Boolean                   @default(false)
+  isClosed                Boolean                   @default(false)
+  events                  Json?
+  folder                  WorkspaceDashboardFolder? @relation(fields: [folderId], references: [id])
+  workspace               Workspace                 @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  botCollaborators        BotCollaborator[]
+  botInvitations          BotInvitation[]
+  publishedBot            BotPublic?
+  botResults              BotResult[]
+  webhooks                Webhook[]
+  userBannedIps           UserBannedIp[]
+  UserVerificationToken   UserVerificationToken[]
+
+  @@index([workspaceId])
+  @@index([isArchived, createdAt(sort: Desc)])
+  @@index([variables(ops: JsonbPathOps)], type: Gin)
+}
+
+model BotInvitation {
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
+  email     String
+  type      CollaborationType
+  botId     String
+  bot       Bot               @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@unique([email, botId])
+  @@index([botId])
+}
+
+model BotCollaborator {
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @default(now()) @updatedAt
+  userId    String
+  botId     String
+  type      CollaborationType
+  bot       Bot               @relation(fields: [botId], references: [id], onDelete: Cascade)
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, botId])
+  @@index([botId])
+}
+
+model BotPublic {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+  botId     String   @unique
+  version   String?
+  groups    Json
+  variables Json
+  edges     Json
+  theme     Json
+  settings  Json
+  events    Json?
+
+  bot Bot @relation(fields: [botId], references: [id], onDelete: Cascade)
+}
+
+model BotResult {
+  id                 String                     @id @default(cuid())
+  createdAt          DateTime                   @default(now())
+  botId              String
+  variables          Json
+  isCompleted        Boolean
+  hasStarted         Boolean?
+  isArchived         Boolean?                   @default(false)
+  lastChatSessionId  String?
+  bot                Bot                        @relation(fields: [botId], references: [id], onDelete: Cascade)
+  answersV2          AnswerV2[]
+  logs               BotLog[]
+  edges              BotResultVisitedEdge[]
+  setVariableHistory BotResultVariableHistory[]
+
+  @@index([botId, hasStarted, createdAt(sort: Desc)])
+  @@index([botId, isCompleted])
+}
+
+model BotResultVariableHistory {
+  resultId   String
+  index      Int
+  variableId String
+  blockId    String
+  value      Json
+  result     BotResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@unique([resultId, index])
+}
+
+model BotResultVisitedEdge {
+  resultId String
+  edgeId   String
+  index    Int
+  result   BotResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@unique([resultId, index])
+}
+
+model BotLog {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  resultId    String
+  status      String
+  description String
+  details     String?
+  result      BotResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@index([resultId])
+}
+
+model AnswerV2 {
+  id               Int       @id @default(autoincrement())
+  createdAt        DateTime  @default(now())
+  resultId         String
+  blockId          String
+  content          String
+  attachedFileUrls Json?
+  result           BotResult @relation(fields: [resultId], references: [id], onDelete: Cascade)
+
+  @@index([blockId])
+  @@index([resultId])
+}
+
+model Coupon {
+  code                   String    @id @unique
+  userPropertiesToUpdate Json
+  dateRedeemedAt         DateTime?
+}
+
+model Webhook {
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now()) @updatedAt
+  botId       String
+  url         String?
+  method      String
+  queryParams Json
+  headers     Json
+  body        String?
+  bot         Bot      @relation(fields: [botId], references: [id], onDelete: Cascade)
+}
+
+model ChatSession {
+  id                    String   @id @default(cuid())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @default(now()) @updatedAt
+  state                 Json
+  isReplying            Boolean?
+  lastWhatsAppMessageId String?
+}
+
+model BotThemeTemplate {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now()) @updatedAt
+  workspaceId String
+  name        String
+  theme       Json
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model UserBannedIp {
+  id               String   @id @default(cuid())
+  createdAt        DateTime @default(now())
+  responsibleBotId String
+  userId           String
+  ip               String   @unique @db.Inet
+  responsibleBot   Bot      @relation(fields: [responsibleBotId], references: [id], onDelete: Restrict)
+  user             User     @relation(fields: [userId], references: [id], onDelete: Restrict)
+}
+
+model WorkspaceBillingPlan {
+  id                String                     @id @default(cuid())
+  createdAt         DateTime                   @default(now())
+  updatedAt         DateTime                   @default(now()) @updatedAt
+  deletedAt         DateTime?
+  name              String
+  key               BillingPlanType            @default(FREE)
+  price             Int
+  currency          String                     @default("usd")
+  isSystem          Boolean
+  description       String?
+  chatsLimit        Int?
+  storageLimit      Int?
+  botsLimit         Int?
+  membersLimit      Int?
+  isYearly          Boolean?                   @default(false)
+  allowCustomDomain Boolean                    @default(false)
+  allowWhatsapp     Boolean                    @default(false)
+  allowAnalytics    Boolean                    @default(false)
+  allowedBotBlocks  String[]                   @default([])
+  allowGuests       Boolean                    @default(false)
+  allowResults      Boolean                    @default(false)
+  allowRemoveBrand  Boolean                    @default(false)
+  chatTiers         WorkspaceBillingPlanTier[]
+  Workspace         Workspace[]
+}
+
+model WorkspaceBillingPlanTier {
+  id                String               @id @default(cuid())
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @default(now()) @updatedAt
+  billingPlanId     String
+  upTo              Int?
+  flatAmount        Int?
+  flatAmountDecimal String?
+  unitAmount        Int?
+  unitAmountDecimal String?
+  isInfinite        Boolean              @default(false)
+  billingPlan       WorkspaceBillingPlan @relation(fields: [billingPlanId], references: [id])
+}
+
+enum WorkspaceRole {
+  ADMIN
+  MEMBER
+  GUEST
+}
+
+enum CollaborationType {
+  READ
+  WRITE
+  FULL_ACCESS
+}
+
+enum BillingPlanType {
+  FREE
+  PERSONAL
+  BUSINESS
+  ENTERPRISE
+  UNLIMITED
+  CUSTOM
+}

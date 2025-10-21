@@ -1,0 +1,273 @@
+{
+  "version": "6",
+  "id": "cmb173v58000kic68oti8ox2c",
+  "name": "wordpress",
+  "events": [
+    {
+      "id": "bacp1yux8kixy0h9x55ulx9a",
+      "outgoingEdgeId": "zs4teocujmkebj0r8reh8go0",
+      "graphCoordinates": {
+        "x": -37,
+        "y": 147
+      },
+      "type": "start"
+    }
+  ],
+  "groups": [
+    {
+      "id": "r0fx6abbbjniar72c4504se4",
+      "title": "Group #4",
+      "graphCoordinates": {
+        "x": -86,
+        "y": 643
+      },
+      "blocks": [
+        {
+          "id": "sosfh0uulz2t7uk4motbslq3",
+          "outgoingEdgeId": "dab8ekl90rxtgjidrmkqpc84",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{message}}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "u6334axivdb8z4oiz7ss3xoi",
+      "title": "Group #5",
+      "graphCoordinates": {
+        "x": -73,
+        "y": 838
+      },
+      "blocks": [
+        {
+          "id": "koegzzb54e3eyjyjzn0u702l",
+          "type": "text",
+          "content": {
+            "richText": [
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{ID}}"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{Nickname}}"
+                  }
+                ]
+              },
+              {
+                "type": "p",
+                "children": [
+                  {
+                    "text": "{{token}}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "vgh0hel34o73fdcyzq33oypy",
+      "title": "Group #5",
+      "graphCoordinates": {
+        "x": -16,
+        "y": 445
+      },
+      "blocks": [
+        {
+          "id": "zrjaj0hq882ens1y3x4gysmw",
+          "outgoingEdgeId": "s87r40tlntm7v3srtqwzf09m",
+          "type": "wordpress"
+        }
+      ]
+    },
+    {
+      "id": "cipvtbdpxp11fyjfpfwocowl",
+      "title": "Group #4",
+      "graphCoordinates": {
+        "x": 71,
+        "y": 218
+      },
+      "blocks": [
+        {
+          "id": "ea7hl4mduojr08khr3lvdivv",
+          "outgoingEdgeId": "hc5s389ps498fa3paeg5otfl",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Type your email"
+            },
+            "variableId": "va8edk935l1nob5b0dn292jzq"
+          }
+        }
+      ]
+    },
+    {
+      "id": "schq5oz3hmzk43k2jmwafg8m",
+      "title": "Group #5",
+      "graphCoordinates": {
+        "x": 387,
+        "y": 346
+      },
+      "blocks": [
+        {
+          "id": "u0ac72p88szujzqeuqg353s4",
+          "outgoingEdgeId": "dxio5ozedk040xx0cbce1p2t",
+          "type": "text input",
+          "options": {
+            "labels": {
+              "placeholder": "Type your password"
+            },
+            "variableId": "vqb3htaf358k5j4pistdzp0rg"
+          }
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "dab8ekl90rxtgjidrmkqpc84",
+      "from": {
+        "blockId": "sosfh0uulz2t7uk4motbslq3"
+      },
+      "to": {
+        "groupId": "u6334axivdb8z4oiz7ss3xoi"
+      }
+    },
+    {
+      "id": "fol6rprebn21h22h27wpy94p",
+      "from": {
+        "blockId": "b7h5y796qelhz7u38tt0dfzw"
+      },
+      "to": {
+        "groupId": "r0fx6abbbjniar72c4504se4"
+      }
+    },
+    {
+      "id": "grclzbxfmfdttm29gtmtcgia",
+      "from": {
+        "blockId": "qkj0cenpbmox2y8x4cqz9qrd"
+      },
+      "to": {
+        "groupId": "r0fx6abbbjniar72c4504se4",
+        "blockId": "sosfh0uulz2t7uk4motbslq3"
+      }
+    },
+    {
+      "id": "r5n25cpjfw3np32i18mu13v6",
+      "from": {
+        "blockId": "l0yjwj2swnelza0rk9ytqnwg"
+      },
+      "to": {
+        "groupId": "vgh0hel34o73fdcyzq33oypy",
+        "blockId": "zrjaj0hq882ens1y3x4gysmw"
+      }
+    },
+    {
+      "id": "s87r40tlntm7v3srtqwzf09m",
+      "from": {
+        "blockId": "zrjaj0hq882ens1y3x4gysmw"
+      },
+      "to": {
+        "groupId": "r0fx6abbbjniar72c4504se4",
+        "blockId": "sosfh0uulz2t7uk4motbslq3"
+      }
+    },
+    {
+      "id": "zs4teocujmkebj0r8reh8go0",
+      "from": {
+        "eventId": "bacp1yux8kixy0h9x55ulx9a"
+      },
+      "to": {
+        "groupId": "cipvtbdpxp11fyjfpfwocowl"
+      }
+    },
+    {
+      "id": "hc5s389ps498fa3paeg5otfl",
+      "from": {
+        "blockId": "ea7hl4mduojr08khr3lvdivv"
+      },
+      "to": {
+        "groupId": "schq5oz3hmzk43k2jmwafg8m"
+      }
+    },
+    {
+      "id": "dxio5ozedk040xx0cbce1p2t",
+      "from": {
+        "blockId": "u0ac72p88szujzqeuqg353s4"
+      },
+      "to": {
+        "groupId": "vgh0hel34o73fdcyzq33oypy",
+        "blockId": "zrjaj0hq882ens1y3x4gysmw"
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "vbsbsm0hn9s4ggcp5dq96ld3i",
+      "name": "token",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vepjtlabdhngfh1cdoz39zyxh",
+      "name": "Nickname",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vtserpjh4jcurxd52vcnj7263",
+      "name": "ID",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vef7fwddkbjufnsnz3nt6kvei",
+      "name": "message",
+      "isSavedVariable": false
+    },
+    {
+      "id": "vqb3htaf358k5j4pistdzp0rg",
+      "name": "pass",
+      "isSavedVariable": false
+    },
+    {
+      "id": "va8edk935l1nob5b0dn292jzq",
+      "name": "email",
+      "isSavedVariable": false
+    }
+  ],
+  "theme": {},
+  "selectedThemeTemplateId": null,
+  "settings": {
+    "general": {
+      "isBrandingEnabled": true
+    }
+  },
+  "createdAt": "2025-05-23T19:30:19.628Z",
+  "updatedAt": "2025-05-23T20:52:44.885Z",
+  "icon": null,
+  "folderId": null,
+  "publicId": null,
+  "customDomain": null,
+  "workspaceId": "cmb16z284000aic68j3hg03rc",
+  "resultsTablePreferences": null,
+  "isArchived": false,
+  "isClosed": false,
+  "whatsAppCredentialsId": null,
+  "riskLevel": null
+}

@@ -1,0 +1,40 @@
+.slate-inline-code {
+  background-color: #a1a1aa;
+  color: white;
+  padding: 0.125rem 0.25rem;
+  border-radius: 0.35rem;
+  font-size: small;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.slate-bold {
+  font-weight: bold;
+}
+
+.slate-italic {
+  font-style: oblique;
+}
+
+.slate-underline {
+  text-decoration: underline;
+}
+
+.slate-ToolbarButton-active > svg {
+  stroke-width: 2px;
+}
+
+.slate-ToolbarButton {
+  color: gray;
+}
+
+.slate-a {
+  text-decoration: underline;
+}
+
+.slate-html-container > div {
+  min-height: 24px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: pre-wrap;
+}

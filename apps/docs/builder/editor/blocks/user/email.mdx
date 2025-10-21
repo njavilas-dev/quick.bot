@@ -1,0 +1,197 @@
+---
+title: Email
+icon: at
+---
+
+The Email user block allows you to ask your user for an email address with automatic format
+validation. It provides a specialized input field that ensures proper email format before allowing
+the user to proceed.
+
+## Configuration Options
+
+### Custom Labels
+
+- **Placeholder**: Set the placeholder text shown in the email input field
+- **Button Label**: Customize the text shown on the submit button
+- **Retry Message**: Configure the error message displayed when an invalid email format is entered
+
+### Variable Integration
+
+- **Save Answer**: Choose a variable to store the collected email address
+
+### Validation Settings
+
+The block automatically validates email format using standard email regex patterns, ensuring the
+input contains:
+
+- A valid username part before the @ symbol
+- An @ symbol
+- A valid domain part after the @ symbol
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/email-flow.png"
+        alt="Email input in flow"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <Frame>
+      <img
+        src="/images/builder/blocks/user/email-bot.png"
+        alt="Email input in bot"
+        className="rounded-lg"
+      />
+    </Frame>
+  </Tab>
+</Tabs>
+
+## Email Validation
+
+### Format Validation
+
+The block automatically validates email format and displays a retry message when detection fails.
+Common validation rules include:
+
+- Presence of exactly one @ symbol
+- Valid characters in username and domain parts
+- Proper domain structure (e.g., domain.extension)
+
+### Validation Limitations
+
+The block performs **format validation only** and does not verify:
+
+- Whether the email address actually exists
+- If the domain is valid and reachable
+- If the mailbox can receive messages
+
+### Advanced Email Verification
+
+For comprehensive email validation beyond format checking, you'll need to integrate with external
+services using a [Webhook block](/builder/editor/blocks/integrations/webhook):
+
+- Email deliverability services
+- Domain verification APIs
+- Real-time email validation services
+
+## Best Practices
+
+### User Experience
+
+- Use clear, friendly placeholder text (e.g., "Enter your email address")
+- Provide helpful retry messages that guide users (e.g., "Please enter a valid email format")
+- Consider the context of email collection (newsletter, account creation, contact)
+
+### Validation Messages
+
+- Keep retry messages concise and actionable
+- Avoid technical jargon in error messages
+- Provide examples of correct format when helpful
+- Use positive language that encourages correction
+
+### Data Collection
+
+- Use descriptive variable names for email storage
+- Consider privacy implications of email collection
+- Plan for downstream processing and validation needs
+- Implement appropriate data retention policies
+
+## Advanced Features
+
+### Variable Integration
+
+Email inputs support variable integration in all text fields:
+
+- Dynamic placeholders based on user context
+- Personalized button labels
+- Contextual retry messages
+
+### Mobile Optimization
+
+The email input automatically provides:
+
+- Mobile-optimized keyboard with @ and . readily available
+- Touch-friendly input sizing
+- Responsive layout adaptation
+
+### Accessibility
+
+Built-in accessibility features include:
+
+- Proper ARIA labeling for screen readers
+- Keyboard navigation support
+- High contrast compatibility
+- Focus management
+
+## Integration Examples
+
+### Basic Email Collection
+
+```
+User Input: john.doe@example.com
+Validation: ✓ Format valid
+Saved Variable: john.doe@example.com
+```
+
+### Invalid Format Handling
+
+```
+User Input: john.doe@
+Validation: ✗ Format invalid
+Display: Custom retry message
+User Action: Re-enter valid email
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Email not accepting valid addresses**
+
+- Verify the email validation logic is working correctly
+- Check if special characters or international domains are causing issues
+- Test with common email providers (Gmail, Outlook, etc.)
+
+**Retry message not appearing**
+
+- Confirm the retry message is configured in block settings
+- Check that invalid email formats trigger the validation
+- Verify the message text is not empty or contains only spaces
+
+**Variable not saving email**
+
+- Ensure a variable is selected in the "Save Answer" dropdown
+- Verify the variable name doesn't contain special characters
+- Check that the email passes validation before variable assignment
+
+**Mobile keyboard issues**
+
+- Test on actual mobile devices for keyboard behavior
+- Ensure the input type is correctly set to 'email'
+- Verify mobile browsers display the appropriate keyboard
+
+### Validation Considerations
+
+**International Email Addresses**
+
+- Modern email validation should support international characters
+- Consider Unicode domain names and international TLDs
+- Test with various international email formats
+
+**Edge Cases**
+
+- Very long email addresses (up to 254 characters)
+- Multiple dots in domain names
+- Plus signs and other special characters in usernames
+- Quoted strings in email addresses
+
+### Integration Tips
+
+- Sanitize email data before storing in external systems
+- Consider email normalization (lowercase, trim whitespace)
+- Plan for email verification workflows post-collection
+- Implement proper error handling for downstream services
+- Use email data responsibly and in compliance with privacy regulations

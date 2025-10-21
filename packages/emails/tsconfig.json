@@ -1,0 +1,5 @@
+{
+  "extends": "@quickbot.io/tsconfig/react-library.json",
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules"]
+}

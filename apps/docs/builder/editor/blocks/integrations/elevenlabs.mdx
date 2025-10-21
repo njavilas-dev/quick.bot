@@ -1,0 +1,181 @@
+---
+title: ElevenLabs
+---
+
+The **ElevenLabs integration block** allows you to integrate advanced text-to-speech capabilities into your QuickBot using ElevenLabs' AI voice technology. This integration enables you to convert text into high-quality, natural-sounding speech using a variety of AI-generated voices and models.
+
+---
+
+## General
+
+ElevenLabs is a leading AI voice technology platform that provides realistic text-to-speech conversion. The QuickBot integration leverages ElevenLabs' REST API to transform text into audio files that can be seamlessly integrated into your chatbot conversations, creating more engaging and accessible user experiences.
+
+---
+
+## Configuration Options
+
+### Prerequisites
+
+Before configuring the ElevenLabs block, you need:
+
+1. **ElevenLabs Account**: Sign up at [ElevenLabs](https://elevenlabs.io)
+2. **API Key**: Generate an API key from your ElevenLabs dashboard
+
+### Authentication Setup
+
+1. Navigate to your ElevenLabs dashboard
+2. Go to **Profile** menu and select **API Keys**
+3. Generate a new API key or copy an existing one
+4. In QuickBot, add the ElevenLabs block to your flow
+5. Click **Add ElevenLabs credentials**
+6. Enter your API key in the password field
+7. Save the credentials
+
+### Configuration Parameters
+
+- **API Key**: Your ElevenLabs API key (required, stored encrypted)
+- **Text**: The text content to convert to speech (supports variables)
+- **Voice**: Select from available ElevenLabs voices (dynamically fetched)
+- **Model**: Choose the AI model for speech generation (dynamically fetched)
+- **Output Variable**: Variable to store the generated audio URL
+
+---
+
+## Features
+
+### Core Capabilities
+
+#### Convert Text to Speech
+
+The primary action transforms text into high-quality speech audio:
+
+- **Dynamic Voice Selection**: Automatically fetches and displays all available voices from your ElevenLabs account
+- **Model Selection**: Choose from text-to-speech capable models in your account
+- **Flexible Text Input**: Supports plain text and variable substitution
+- **Automatic File Hosting**: Generated audio files are automatically uploaded and hosted
+- **URL Generation**: Returns a temporary URL for immediate use in audio bubbles
+
+#### Voice Management
+
+- **Voice Fetching**: Dynamically loads all voices associated with your API key
+- **Voice Metadata**: Displays voice names for easy selection
+- **Voice Filtering**: Only shows voices available to your account
+
+#### Model Management
+
+- **Model Fetching**: Automatically retrieves available models
+- **Capability Filtering**: Only displays models that support text-to-speech
+- **Dynamic Updates**: Model list updates based on your account access
+
+### Data Handling
+
+- **Text Processing**: Handles various text formats including special characters
+- **Audio Format**: Generates MP3 files optimized for web playback
+- **File Storage**: Temporary file storage with automatic cleanup
+- **URL Management**: Provides direct access URLs for audio files
+
+### Variable Support
+
+- **Input Variables**: Text field supports variable substitution using `{{variableName}}` syntax
+- **Output Variables**: Audio URL is automatically saved to your specified variable
+- **Dynamic Content**: Real-time variable processing for personalized audio
+
+---
+
+## Advanced Features
+
+### Error Handling
+
+The integration includes comprehensive error management:
+
+- **API Error Handling**: Captures and reports ElevenLabs API errors
+- **Network Error Management**: Handles connection timeouts and failures
+- **Validation Checks**: Ensures all required parameters are provided
+- **Detailed Logging**: Provides specific error messages for troubleshooting
+
+### Performance Optimization
+
+- **Timeout Management**: Configurable request timeouts for audio generation
+- **Efficient Processing**: Optimized API calls to minimize response time
+- **File Management**: Automatic file cleanup and storage optimization
+- **Caching**: Intelligent caching of voice and model data
+
+### Security Features
+
+- **Encrypted Credentials**: API keys are stored using encryption
+- **Secure File Storage**: Audio files are stored with secure access controls
+- **API Rate Limiting**: Respects ElevenLabs API rate limits
+- **Access Control**: Credentials are isolated per workspace
+
+---
+
+## Best Practices
+
+### Implementation Recommendations
+
+1. **Voice Selection**: Test different voices to find the best match for your brand
+2. **Text Optimization**: Write conversational text for more natural speech output
+3. **Variable Usage**: Use variables to personalize audio content dynamically
+4. **Error Handling**: Always implement fallback options in case of API failures
+
+### Security Best Practices
+
+1. **API Key Protection**: Never expose API keys in client-side code
+2. **Access Management**: Regularly rotate API keys for enhanced security
+3. **Usage Monitoring**: Monitor API usage to prevent unexpected charges
+4. **Workspace Isolation**: Use separate credentials for different projects
+
+### Performance Guidelines
+
+1. **Text Length**: Keep text reasonably short for faster processing
+2. **Concurrent Requests**: Avoid making too many simultaneous requests
+3. **Caching Strategy**: Cache frequently used audio files when possible
+4. **Error Recovery**: Implement retry logic for transient failures
+
+### Content Guidelines
+
+1. **Text Quality**: Use clear, well-formatted text for better speech output
+2. **Pronunciation**: Use phonetic spelling for proper names or technical terms
+3. **Pacing**: Include punctuation and breaks for natural speech rhythm
+4. **Localization**: Choose appropriate voices for your target language
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Authentication Problems
+- **Invalid API Key**: Verify the API key is correctly copied from ElevenLabs dashboard
+- **Permission Denied**: Ensure the API key has the necessary permissions
+- **Account Status**: Check that your ElevenLabs account is active and in good standing
+
+#### Voice/Model Loading Issues
+- **Empty Voice List**: Verify your API key has access to voices
+- **Model Not Available**: Check your account's model access permissions
+- **Loading Failures**: Ensure stable internet connection during setup
+
+#### Audio Generation Problems
+- **Generation Timeout**: Check text length and complexity
+- **Quality Issues**: Try different models or voices for better results
+- **File Access Problems**: Verify the generated URL is accessible
+
+#### Variable and Integration Issues
+- **Variable Not Set**: Ensure the output variable is properly configured
+- **Audio Not Playing**: Check that the audio URL is valid and accessible
+- **Flow Integration**: Verify the audio variable is correctly referenced in audio bubbles
+
+### Debugging Steps
+
+1. **Check API Status**: Verify ElevenLabs service status
+2. **Validate Credentials**: Test API key in ElevenLabs dashboard
+3. **Review Logs**: Check QuickBot logs for detailed error messages
+4. **Test Parameters**: Verify all required fields are properly filled
+5. **Network Connectivity**: Ensure stable connection to ElevenLabs API
+
+### Performance Issues
+
+- **Slow Generation**: Consider shorter text or different models
+- **High Latency**: Check network connection and API response times
+- **Resource Usage**: Monitor API quota and usage limits
+- **File Size**: Large audio files may impact loading times

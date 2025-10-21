@@ -1,0 +1,46 @@
+{
+  "name": "@urbiport/react",
+  "version": "0.0.11",
+  "description": "Convenient library to display bots on your React app",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "stories:dev": "ladle serve -p 3006",
+    "stories:build": "ladle build",
+    "dev": "rollup --watch --config rollup.config.js",
+    "build": "rollup --config rollup.config.js",
+    "lint": "eslint --fix \"src/**/*.ts*\"",
+    "format:write": "prettier --write ./src",
+    "format:check": "prettier --check ./src"
+  },
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@ladle/react": "2.5.1"
+  },
+  "devDependencies": {
+    "@rollup/plugin-babel": "6.0.3",
+    "@rollup/plugin-node-resolve": "15.1.0",
+    "@rollup/plugin-replace": "5.0.7",
+    "@rollup/plugin-terser": "0.4.3",
+    "@quickbot.io/lib": "workspace:*",
+    "@urbiport/js": "workspace:*",
+    "@quickbot.io/schemas": "workspace:*",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/node": "20.4.2",
+    "@types/react": "18.2.15",
+    "eslint": "8.44.0",
+    "eslint-config-custom": "workspace:*",
+    "react": "18.2.0",
+    "rollup": "3.26.2",
+    "rollup-plugin-typescript-paths": "1.4.0",
+    "tslib": "2.6.0",
+    "typescript": "5.4.5",
+    "@rollup/plugin-typescript": "11.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  }
+}

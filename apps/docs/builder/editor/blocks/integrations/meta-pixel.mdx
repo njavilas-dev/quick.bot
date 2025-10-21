@@ -1,0 +1,268 @@
+---
+title: Meta Pixel
+---
+
+The Meta Pixel integration block allows you to implement Facebook/Meta pixel tracking in your bot flows for comprehensive user behavior analysis, conversion tracking, and advertising optimization. This integration supports both standard Meta events and custom event tracking with detailed parameters.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/pixel.png" alt="Meta Pixel block" />
+</Frame>
+
+When your flow contains a Meta Pixel block, it automatically:
+
+- Initializes the Meta Pixel with your Pixel ID on page load
+- Tracks a "PageView" event when the page loads (unless initialization is skipped)
+- Executes specific event tracking when the block is reached in your flow
+- Sends structured data to Meta for advertising insights and optimization
+
+## Configuration Options
+
+### Basic Setup
+
+**Pixel ID (Required)**
+- Your Meta Pixel ID (numeric format: 123456789)
+- Found in your Meta Business Manager under Events Manager > Pixels
+- Supports variable substitution for dynamic pixel management
+- Multiple pixels can be managed through separate blocks
+
+**Skip Initialization**
+- Option to skip automatic pixel initialization
+- Useful when pixel is already initialized elsewhere on your site
+- Prevents duplicate initialization and potential tracking conflicts
+- Default: false (pixel will initialize automatically)
+
+### Event Tracking Configuration
+
+**Track Event Toggle**
+- Enable/disable custom event tracking for this block
+- When enabled, allows selection of standard Meta events or custom events
+- When disabled, block only handles pixel initialization
+
+**Event Type Selection**
+- **Standard Events**: Pre-defined Meta events (Lead, Purchase, ViewContent, etc.)
+- **Custom Events**: Create your own event names for unique tracking needs
+- Each event type supports specific parameters relevant to the event
+
+**Event Parameters**
+- **Key-Value Pairs**: Add custom parameters to enrich event data
+- **Dynamic Content**: Use variables for real-time parameter values
+- **Event-Specific Fields**: Parameters change based on selected event type
+- **Code Support**: Some parameters accept JavaScript code for complex values
+
+## Features
+
+### Standard Event Types
+Meta Pixel supports comprehensive standard events for different business scenarios:
+
+**Lead Generation**
+- `Lead`: Track potential customer interest
+- `Contact`: Track contact form submissions
+- `CompleteRegistration`: Track user registrations
+- `Schedule`: Track appointment bookings
+- `SubmitApplication`: Track application submissions
+
+**E-commerce Events**
+- `ViewContent`: Track product or content views
+- `AddToCart`: Track items added to shopping cart
+- `AddToWishlist`: Track items added to wishlist
+- `InitiateCheckout`: Track checkout process start
+- `Purchase`: Track completed transactions
+- `AddPaymentInfo`: Track payment information addition
+
+**Engagement Events**
+- `Search`: Track internal site searches
+- `Subscribe`: Track subscription signups
+- `StartTrial`: Track free trial starts
+- `CustomizeProduct`: Track product customization
+- `Donate`: Track donation events
+- `FindLocation`: Track location searches
+
+### Custom Event Tracking
+- **Custom Event Names**: Define events specific to your business
+- **Flexible Parameters**: Add any key-value pairs for custom data
+- **Variable Integration**: Use bot variables in event names and parameters
+- **Business Logic**: Track unique user interactions and conversions
+
+### Advanced Parameter Support
+Each standard event supports specific parameters for detailed tracking:
+
+**Content Parameters**
+- `content_category`: Categorize content or products
+- `content_ids`: Array of product or content IDs
+- `content_name`: Specific names of items
+- `contents`: Detailed product information arrays
+
+**Transaction Parameters**
+- `currency`: Transaction currency (USD, EUR, etc.)
+- `value`: Monetary value of the event
+- `num_items`: Number of items in transaction
+- `predicted_ltv`: Predicted customer lifetime value
+
+**Search and Status Parameters**
+- `search_string`: Search terms used
+- `status`: Completion or registration status
+
+## Advanced Features
+
+### E-commerce Tracking
+For online stores, implement comprehensive purchase tracking:
+
+```
+Event Type: Purchase
+Parameters:
+- currency: USD
+- value: {{order_total}}
+- content_ids: {{product_ids}}
+- contents: [{"id": "{{product_id}}", "quantity": {{quantity}}}]
+- num_items: {{item_count}}
+```
+
+### Lead Scoring and Qualification
+Track lead quality and progression:
+
+```
+Event Type: Lead
+Parameters:
+- value: {{lead_score}}
+- content_category: {{lead_source}}
+- content_name: {{campaign_name}}
+- currency: USD
+```
+
+### Custom Business Events
+Create events specific to your industry:
+
+```
+Event Type: Custom
+Event Name: {{custom_event_name}}
+Parameters:
+- user_type: {{user_segment}}
+- engagement_level: {{score}}
+- source: {{traffic_source}}
+```
+
+### Multi-Pixel Management
+- **Separate Blocks**: Use different blocks for different pixels
+- **Conditional Tracking**: Use bot logic to determine which pixels to fire
+- **Cross-Platform Tracking**: Coordinate tracking across web and mobile
+- **Account Segmentation**: Track different business units with separate pixels
+
+### Advanced Conversion Tracking
+- **Conversion Value Optimization**: Send accurate values for Meta's algorithm
+- **Custom Audiences**: Build audiences based on bot interactions
+- **Lookalike Audiences**: Create similar audience segments
+- **Attribution Windows**: Track conversions across different timeframes
+
+## Best Practices
+
+### Privacy Compliance
+- **Consent Management**: Ensure proper user consent before pixel initialization
+- **Data Processing**: Follow Meta's data processing guidelines
+- **GDPR Compliance**: Implement proper consent mechanisms for EU users
+- **CCPA Compliance**: Respect user privacy choices in California
+- **Terms of Service**: Ensure your privacy policy covers pixel usage
+
+### Tracking Accuracy
+- **Event Deduplication**: Prevent duplicate events from multiple triggers
+- **Parameter Validation**: Ensure parameter values are properly formatted
+- **Currency Consistency**: Use consistent currency codes across events
+- **Value Assignment**: Send meaningful monetary values for optimization
+
+### Performance Optimization
+- **Strategic Event Placement**: Place pixel blocks at meaningful conversion points
+- **Parameter Efficiency**: Send only necessary parameters to avoid data bloat
+- **Load Performance**: Pixel initialization won't block bot functionality
+- **Error Handling**: Implement fallbacks for tracking failures
+
+### Data Quality
+- **Consistent Naming**: Use standardized event and parameter naming conventions
+- **Value Normalization**: Ensure consistent value formatting across events
+- **Content ID Management**: Use consistent product or content identification
+- **Parameter Completeness**: Provide all relevant parameters for each event type
+
+### Advertising Optimization
+- **Conversion Events**: Prioritize tracking of your most valuable conversions
+- **Value-Based Bidding**: Send accurate conversion values for automated bidding
+- **Event Hierarchy**: Set up proper conversion event priorities in Meta
+- **Audience Building**: Use events strategically to build custom audiences
+
+## Troubleshooting
+
+### Tracking Verification
+**Meta Events Manager**
+- Check Events Manager in your Meta Business account for real-time event data
+- Use the "Test Events" feature to verify events are being received
+- Monitor event quality scores and recommendations
+
+**Browser Developer Tools**
+- Check Network tab for fbevents.js requests
+- Verify pixel initialization and event firing
+- Look for Meta Pixel Helper browser extension feedback
+
+**Real-time Testing**
+- Use Meta's Pixel Helper browser extension for immediate feedback
+- Test events in preview mode (note: some events may not fire in preview)
+- Verify parameter values are being sent correctly
+
+### Common Issues
+
+**Pixel Not Initializing**
+- Verify Pixel ID is correct and properly formatted (numeric only)
+- Check that the pixel block is being executed in your bot flow
+- Ensure no ad-blockers are preventing pixel script loading
+- Confirm pixel is active in Meta Events Manager
+
+**Events Not Tracking**
+- Verify event type is spelled correctly for standard events
+- Check that required parameters are provided for each event type
+- Ensure bot variables have values when the pixel block executes
+- Confirm pixel initialization occurred before event tracking
+
+**Data Discrepancies**
+- Allow time for data processing (events may take minutes to appear)
+- Check for event deduplication in Meta Events Manager
+- Verify timezone settings match between bot and Meta account
+- Compare event counts with your bot's analytics
+
+**Parameter Issues**
+- Ensure parameter keys match Meta's expected format
+- Verify parameter values are properly formatted (strings, numbers, arrays)
+- Check that JavaScript code in parameters executes without errors
+- Test parameter values independently before pixel implementation
+
+### Performance Issues
+**Slow Loading**
+- Verify pixel initialization isn't blocking other bot functions
+- Check for conflicts with other tracking scripts
+- Monitor page load impact in browser developer tools
+
+**High Event Volume**
+- Review event frequency to avoid excessive tracking
+- Consolidate similar events where possible
+- Use Meta's event aggregation features for high-volume scenarios
+
+**Custom Audience Building**
+- Ensure sufficient event volume for audience creation (minimum 100 users)
+- Verify event parameters provide enough data for audience segmentation
+- Check audience definitions match your tracking implementation
+
+### Technical Support
+For persistent issues:
+1. **Meta Support**: Use Meta Business Help Center for platform-specific issues
+2. **Event Quality**: Review Meta's Event Quality recommendations
+3. **API Documentation**: Refer to Meta's Pixel API documentation for advanced implementations
+4. **Testing Tools**: Use Meta's testing tools to validate your implementation
+
+**Advanced Debugging**
+- Enable Meta Pixel's debug mode for detailed console logging
+- Use Meta's Conversions API for server-side event validation
+- Implement custom error tracking for pixel-related issues
+- Monitor pixel performance through Meta's reporting tools
+
+### Integration Considerations
+- **iOS 14.5+ Impact**: Consider Aggregated Event Measurement limitations
+- **Cookie Restrictions**: Plan for third-party cookie deprecation
+- **Cross-Domain Tracking**: Implement proper domain configuration for multi-site tracking
+- **Mobile App Integration**: Coordinate with app-based tracking for complete user journey mapping
+
+The Meta Pixel integration provides powerful tracking capabilities that, when properly implemented, significantly enhance your advertising effectiveness and user understanding. Regular monitoring and optimization of your pixel implementation ensures maximum value from your Meta advertising investments.

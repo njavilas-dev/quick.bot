@@ -1,0 +1,42 @@
+{
+  "name": "@quickbot.io/bot-engine",
+  "version": "1.0.0",
+  "license": "AGPL-3.0-or-later",
+  "private": true,
+  "main": "./index.ts",
+  "types": "./index.ts",
+  "dependencies": {
+    "@planetscale/database": "1.8.0",
+    "@sentry/nextjs": "9.6.0",
+    "@trpc/server": "10.40.0",
+    "@quickbot.io/emails": "workspace:*",
+    "@quickbot.io/env": "workspace:*",
+    "@quickbot.io/lib": "workspace:*",
+    "@quickbot.io/logic": "workspace:*",
+    "@quickbot.io/prisma": "workspace:*",
+    "@quickbot.io/results": "workspace:*",
+    "@quickbot.io/schemas": "workspace:*",
+    "@quickbot.io/variables": "workspace:*",
+    "@udecode/plate-common": "30.4.5",
+    "chrono-node": "2.7.6",
+    "date-fns": "2.30.0",
+    "date-fns-tz": "2.0.0",
+    "google-auth-library": "8.9.0",
+    "google-spreadsheet": "4.1.1",
+    "isolated-vm": "5.0.1",
+    "ky": "1.2.4",
+    "libphonenumber-js": "1.10.37",
+    "node-html-parser": "6.1.5",
+    "nodemailer": "6.9.8",
+    "openai": "4.47.1",
+    "qs": "6.11.2",
+    "stripe": "12.13.0"
+  },
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/forge-repository": "workspace:*",
+    "@types/node": "20.4.2",
+    "@types/nodemailer": "6.4.14",
+    "@types/qs": "6.9.7"
+  }
+}

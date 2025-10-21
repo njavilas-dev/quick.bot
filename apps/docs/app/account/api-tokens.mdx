@@ -1,0 +1,124 @@
+---
+title: API Tokens
+icon: key
+---
+
+Create and manage API tokens to authenticate requests to the QuickBot API. API tokens provide secure
+access to your account data and bot management functions.
+
+## What are API Tokens?
+
+API tokens are secure authentication keys that allow external applications and scripts to interact
+with your QuickBot account programmatically. They provide:
+
+- **Secure Access**: Authentication without exposing your password
+- **Granular Control**: Each token can be managed independently
+- **Easy Revocation**: Tokens can be deleted instantly if compromised
+- **Activity Tracking**: Monitor when and how your tokens are used
+
+## Creating API Tokens
+
+### Generate a New Token
+
+To create a new API token:
+
+1. Go to your Account settings
+2. Navigate to the **API Tokens** section
+3. Click the **Create Token** button
+4. Enter a descriptive name for your token
+5. Click **Generate Token**
+
+<Warning>
+  **Important**: The token value will only be displayed once immediately after creation. Copy and
+  save it securely - you won't be able to view it again.
+</Warning>
+
+### Token Naming Best Practices
+
+Use descriptive names that help you identify the token's purpose:
+
+- ✅ `Production Website Integration`
+- ✅ `Development Testing`
+- ✅ `Mobile App Backend`
+- ❌ `Token 1`
+- ❌ `API Key`
+
+## Managing Your Tokens
+
+### Viewing Active Tokens
+
+The API Tokens page shows all your active tokens with:
+
+- **Token Name**: The descriptive name you assigned
+- **Created Date**: When the token was generated
+- **Last Used**: When the token was last used (if available)
+
+### Token Security
+
+- **Keep tokens secure**: Treat API tokens like passwords
+- **Use environment variables**: Don't hardcode tokens in your source code
+- **Limit token scope**: Create separate tokens for different applications
+- **Regular rotation**: Consider recreating tokens periodically for enhanced security
+
+### Revoking Tokens
+
+To delete an API token:
+
+1. Find the token in your API Tokens list
+2. Click the **Delete** button next to the token
+3. Confirm the deletion
+
+<Note>
+  Once a token is deleted, all applications using that token will immediately lose access. Make sure
+  to update your applications with new tokens before deleting old ones.
+</Note>
+
+## Using API Tokens
+
+### Authentication Header
+
+Include your API token in the Authorization header of your HTTP requests:
+
+```bash
+curl -H "Authorization: Bearer your_api_token_here" \
+     https://api.quick.bot/api/v1/bots
+```
+
+### API Documentation
+
+For complete API documentation including all available endpoints and parameters, visit the
+[API Reference](/api/authentication) section.
+
+## Troubleshooting
+
+### Token Not Working
+
+If your API token isn't working:
+
+1. **Verify the token**: Ensure you copied the complete token string
+2. **Check the header format**: Use `Authorization: Bearer <token>`
+3. **Confirm token status**: Make sure the token hasn't been deleted
+4. **Review rate limits**: You may have exceeded your hourly request limit
+
+### Security Concerns
+
+If you suspect a token has been compromised:
+
+1. **Delete immediately**: Remove the token from your account
+2. **Generate new token**: Create a replacement with a new name
+3. **Update applications**: Replace the old token in all your code
+4. **Review usage**: Check recent API activity for suspicious requests
+
+## Best Practices
+
+### Development vs Production
+
+- Use separate tokens for development and production environments
+- Never commit tokens to version control systems
+- Use environment variables or secure configuration management
+- Regularly audit and rotate tokens in production
+
+<Tip>
+  Create tokens with specific, descriptive names and delete them as soon as they're no longer
+  needed. This minimizes security risks and keeps your token list clean and manageable.
+</Tip>

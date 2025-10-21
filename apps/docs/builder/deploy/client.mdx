@@ -1,0 +1,227 @@
+---
+title: Client
+icon: 'desktop'
+---
+
+Our web client provides three display modes and multiple customization options to seamlessly
+integrate your bot into any web application.
+
+**Display modes**:
+
+- **Standard**: Embeds the bot in a box with the size of your choice anywhere on your app. This is
+  what is used on QuickBot homepage: You can also set the width to `100%` and the height to `100vh`
+  to make it take the entire page dimensions
+- **Popup**: Embeds the bot in a Popup that overlays your website. It can be triggered after a delay
+  or with a click of a button for example
+- **Bubble**: Embeds the bot as a "chat bubble" at the bottom right corner of your site. Can be
+  triggered automatically or with a click. It can also come with a "proactive message".
+
+**Customization options**:
+
+- Theme and styling
+- Trigger conditions
+- User identification
+- Pre-filled variables
+
+---
+
+## Integration
+
+You can get the standard HTML and Javascript code by clicking on the "Javascript" button in the
+"Deploy" tab of your bot.
+
+There are also appropriate instructions to deploy your bot in your platform of choice, make sure to
+head over the `Deploy` tab of your bot and select the platform you want to deploy your bot on.
+
+Here we will explain you the general integration steps for any platform.
+
+### Code snippet
+
+Copy and paste the following code in your website HTML, ideally in the `<head>` section:
+
+```html
+<script type="module">
+  import QuickBot from 'https://cdn.jsdelivr.net/npm/@urbiport/js@0.3/dist/web.js'
+
+  QuickBot.initStandard({
+    botId: 'your-bot-id',
+  })
+</script>
+
+<quickbot-standard style="width: 100%; height: 600px; "></quickbot-standard>
+```
+
+This code is creating a container with a 100% width (will match parent width) and 600px height.
+
+### Multiple bots
+
+If you have different bots on the same page you will have to make them distinct with an additional
+`id` prop:
+
+```html
+<script type="module">
+  import QuickBot from 'https://cdn.jsdelivr.net/npm/@urbiport/js@0.3/dist/web.js'
+
+  QuickBot.initStandard({
+    id: 'bot1'
+    botId: 'your-bot-id',
+  })
+
+  QuickBot.initStandard({
+    id: 'bot2'
+    bot: 'my-bot-2',
+  })
+</script>
+
+<quickbot-standard id="bot1" style="width: 100%; height: 600px; "></quickbot-standard>
+...
+<quickbot-standard id="bot2" style="width: 100%; height: 600px; "></quickbot-standard>
+```
+
+### Popup
+
+You can get the popup HTML and Javascript code by clicking on the "Javascript" button in the
+"Deploy" tab of your bot.
+
+Here is an example:
+
+```html
+<script type="module">
+  import QuickBot from 'https://cdn.jsdelivr.net/npm/@urbiport/js@0.3/dist/web.js'
+
+  QuickBot.initPopup({
+    botId: 'your-bot-id',
+    apiHost: 'https://viewer.quick.bot',
+    autoShowDelay: 3000,
+  })
+</script>
+```
+
+This code will automatically trigger the popup window after 3 seconds.
+
+### Bubble
+
+You can get the bubble HTML and Javascript code by clicking on the "Javascript" button in the
+"Deploy" tab of your bot.
+
+Here is an example:
+
+```html
+<script type="module">
+  import QuickBot from 'https://cdn.jsdelivr.net/npm/@urbiport/js@0.3/dist/web.js'
+
+  QuickBot.initBubble({
+    botId: 'your-bot-id',
+    previewMessage: {
+      message: 'I have a question for you!',
+      autoShowDelay: 5000,
+      avatarUrl: 'https://placehold.co/90x90',
+    },
+    theme: {
+      button: { backgroundColor: '#01a952', iconColor: '#FFFFFF' },
+      previewMessage: { backgroundColor: '#ffffff', textColor: 'black' },
+      chatWindow: { backgroundColor: '#ffffff', maxWidth: '100%' },
+    },
+  })
+</script>
+```
+
+This code will show the bubble and let a preview message appear after 5 seconds.
+
+### Custom button position
+
+You can move the button with some custom CSS on your website. For example, you can place the bubble
+button higher with the following CSS:
+
+```css
+bot-bubble::part(button) {
+  bottom: 60px;
+}
+
+bot-bubble::part(bot) {
+  bottom: 140px;
+  height: calc(100% - 140px)
+}
+```
+
+If you have a preview message, you'll also have to manually position it:
+
+```css
+bot-bubble::part(preview-message) {
+  bottom: 140px;
+}
+```
+
+## Commands
+
+Here are the commands you can use to trigger your embedded bot:
+
+- `QuickBot.open()`: Open popup or bubble
+- `QuickBot.close()`: Close popup or bubble
+- `QuickBot.toggle()`: Toggle the bubble or popup open/close state,
+- `QuickBot.showPreviewMessage()`: Show preview message from the bubble,
+- `QuickBot.hidePreviewMessage()`: Hide preview message from the bubble,
+- `QuickBot.setPrefilledVariables(...)`: Set prefilled variables. Example:
+
+  ```js
+  QuickBot.setPrefilledVariables({
+    Name: 'Jhon',
+    Email: 'john@gmail.com',
+  })
+  ```
+
+  For more information, check out [Additional configuration](#additional-configuration).
+
+- `QuickBot.setInputValue(...)`: Set the value in the currently displayed input.
+
+You can bind these commands on a button element, for example:
+
+```html
+<button onclick="QuickBot.open()">Contact us</button>
+```
+
+## Callbacks
+
+If you need to trigger events on your parent website when the user interact with the bot, you can
+use the following callbacks:
+
+```js
+QuickBot.initStandard({
+  botId: 'your-bot-id',
+  onNewInputBlock: (inputBlock) => {
+    console.log('New user block displayed', inputBlock.id)
+  },
+  onAnswer: (answer) => {
+    console.log('Answer received', answer.message, answer.blockId)
+  },
+  onInit: () => {
+    console.log('Bot initialized')
+  },
+  onEnd: () => {
+    console.log('Bot ended')
+  },
+})
+```
+
+## Variables
+
+You can prefill the bot variable values in your embed code by adding the `prefilledVariables`
+option. Here is an example:
+
+```js
+QuickBot.initStandard({
+  botId: 'your-bot-id',
+  prefilledVariables: {
+    varURL: 'https://my-site.com/account',
+    varName: 'Francisco',
+  },
+})
+```
+
+This will prefill the `varURL` variable with "https://my-site.com/account" and the `varName`
+variable with "Francisco". More info about variables: [here](/builder/editor/variables).
+
+Note that if your site URL contains query params (i.e.
+https://viewer.quick.bot/my-publicid?varName=John&varSurname=Doe), the variables will automatically
+be injected to the bot. So you don't need to manually transfer query params to the bot embed
+configuration.

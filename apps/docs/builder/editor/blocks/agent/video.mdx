@@ -1,0 +1,134 @@
+---
+title: Video
+icon: video
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Video agent block allows you to display videos from multiple sources to your users. It supports
+direct video files (MP4) and automatic embedding from popular video platforms like YouTube, Vimeo,
+TikTok, and more.
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame style={{ maxWidth: '400px' }}>
+      <img src="/images/builder/blocks/agent/video.png" alt="Video bubble" className="rounded-lg" />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <YoutubeVideo id="NpEaa2P7qZI" />
+  </Tab>
+</Tabs>
+
+## Video Source Options
+
+### Link Tab
+
+Paste any supported video URL directly into the input field. The system automatically detects the
+video service and configures proper embedding.
+
+### Pexels Integration
+
+Browse and select professional stock videos directly from Pexels (available when configured with API
+key).
+
+## Supported Video Services
+
+The Video block automatically detects and embeds videos from these platforms:
+
+### Fully Supported Platforms
+
+- **YouTube**: Regular videos and Shorts (automatic URL parsing and iframe embedding)
+- **Vimeo**: Professional video hosting with clean player interface
+- **TikTok**: Social media videos with custom embed player (300px height)
+- **Gumlet**: Video hosting and optimization platform
+- **OneDrive**: Microsoft cloud-hosted videos
+
+### Direct Video Files
+
+- **MP4**: Direct video file URLs with HTML5 video player
+- **Customizable Controls**: Toggle video controls visibility
+- **Variable Support**: Use variables for dynamic video URLs
+
+## Advanced Features
+
+### Video Configuration
+
+- **Controls Display**: Show or hide video playback controls for direct video files
+- **Aspect Ratio**: Configurable video dimensions and sizing
+- **Max Width**: Control maximum display width for optimal viewing
+- **Auto-sizing**: Automatic size suggestions based on video type
+
+### Variable Integration
+
+- Use variables in video URLs for dynamic content
+- Variable preview shows descriptive tags in the editor
+- Supports all video types including platform embeds and direct files
+
+## Platform-Specific Features
+
+### YouTube
+
+- Automatic detection of regular videos and Shorts
+- Clean embed interface without YouTube branding distractions
+- Supports playlist and timestamp parameters
+
+### TikTok
+
+- Special handling with dedicated embed player
+- Taller aspect ratio (300px) optimized for vertical content
+- Direct integration with TikTok's embed API
+
+### Direct Files (MP4)
+
+- HTML5 video player with full controls
+- Responsive sizing that adapts to container
+- Support for multiple video formats beyond MP4
+
+## Troubleshooting and Limitations
+
+### Unsupported Content
+
+For video services not in the supported list:
+
+1. Use the [Embed bubble](/builder/editor/blocks/agent/embed) instead
+2. Copy the iframe embed code from the video platform
+3. Paste the embed code into the Embed block
+
+### YouTube Limitations
+
+- **YouTube Clips**: Not supported due to embed URL restrictions
+- **Workaround**: Use the Embed bubble with iframe code from YouTube's "Deploy" → "Embed" button
+- **Age-restricted videos**: May not embed properly due to platform restrictions
+
+### Variable Videos Not Loading
+
+- Ensure variables contain complete, valid video URLs
+- Check that video URLs are accessible and publicly available
+- Verify the video service is supported or use direct file URLs
+
+### Video Not Playing
+
+- Direct video files must be hosted on HTTPS servers
+- Check that video files are in supported formats (MP4 recommended)
+- Ensure video hosting allows embedding and cross-origin access
+
+## Best Practices
+
+### Content Selection
+
+- Choose appropriate video lengths for chat interfaces
+- Consider using video thumbnails or previews for longer content
+- Test videos across different devices and connection speeds
+
+### Platform Choice
+
+- Use YouTube for educational or marketing content
+- Choose Vimeo for professional presentations
+- Use TikTok for short, engaging social content
+- Select direct MP4 files for maximum control over playback
+
+## Feature Requests
+
+Missing a video service? [Suggest it on the feedback board](https://feedback.quick.bot/) to help
+prioritize new integrations.

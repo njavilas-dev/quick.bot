@@ -1,0 +1,283 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "QuickBot Documentation",
+  "integrations": {
+    "posthog": {
+      "apiKey": "phc_V6qcnt2bE7JZOlyCAbZxMFKuT7GmMwD4v0B9S0kvz9y"
+    }
+  },
+  "theme": "quill",
+  "openapi": ["/openapi/builder.json", "/openapi/viewer.json"],
+  "ignorePatterns": ["node_modules/**/*"],
+  "feedback": {
+    "suggestEdit": true
+  },
+  "logo": {
+    "dark": "/images/logo-dark.svg",
+    "light": "/images/logo-light.svg",
+    "href": "https://quick.bot"
+  },
+  "favicon": "/favicon.png",
+  "colors": {
+    "primary": "#000000",
+    "light": "#00cd62",
+    "dark": "#00cd62",
+    "background": {
+      "dark": "#121212"
+    },
+    "anchors": {
+      "from": "#FF7F57",
+      "to": "#9563FF"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "Purchase",
+      "url": "https://app.quick.bot"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Dashboard",
+    "url": "https://app.quick.bot"
+  },
+  "primaryTab": {
+    "name": "App"
+  },
+  "tabs": [
+    {
+      "name": "Builder",
+      "url": "builder"
+    },
+    {
+      "name": "API",
+      "url": "api"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Support",
+      "icon": "message-text",
+      "url": "https://docs.quick.bot/support/contact"
+    },
+    {
+      "name": "Privacy Policies",
+      "icon": "shield-check",
+      "url": "https://docs.quick.bot/privacy-policies"
+    },
+    {
+      "name": "GDPR Rules",
+      "icon": "shield-check",
+      "url": "https://docs.quick.bot/gdpr-rules"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Getting Started",
+      "pages": ["app/getting-started/welcome"]
+    },
+    {
+      "group": "Account",
+      "pages": [
+        "app/account/profile",
+        "app/account/preferences",
+        "app/account/notifications",
+        "app/account/api-tokens"
+      ]
+    },
+    {
+      "group": "Workspace",
+      "pages": [
+        "app/workspace/settings",
+        "app/workspace/members",
+        "app/workspace/credentials",
+        "app/workspace/billing",
+        "app/workspace/bots"
+      ]
+    },
+    {
+      "group": "Support",
+      "pages": ["support/contact", "support/faq", "troubleshoot", "breaking-changes"]
+    },
+    {
+      "group": "Getting Started",
+      "pages": ["api/authentication"]
+    },
+    {
+      "group": "Chat",
+      "pages": [
+        "api/chat/start-chat",
+        "api/chat/start-preview-chat",
+        "api/chat/continue-chat",
+        "api/chat/save-logs",
+        "api/chat/generate-upload-url",
+        "api/chat/update-bot-in-session"
+      ]
+    },
+    {
+      "group": "Bot",
+      "pages": [
+        "api/bot/list",
+        "api/bot/get",
+        "api/bot/create",
+        "api/bot/import",
+        "api/bot/update",
+        "api/bot/delete",
+        "api/bot/get-published-bot",
+        "api/bot/publish",
+        "api/bot/unpublish"
+      ]
+    },
+    {
+      "group": "Results",
+      "pages": [
+        "api/results/list",
+        "api/results/get",
+        "api/results/delete",
+        "api/results/list-logs"
+      ]
+    },
+    {
+      "group": "Analytics",
+      "pages": ["api/analytics/get-stats"]
+    },
+    {
+      "group": "Folder",
+      "pages": [
+        "api/folder/list",
+        "api/folder/get",
+        "api/folder/create",
+        "api/folder/update",
+        "api/folder/delete"
+      ]
+    },
+    {
+      "group": "Workspace",
+      "pages": [
+        "api/workspace/list",
+        "api/workspace/get",
+        "api/workspace/create",
+        "api/workspace/update",
+        "api/workspace/delete",
+        "api/workspace/list-members"
+      ]
+    },
+    {
+      "group": "Billing",
+      "pages": ["api/billing/get-usage", "api/billing/list-invoices"]
+    },
+    {
+      "group": "Getting Started",
+      "icon": "rocket-launch",
+      "pages": [
+        "builder/getting-started/overview",
+        "builder/getting-started/first-bot",
+        "builder/getting-started/deployment"
+      ]
+    },
+    {
+      "group": "Bot Editor",
+      "pages": [
+        "builder/editor/flow",
+        {
+          "group": "Blocks",
+          "icon": "block",
+          "pages": [
+            "builder/editor/blocks/general",
+            {
+              "group": "Agent",
+              "pages": [
+                "builder/editor/blocks/agent/text",
+                "builder/editor/blocks/agent/image",
+                "builder/editor/blocks/agent/video",
+                "builder/editor/blocks/agent/embed",
+                "builder/editor/blocks/agent/audio"
+              ]
+            },
+            {
+              "group": "User",
+              "pages": [
+                "builder/editor/blocks/user/text",
+                "builder/editor/blocks/user/number",
+                "builder/editor/blocks/user/email",
+                "builder/editor/blocks/user/website",
+                "builder/editor/blocks/user/date",
+                "builder/editor/blocks/user/phone-number",
+                "builder/editor/blocks/user/buttons",
+                "builder/editor/blocks/user/payment",
+                "builder/editor/blocks/user/rating",
+                "builder/editor/blocks/user/file-upload"
+              ]
+            },
+            {
+              "group": "Logic",
+              "pages": [
+                "builder/editor/blocks/logic/set-variable",
+                "builder/editor/blocks/logic/condition",
+                "builder/editor/blocks/logic/redirect",
+                "builder/editor/blocks/logic/script",
+                "builder/editor/blocks/logic/bot-link",
+                "builder/editor/blocks/logic/wait",
+                "builder/editor/blocks/logic/jump",
+                "builder/editor/blocks/logic/ab-test"
+              ]
+            },
+            {
+              "group": "Integrations",
+              "pages": [
+                "builder/editor/blocks/integrations/google-sheets",
+                "builder/editor/blocks/integrations/google-analytics",
+                "builder/editor/blocks/integrations/webhook",
+                "builder/editor/blocks/integrations/send-email",
+                "builder/editor/blocks/integrations/zapier",
+                "builder/editor/blocks/integrations/make-com",
+                "builder/editor/blocks/integrations/pabbly-connect",
+                "builder/editor/blocks/integrations/chatwoot",
+                "builder/editor/blocks/integrations/meta-pixel",
+                "builder/editor/blocks/integrations/openai",
+                "builder/editor/blocks/integrations/mistral",
+                "builder/editor/blocks/integrations/elevenlabs",
+                "builder/editor/blocks/integrations/anthropic",
+                "builder/editor/blocks/integrations/dify-ai",
+                "builder/editor/blocks/integrations/nocodb",
+                "builder/editor/blocks/integrations/segment",
+                "builder/editor/blocks/integrations/woocommerce",
+                "builder/editor/blocks/integrations/freshdesk",
+                "builder/editor/blocks/integrations/wordpress",
+                "builder/editor/blocks/integrations/zoho-crm"
+              ]
+            }
+          ]
+        },
+        "builder/editor/variables",
+        "builder/editor/invite",
+        "builder/editor/publish",
+        "builder/editor/export"
+      ]
+    },
+    {
+      "group": "Settings",
+      "pages": ["builder/settings/general"]
+    },
+    {
+      "group": "Theme",
+      "pages": ["builder/theme/general"]
+    },
+    {
+      "group": "Deploy",
+      "pages": [
+        "builder/deploy/general",
+        "builder/deploy/client",
+        "builder/deploy/api",
+        "builder/deploy/whatsapp"
+      ]
+    },
+    {
+      "group": "Results",
+      "pages": ["builder/results/table", "builder/results/analytics"]
+    }
+  ],
+  "footerSocials": {
+    "website": "https://quick.bot",
+    "discord": "https://discord.gg/Jbz7bKVz"
+  }
+}

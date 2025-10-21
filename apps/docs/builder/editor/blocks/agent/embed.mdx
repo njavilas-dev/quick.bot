@@ -1,0 +1,102 @@
+---
+title: Embed
+icon: browser
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Embed agent block allows you to display websites, iframe content, or multimedia from various
+sources to your users. You can embed videos from platforms like YouTube, Vimeo, direct mp4 files,
+PDFs, and other web content.
+
+<Info>
+  Not all websites allow embedding due to security policies (X-Frame-Options). If you see a blank
+  space, it means the website you're trying to embed doesn't allow iframe embedding.
+</Info>
+
+<Tabs>
+  <Tab title="Flow">
+    <Frame>
+      <img src="/images/builder/blocks/agent/embed.png" alt="Embed bubble" className="rounded-lg" />
+    </Frame>
+  </Tab>
+  <Tab title="Bot">
+    <YoutubeVideo id="NpEaa2P7qZI" />
+  </Tab>
+</Tabs>
+
+## Configuration Options
+
+### URL Input
+
+- **Direct URLs**: Paste any embeddable URL directly
+- **Iframe Code**: Paste iframe HTML code - the system will automatically extract the source URL
+- **Variable Support**: Use variables in URLs for dynamic content
+
+### Height Setting
+
+Configure the height of the embedded content in pixels. This can also be set using variables for
+dynamic sizing.
+
+## Advanced Features
+
+### Wait for Event
+
+Enable this feature when you own the embedded website and want to control the bot flow based on
+events from the embedded content.
+
+**Configuration:**
+
+- **Event Name**: Specify the name of the event to listen for
+- **Save Data**: Choose a variable to store any data sent with the event
+
+**Implementation Example:**
+
+```js
+window.parent.postMessage(
+  {
+    name: 'My event',
+    data: 'Custom data passed to the bot variable',
+  },
+  '*',
+)
+```
+
+The event name must match what you've configured in the Embed block settings.
+
+<Frame>
+  <img
+    src="/images/builder/blocks/agent/embed-wait.jpg"
+    alt="Embed bubble wait for event configuration"
+    className="rounded-lg"
+  />
+</Frame>
+
+## Common Use Cases
+
+### Embed a PDF hosted on Google Drive
+
+1. Select the PDF file you want to embed
+2. Right-click → Preview → More actions → Open in a new window
+3. Click More actions → Embed item
+4. Copy the embed code and paste it in the Embed agent block URL field
+
+### Video Embedding
+
+- **YouTube**: Use direct YouTube URLs or embed codes
+- **Vimeo**: Support for Vimeo player URLs
+- **Direct MP4**: Host your own video files and use direct URLs
+
+## Troubleshooting
+
+### Blank or Empty Embed
+
+- The website may not allow iframe embedding due to security policies
+- Check if the URL is accessible and publicly available
+- Try using the direct link instead of an embed code
+
+### Variable URLs Not Loading
+
+- Ensure the variable contains a valid, complete URL
+- Check that the variable is populated before the embed block is reached
+- Variables should include the full protocol (http:// or https://)

@@ -1,0 +1,116 @@
+---
+title: Redirect
+icon: arrow-up-right-from-square
+---
+
+The Redirect logic block allows you to redirect users to external URLs either in the current tab or a new tab, enabling seamless integration with external services and websites.
+
+<Warning>
+  Safari and iOS devices will block a redirect in a new tab by default so a popup will be displayed
+  to the user. Make sure to test your redirect logic block on these devices.
+</Warning>
+
+<Frame>
+  <img src="/images/builder/blocks/logic/redirect.png" alt="Redirect logic block" />
+</Frame>
+
+## Configuration Options
+
+### URL Settings
+- **Target URL**: Specify the destination URL for redirection
+- **Variable Support**: Use variables to create dynamic URLs based on user data
+- **Validation**: Ensures proper URL formatting for successful redirection
+- **Protocol Handling**: Automatically handles HTTP/HTTPS protocols
+
+### Navigation Behavior
+- **Current Tab**: Redirects in the same browser tab (default behavior)
+- **New Tab**: Opens the URL in a new browser tab or window
+- **Cross-Platform Support**: Works across web, mobile web, and embedded environments
+
+## Features
+
+### Dynamic URL Construction
+Build personalized redirect URLs using variables:
+- **User Data Integration**: Include user information in URLs (e.g., `https://example.com/user/{{User ID}}`)
+- **Parameter Passing**: Pass form responses as URL parameters
+- **External System Integration**: Direct users to external dashboards with context
+
+### Flexible Navigation Options
+- **Same Tab Redirect**: Seamless transition for completing workflows
+- **New Tab Opening**: Keep the conversation open while accessing external resources
+- **Context Preservation**: Maintain bot session when opening in new tabs
+
+### Cross-Platform Compatibility
+- **Web Browsers**: Full support across all modern browsers
+- **Mobile Devices**: Optimized for mobile web experiences
+- **Embedded Environments**: Works within iframe and embedded implementations
+
+## Advanced Features
+
+### Conditional Redirecting
+- **Variable-Based Logic**: Redirect to different URLs based on user responses
+- **A/B Testing**: Use with A/B test blocks to redirect users to different landing pages
+- **Personalization**: Create personalized redirect experiences based on user data
+
+### External System Integration
+- **CRM Integration**: Direct users to personalized CRM portals
+- **Payment Processing**: Redirect to payment gateways with pre-filled information
+- **Third-party Dashboards**: Link to external analytics or reporting tools
+- **Document Systems**: Direct to specific documents or resources
+
+### Analytics and Tracking
+- **UTM Parameter Support**: Add tracking parameters for analytics
+- **Campaign Tracking**: Monitor redirect performance and user behavior
+- **Conversion Tracking**: Measure success rates of redirect-based flows
+
+## Best Practices
+
+### URL Construction
+- **Absolute URLs**: Always use complete URLs (https://example.com) rather than relative paths
+- **Parameter Encoding**: Properly encode variable values in URLs
+- **Security Validation**: Validate and sanitize user input used in URLs
+- **HTTPS Protocol**: Use secure HTTPS URLs whenever possible
+
+### User Experience
+- **Clear Intent**: Make redirect purpose clear to users before redirecting
+- **Loading Indicators**: Provide feedback during redirect processes
+- **Fallback Options**: Have alternatives if redirects fail
+- **Return Navigation**: Consider how users will return to the conversation
+
+### Cross-Platform Considerations
+- **Mobile Optimization**: Ensure target URLs are mobile-friendly
+- **App Integration**: Consider how redirects work within mobile apps
+- **Popup Blockers**: Account for browser popup blocking behavior
+- **Network Conditions**: Handle slow network connections gracefully
+
+### Security Considerations
+- **URL Validation**: Validate URLs to prevent malicious redirects
+- **Domain Whitelisting**: Consider restricting redirects to trusted domains
+- **User Consent**: Inform users before redirecting to external sites
+- **Data Privacy**: Be mindful of data passed in URL parameters
+
+## Troubleshooting
+
+### Common Redirect Issues
+- **Invalid URLs**: Ensure URLs are properly formatted with protocols
+- **Variable Errors**: Check that variables contain valid URL components
+- **Encoding Problems**: Properly encode special characters in URLs
+- **Protocol Mismatches**: Verify HTTP/HTTPS protocol consistency
+
+### Browser-Specific Problems
+- **Popup Blockers**: New tab redirects may be blocked by popup blockers
+- **Safari Limitations**: iOS Safari has strict popup blocking policies
+- **CORS Issues**: Some embedded environments may restrict redirects
+- **Mobile Browsers**: Different behavior between mobile and desktop browsers
+
+### Platform-Specific Challenges
+- **Mobile Apps**: Redirects may behave differently in WebView components
+- **Iframe Restrictions**: Some sites prevent iframe-based redirects
+- **Third-party Blockers**: Ad blockers or privacy tools may interfere
+- **Network Firewalls**: Corporate networks may block certain redirects
+
+### Integration Problems
+- **External System Failures**: Handle cases where target sites are unavailable
+- **Authentication Issues**: Manage expired or invalid authentication tokens
+- **Parameter Handling**: Ensure external systems properly receive passed parameters
+- **Session Management**: Maintain proper session state across redirects

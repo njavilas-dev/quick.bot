@@ -1,0 +1,228 @@
+import { withSentryConfig } from '@sentry/nextjs'
+import { join, dirname } from 'path'
+import { fileURLToPath } from 'url'
+import { configureRuntimeEnv } from 'next-runtime-env/build/configure.js'
+
+const __filename = fileURLToPath(import.meta.url)
+
+const __dirname = dirname(__filename)
+
+const injectViewerUrlIfVercelPreview = (val) => {
+  if (
+    (val && typeof val === 'string' && val.length > 0) ||
+    process.env.VERCEL_ENV !== 'preview' ||
+    !process.env.VERCEL_BUILDER_PROJECT_NAME ||
+    !process.env.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME
+  )
+    return
+  process.env.NEXT_PUBLIC_VIEWER_URL = `https://${process.env.VERCEL_BRANCH_URL}`
+  if (process.env.NEXT_PUBLIC_CHAT_API_URL?.includes('{{pr_id}}'))
+    process.env.NEXT_PUBLIC_CHAT_API_URL = process.env.NEXT_PUBLIC_CHAT_API_URL.replace(
+      '{{pr_id}}',
+      process.env.VERCEL_GIT_PULL_REQUEST_ID,
+    )
+}
+
+injectViewerUrlIfVercelPreview(process.env.NEXT_PUBLIC_VIEWER_URL)
+
+configureRuntimeEnv()
+
+const landingPagePaths = [
+  '/',
+  '/pricing',
+  '/privacy-policies',
+  '/terms-of-service',
+  '/about',
+  '/oss-friends',
+  '/blog',
+  '/blog/:slug*',
+]
+
+const landingPageReferers = [
+  '/',
+  '/pricing',
+  '/privacy-policies',
+  '/terms-of-service',
+  '/about',
+  '/oss-friends',
+  '/blog',
+].concat(['/blog/(.+)'])
+
+const currentHost = 'quickbot.io'
+const currentOrigin = `https://${currentHost}`
+const optionalQueryParams = `(\\/?\\?.*)?`
+
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ['@quickbot.io/lib', '@quickbot.io/schemas', '@quickbot.io/emails'],
+  output: 'standalone',
+  experimental: {
+    outputFileTracingRoot: join(__dirname, '../../'),
+    serverComponentsExternalPackages: ['isolated-vm'],
+  },
+  // Optimización para Tailwind CSS
+  compiler: {
+    // Remover console.log en producción
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  webpack: (config, { isServer }) => {
+    if (isServer) return config
+
+    config.resolve.alias['minio'] = false
+    config.resolve.alias['qrcode'] = false
+    config.resolve.alias['isolated-vm'] = false
+    return config
+  },
+  async redirects() {
+    return [
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/Jbz7bKVz',
+        permanent: true,
+      },
+    ]
+  },
+  async rewrites() {
+    return {
+      beforeFiles: (process.env.LANDING_PAGE_URL
+        ? landingPageReferers
+            .map((path) => ({
+              source: '/_next/static/:static*',
+              has: [
+                {
+                  type: 'header',
+                  key: 'referer',
+                  value: `${currentOrigin}${path}${optionalQueryParams}`,
+                },
+              ],
+              destination: `${process.env.LANDING_PAGE_URL}/_next/static/:static*`,
+            }))
+            .concat(
+              landingPageReferers.map((path) => ({
+                source: '/bots/:bot*',
+                has: [
+                  {
+                    type: 'header',
+                    key: 'referer',
+                    value: `${currentOrigin}${path}${optionalQueryParams}`,
+                  },
+                ],
+                destination: `${process.env.LANDING_PAGE_URL}/bots/:bot*`,
+              })),
+            )
+            .concat(
+              landingPageReferers.map((path) => ({
+                source: '/styles/:style*',
+                has: [
+                  {
+                    type: 'header',
+                    key: 'referer',
+                    value: `${currentOrigin}${path}${optionalQueryParams}`,
+                  },
+                ],
+                destination: `${process.env.LANDING_PAGE_URL}/styles/:style*`,
+              })),
+            )
+            .concat(
+              landingPagePaths.map((path) => ({
+                source: path,
+                has: [
+                  {
+                    type: 'host',
+                    value: currentHost,
+                  },
+                ],
+                destination: `${process.env.LANDING_PAGE_URL}${path}`,
+              })),
+            )
+            .concat(
+              landingPageReferers.map((path) => ({
+                source: '/images/:image*',
+                has: [
+                  {
+                    type: 'header',
+                    key: 'referer',
+                    value: `${currentOrigin}${path}${optionalQueryParams}`,
+                  },
+                ],
+                destination: `${process.env.LANDING_PAGE_URL}/images/:image*`,
+              })),
+            )
+        : []
+      )
+        .concat([
+          {
+            source: '/api/bots/:botId/blocks/:blockId/storage/upload-url',
+            destination: '/api/v1/bots/:botId/blocks/:blockId/storage/upload-url',
+          },
+          {
+            source: '/health',
+            destination: '/api/health',
+          },
+        ])
+        .concat(
+          process.env.NEXTAUTH_URL
+            ? [
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/steps/:stepId/sampleResult',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/getResultExample`,
+                },
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/sampleResult',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/getResultExample`,
+                },
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/steps/:stepId/unsubscribeWebhook',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/unsubscribe`,
+                },
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/unsubscribeWebhook',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/unsubscribe`,
+                },
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/steps/:stepId/subscribeWebhook',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/subscribe`,
+                },
+                {
+                  source: '/api/bots/:botId/blocks/:blockId/subscribeWebhook',
+                  destination: `${process.env.NEXTAUTH_URL}/api/v1/bots/:botId/webhookBlocks/:blockId/subscribe`,
+                },
+              ]
+            : [],
+        ),
+    }
+  },
+}
+
+export default process.env.NEXT_PUBLIC_SENTRY_DSN
+  ? withSentryConfig(
+      nextConfig,
+      {
+        // For all available options, see:
+        // https://github.com/getsentry/sentry-webpack-plugin#options
+
+        // Suppresses source map uploading logs during build
+        silent: true,
+        release: process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA + '-viewer',
+        org: process.env.SENTRY_ORG,
+        project: process.env.SENTRY_PROJECT,
+      },
+      {
+        // For all available options, see:
+        // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+
+        // Upload a larger set of source maps for prettier stack traces (increases build time)
+        widenClientFileUpload: true,
+
+        // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
+        tunnelRoute: '/monitoring',
+
+        // Hides source maps from generated client bundles
+        hideSourceMaps: true,
+
+        // Automatically tree-shake Sentry logger statements to reduce bundle size
+        disableLogger: true,
+      },
+    )
+  : nextConfig

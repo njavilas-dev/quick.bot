@@ -1,0 +1,23 @@
+{
+  "name": "@quickbot.io/mistral-block",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "keywords": [],
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/lib": "workspace:*",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/node": "20.4.2",
+    "@types/react": "18.2.15",
+    "typescript": "5.4.5"
+  },
+  "dependencies": {
+    "ai": "^4.0.0",
+    "@ai-sdk/mistral": "^1.2.8",
+    "@quickbot.io/ai": "workspace:*",
+    "@quickbot.io/openai-block": "workspace:*",
+    "ky": "1.2.4"
+  }
+}

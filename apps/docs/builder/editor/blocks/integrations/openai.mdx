@@ -1,0 +1,573 @@
+---
+title: OpenAI
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The OpenAI integration block provides comprehensive access to OpenAI's AI models and services,
+including GPT chat completions, assistants, text-to-speech, speech-to-text, and variable generation
+capabilities. This block supports both OpenAI's official API and compatible providers with custom
+configurations.
+
+## Configuration Options
+
+### Credentials Setup
+
+Before using any OpenAI functionality, you must configure your API credentials:
+
+1. **OpenAI Account**: Select or create OpenAI API credentials
+
+   - Requires a valid OpenAI API key
+   - Supports organization-specific API keys
+   - Credentials are securely encrypted and stored
+
+2. **Custom Provider Settings** (Optional)
+   - **Base URL**: Override the default OpenAI API endpoint (`https://api.openai.com/v1`)
+   - **API Version**: Specify API version for Azure OpenAI or other compatible services
+   - Supports OpenAI-compatible providers like Azure OpenAI, LocalAI, or custom implementations
+
+### Task Selection
+
+The OpenAI block supports multiple task types:
+
+- **Create chat completion**: Generate conversational responses using GPT models
+- **Ask Assistant**: Interact with OpenAI Assistants with function calling capabilities
+- **Create speech**: Convert text to speech using OpenAI's TTS models
+- **Create transcription**: Convert audio files to text using Whisper
+- **Generate variables**: Extract structured data from text using AI
+
+## Features
+
+### Create Chat Completion
+
+Generate AI-powered responses using OpenAI's GPT models with advanced configuration options.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/openai/general.png" alt="OpenAI block" />
+</Frame>
+
+#### Model Configuration
+
+- **Model Selection**: Choose from available GPT models (gpt-4o, gpt-4o-mini, gpt-4-turbo, etc.)
+- **Temperature**: Control response randomness (0.0 to 2.0, default: 1.0)
+- **Settings**: Fine-tune model behavior for specific use cases
+
+#### Message Management
+
+Configure conversation context with multiple message types:
+
+- **System**: Define AI behavior and instructions
+- **User**: Represent user input and queries
+- **Assistant**: Include AI responses for context
+- **Dialogue**: Reference conversation history variables
+
+#### Dialogue Integration
+
+The **Dialogue** message type provides seamless conversation history management:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/openai/append-to-history.png"
+    alt="OpenAI messages sequence"
+  />
+</Frame>
+
+Configure dialogue parameters:
+
+- **Dialogue Variable**: Select variable containing conversation history
+- **Starts By**: Choose whether conversation begins with user or assistant message
+
+Then reference the dialogue in your OpenAI block:
+
+<Frame>
+  <img
+    src="/images/builder/blocks/integrations/openai/dialogue-usage.png"
+    alt="OpenAI messages sequence"
+  />
+</Frame>
+
+#### Response Mapping
+
+Configure how AI responses are saved to variables:
+
+- **Message content**: Save the AI's response text
+- **Total tokens**: Save token usage for cost tracking
+- **Tool results**: Save results from any executed functions (if applicable)
+
+### Ask Assistant
+
+Interact with OpenAI Assistants that support advanced capabilities including file processing, code
+execution, and custom function calling.
+
+#### Assistant Configuration
+
+- **Assistant ID**: Select from your OpenAI Assistants
+- **Thread Management**: Automatic conversation threading
+  - **Thread ID Variable**: Maintain conversation context
+  - **Auto-creation**: New threads created automatically if none exists
+- **Message Input**: Define the user's query or instruction
+
+#### Function Integration
+
+Assistants can execute custom JavaScript functions:
+
+- **Function Detection**: Automatically fetch available functions from your assistant
+- **Code Execution**: Write JavaScript code that runs server-side
+- **Variable Access**: Functions can read and modify bot variables
+- **Parameter Handling**: Receive structured parameters from the AI
+- **Return Values**: Send function results back to the assistant
+
+Example function implementation:
+
+```javascript
+// Function: getWeather
+// Parameters: { city: string }
+if (city === 'Paris') {
+  return 'Sunny and warm'
+} else {
+  // Make API call to weather service
+  const response = await fetch(`https://api.weather.com/v1/current?q=${city}`)
+  const data = await response.json()
+  return `${data.condition}, ${data.temperature}°C`
+}
+```
+
+<Warning>
+  Functions execute on the server with [these
+  limitations](../logic/script#limitations-on-scripts-executed-on-server). Use the `setVariable`
+  function to modify bot variables directly.
+</Warning>
+
+### Create Speech
+
+Convert text to natural-sounding speech using OpenAI's text-to-speech models.
+
+#### Configuration Options
+
+- **Model Selection**: Choose TTS model (tts-1, tts-1-hd for higher quality)
+- **Voice Selection**: Pick from 6 available voices:
+  - `alloy`: Neutral, balanced tone
+  - `echo`: Clear, professional sound
+  - `fable`: Warm, storytelling voice
+  - `onyx`: Deep, authoritative tone
+  - `nova`: Bright, energetic voice
+  - `shimmer`: Soft, gentle sound
+- **Input Text**: The content to convert to speech (supports variables)
+- **URL Storage**: Automatically save generated audio URL to a variable
+
+#### Output Management
+
+- Generated audio files are temporary (7-day expiration)
+- Files stored in MP3 format for broad compatibility
+- URLs can be used directly in audio bubble blocks
+- Download files before expiration for permanent storage
+
+### Create Transcription
+
+Transcribe audio files to text using OpenAI's Whisper model.
+
+#### Configuration
+
+- **Audio URL**: Provide URL to audio file (MP3, WAV, M4A, etc.)
+- **Model**: Uses Whisper-1 for accurate speech recognition
+- **Result Storage**: Save transcribed text to a specified variable
+
+#### Supported Formats
+
+- Multiple audio formats supported
+- Automatic language detection
+- High accuracy for various accents and languages
+
+### Generate Variables
+
+Use AI to extract structured information from text and automatically populate bot variables.
+
+#### Configuration
+
+- **Model Selection**: Choose appropriate GPT model for the task
+- **Extraction Prompt**: Define what information to extract
+- **Variable Mapping**: Specify which variables to populate
+- **Context Input**: Reference user messages or other text sources
+
+#### Example Usage
+
+**Prompt Configuration:**
+
+```txt
+Extract user's information from user's last message: "{{Last message}}"
+```
+
+**Variable Setup:**
+
+- `Name`: User's name
+- `Email`: Email address
+- `Phone`: Phone number (optional)
+- `Company`: Company name (optional)
+
+**Sample Processing:**
+
+- Input: "My name is John Smith and my email is john@company.com"
+- Result: `Name` = "John Smith", `Email` = "john@company.com"
+
+<YoutubeVideo id="NpEaa2P7qZI" />
+
+## Advanced Features
+
+### Function Calling and Tools
+
+Both Chat Completion and Assistant actions support sophisticated function calling:
+
+#### Tool Definition
+
+```javascript
+// Example: Database query function
+async function getUserData(userId) {
+  const user = await database.users.findById(userId)
+  return {
+    name: user.name,
+    subscription: user.subscription,
+    lastLogin: user.lastLogin,
+  }
+}
+```
+
+#### Integration Benefits
+
+- **Dynamic Data Access**: Query databases, APIs, and external services
+- **Real-time Processing**: Execute functions during conversation flow
+- **Context Enhancement**: Enrich AI responses with live data
+- **Variable Management**: Update bot state based on function results
+
+### Vision Support
+
+GPT-4 Vision models can process images alongside text:
+
+#### Supported Models
+
+- `gpt-4o` and variants
+- `gpt-4-turbo` series
+- `gpt-4-vision-preview`
+
+#### Image Processing
+
+- **URL Detection**: Automatically identifies image URLs in messages
+- **Format Requirements**: Images must be accessible via direct URLs
+- **Context Integration**: Combines visual and textual information
+
+#### Usage Example
+
+```
+What's in this picture?
+
+https://example.com/image.png
+```
+
+### Custom Provider Configuration
+
+#### Azure OpenAI Integration
+
+- **Base URL**: `https://your-resource.openai.azure.com/`
+- **API Version**: `2023-12-01-preview` (or latest)
+- **Authentication**: Use Azure API keys
+- **Model Names**: Use Azure deployment names
+
+#### Compatible Providers
+
+- **LocalAI**: Self-hosted OpenAI-compatible API
+- **Ollama**: Local model serving with OpenAI API compatibility
+- **Custom Endpoints**: Any OpenAI API-compatible service
+
+### Message History Management
+
+#### Dialogue Variables
+
+Maintain conversation context across multiple interactions:
+
+- **Structure**: JSON array of message objects
+- **Format**:
+  `[{"role": "user", "content": "Hello"}, {"role": "assistant", "content": "Hi there!"}]`
+- **Persistence**: Automatically maintained between bot sessions
+- **Flexibility**: Support both user-assistant and system message sequences
+
+#### Threading (Assistants)
+
+- **Automatic Management**: Thread IDs created and stored automatically
+- **Persistence**: Conversations continue across sessions
+- **Cleanup**: Implement thread lifecycle management as needed
+
+## Best Practices
+
+### Security Guidelines
+
+#### API Key Management
+
+- Store API keys securely in workspace credentials
+- Use organization-specific keys for team access control
+- Rotate keys regularly following OpenAI's security recommendations
+- Never expose API keys in client-side code or logs
+
+#### Function Security
+
+- Validate all function inputs before processing
+- Implement proper error handling and logging
+- Use environment variables for sensitive configuration
+- Apply rate limiting to prevent abuse
+
+#### Data Privacy
+
+- Be mindful of sensitive data sent to OpenAI
+- Consider data retention policies and compliance requirements
+- Use Azure OpenAI for enhanced privacy and compliance needs
+- Implement data anonymization where appropriate
+
+### Performance Optimization
+
+#### Model Selection
+
+- Use `gpt-4o-mini` for simple tasks to reduce costs
+- Reserve `gpt-4o` for complex reasoning requirements
+- Consider model-specific capabilities (vision, function calling)
+- Monitor token usage and implement cost controls
+
+#### Message Optimization
+
+- Keep system messages concise but comprehensive
+- Use dialogue variables to maintain context efficiently
+- Implement message truncation for long conversations
+- Cache frequently used responses when appropriate
+
+#### Streaming Configuration
+
+- Enable streaming for better user experience
+- Handle streaming gracefully in error scenarios
+- Consider network conditions and user device capabilities
+
+### Testing Strategies
+
+#### Development Testing
+
+- Test with various input types and edge cases
+- Validate function calling with different parameters
+- Verify error handling and graceful degradation
+- Test streaming behavior and interruption handling
+
+#### Production Monitoring
+
+- Monitor API response times and error rates
+- Track token usage and associated costs
+- Log function execution results for debugging
+- Implement alerting for service availability issues
+
+#### A/B Testing
+
+- Test different model configurations
+- Compare response quality across model versions
+- Evaluate user satisfaction with different approaches
+- Measure conversation completion rates
+
+### Cost Management
+
+#### Token Optimization
+
+- Monitor input and output token consumption
+- Implement conversation length limits
+- Use cheaper models for appropriate tasks
+- Consider caching for repeated queries
+
+#### Usage Patterns
+
+- Set up billing alerts in OpenAI dashboard
+- Implement rate limiting per user/session
+- Monitor peak usage times and plan accordingly
+- Consider implementing usage quotas for users
+
+## Multiple OpenAI Blocks: Tips and Tricks
+
+When using consecutive OpenAI blocks, consider these important factors:
+
+#### Streaming Limitations
+
+- **Text Concatenation**: Streaming disabled when AI responses are prefixed/suffixed with text
+- **Block Sequencing**: All blocks must complete before displaying combined results
+- **Format Preservation**: Text formatting may be affected by surrounding content
+
+#### Optimization Strategies
+
+- **Sequential Processing**: Plan logical flow between AI blocks
+- **Variable Management**: Use intermediate variables for complex data flows
+- **User Feedback**: Provide loading indicators for multi-step AI processes
+- **Error Handling**: Implement fallbacks when sequential blocks fail
+
+<YoutubeVideo id="NpEaa2P7qZI" />
+
+#### Vision Integration Details
+
+**Automatic Processing**: QuickBot automatically detects and processes image URLs in messages for
+vision-capable models.
+
+**URL Requirements**:
+
+- Images must be accessible via direct HTTP/HTTPS URLs
+- URLs should be isolated from surrounding text
+- Supported formats: PNG, JPEG, GIF, WebP
+
+**Model Compatibility**:
+
+- Vision processing only works with [vision-capable models](https://platform.openai.com/docs/models)
+- Non-vision models treat image URLs as plain text
+
+**Example Usage**:
+
+```
+Analyze this screenshot for UI/UX issues:
+
+https://example.com/screenshot.png
+```
+
+## Troubleshooting
+
+### Configuration Errors
+
+#### "OpenAI block returned error"
+
+**Causes and Solutions:**
+
+- **Missing Credentials**: Ensure an OpenAI account is selected
+- **Invalid API Key**: Verify API key is valid and active
+- **Missing Messages**: Include at least one user message or dialogue reference
+- **Model Access**: Confirm your account has access to the selected model
+- **Rate Limits**: Check if you've exceeded API rate limits
+
+#### "Authentication Failed"
+
+**Resolution Steps:**
+
+1. Verify API key format and validity
+2. Check organization ID if using organizational keys
+3. Ensure API key has sufficient permissions
+4. Test API key in OpenAI's API playground
+
+### Response Issues
+
+#### Empty or No Response
+
+**Common Causes:**
+
+- **Quota Exceeded**: Add payment method to OpenAI account
+- **Model Overload**: Try different model or retry request
+- **Content Filtering**: Response may have been filtered
+- **Token Limits**: Request may exceed model's token limit
+
+#### Inconsistent Responses
+
+**Troubleshooting:**
+
+- **Temperature Settings**: Lower temperature for more consistent outputs
+- **System Messages**: Refine system prompts for better guidance
+- **Context Length**: Ensure sufficient context for complex tasks
+- **Model Selection**: Consider using more capable models for complex reasoning
+
+### Function and Assistant Issues
+
+#### Function Calls Not Working
+
+**Debug Steps:**
+
+1. Verify function names match exactly between assistant and block
+2. Check function code for syntax errors
+3. Ensure proper parameter handling in function code
+4. Test function logic independently
+5. Review assistant configuration in OpenAI dashboard
+
+#### Assistant Thread Problems
+
+**Solutions:**
+
+- **Thread Variable**: Ensure thread ID variable is properly configured
+- **Thread Persistence**: Verify thread ID is being saved correctly
+- **Assistant Access**: Confirm assistant ID is valid and accessible
+- **Function Definitions**: Check that assistant has required functions defined
+
+### Audio and Transcription Issues
+
+#### Speech Generation Problems
+
+**Common Fixes:**
+
+- **Input Length**: Ensure text is within model limits
+- **Voice Selection**: Verify voice parameter is valid
+- **Model Access**: Confirm access to TTS models
+- **File Storage**: Check file upload and storage permissions
+
+#### Transcription Failures
+
+**Troubleshooting:**
+
+- **Audio Format**: Ensure audio file is in supported format
+- **File Size**: Check if audio file exceeds size limits
+- **URL Accessibility**: Verify audio URL is publicly accessible
+- **Audio Quality**: Poor quality audio may affect transcription accuracy
+
+### Performance and Cost Issues
+
+#### Slow Response Times
+
+**Optimization:**
+
+- **Model Selection**: Use faster models for simple tasks
+- **Message Length**: Reduce input length when possible
+- **Streaming**: Enable streaming for better user experience
+- **Regional Endpoints**: Use geographically closer endpoints
+
+#### High Token Usage
+
+**Cost Control:**
+
+- **Message Management**: Implement conversation length limits
+- **Model Efficiency**: Use appropriate models for task complexity
+- **Prompt Optimization**: Refine prompts to be more concise
+- **Response Mapping**: Only save necessary response components
+
+### Custom Provider Issues
+
+#### Azure OpenAI Configuration
+
+**Common Problems:**
+
+- **Endpoint Format**: Ensure base URL follows Azure format
+- **API Version**: Use correct API version for your deployment
+- **Authentication**: Use Azure API key, not OpenAI key
+- **Model Names**: Use deployment names, not OpenAI model names
+
+#### Compatible Provider Setup
+
+**Troubleshooting:**
+
+- **API Compatibility**: Verify provider implements OpenAI API specification
+- **Authentication**: Check authentication method requirements
+- **Model Availability**: Confirm model names and availability
+- **Feature Support**: Verify support for required features (vision, functions, etc.)
+
+### Monitoring and Debugging
+
+#### Enable Detailed Logging
+
+1. Check bot execution logs for detailed error messages
+2. Monitor API response codes and error details
+3. Track token usage patterns and costs
+4. Set up alerting for service availability
+
+#### Testing Strategies
+
+1. **Isolation Testing**: Test individual components separately
+2. **Edge Case Testing**: Test with various input types and sizes
+3. **Load Testing**: Verify performance under expected usage
+4. **Error Simulation**: Test error handling and recovery
+
+#### Getting Help
+
+- **OpenAI Status**: Check [OpenAI Status Page](https://status.openai.com/) for service issues
+- **API Documentation**: Reference [OpenAI API docs](https://platform.openai.com/docs/api) for
+  latest information
+- **Community Support**: Engage with QuickBot community for implementation help
+- **Professional Support**: Contact support for enterprise-level assistance

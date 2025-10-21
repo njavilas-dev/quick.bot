@@ -1,0 +1,14 @@
+{
+  "name": "@quickbot.io/cal-com-block",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "keywords": [],
+  "license": "AGPL-3.0-or-later",
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@types/react": "18.2.15",
+    "typescript": "5.4.5"
+  }
+}

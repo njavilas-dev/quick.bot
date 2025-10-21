@@ -1,0 +1,9 @@
+{
+  "extends": "@quickbot.io/tsconfig/base.json",
+  "include": ["./**/*.ts"],
+  "exclude": ["node_modules"],
+  "compilerOptions": {
+    "lib": ["ESNext"],
+    "resolveJsonModule": true
+  }
+}

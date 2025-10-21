@@ -1,0 +1,47 @@
+{
+  "name": "@urbiport/icons",
+  "version": "1.0.21",
+  "description": "",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "dev": "rollup --watch --config rollup.config.js",
+    "build": "rollup --config rollup.config.js",
+    "lint": "eslint --fix \"src/**/*.ts*\"",
+    "format:write": "prettier --write ./src",
+    "format:check": "prettier --check ./src"
+  },
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "ISC",
+  "files": [
+    "dist/**/*",
+    "package.json",
+    "README.md"
+  ],
+  "dependencies": {
+    "@chakra-ui/icon": "3.2.0",
+    "@remixicon/react": "^4.6.0"
+  },
+  "peerDependencies": {
+    "react": ">=18.2.0"
+  },
+  "devDependencies": {
+    "tslib": "2.6.0",
+    "@rollup/plugin-babel": "6.0.3",
+    "@rollup/plugin-commonjs": "26.0.1",
+    "@rollup/plugin-node-resolve": "15.1.0",
+    "@rollup/plugin-replace": "5.0.7",
+    "@rollup/plugin-terser": "0.4.3",
+    "@rollup/plugin-typescript": "11.1.2",
+    "@rollup/plugin-url": "^8.0.2",
+    "@types/react": "18.2.15",
+    "autoprefixer": "10.4.14",
+    "rollup": "3.26.2",
+    "rollup-plugin-postcss": "4.0.2",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-typescript-paths": "1.4.0",
+    "typescript": "5.4.5"
+  }
+}

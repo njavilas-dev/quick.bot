@@ -1,0 +1,185 @@
+---
+title: Google Analytics
+---
+
+The Google Analytics integration block allows you to track Google Analytics events at specific moments in your bot flow. This integration supports Google Analytics 4 (GA4) with comprehensive event tracking and conversion measurement capabilities.
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/ga.png" alt="Google Analytics block" />
+</Frame>
+
+When your flow contains a Google Analytics block, it automatically:
+
+- Initializes Google Analytics (GA4) on page load with your tracking ID
+- Tracks a "PageView" event when the page loads
+- Executes custom event tracking when the block is reached in your flow
+
+## Configuration Options
+
+### Basic Setup
+
+**Measurement ID (Required)**
+- Your GA4 Measurement ID (format: G-XXXXXXXXXX)
+- Can be found in your Google Analytics dashboard under Admin > Property Settings > Data Streams
+- Supports variable substitution for dynamic tracking IDs
+
+**Event Action (Required)**
+- The name of the event you want to track
+- Examples: `conversion`, `lead_generated`, `form_completed`
+- Supports variable substitution for dynamic event names
+
+### Advanced Configuration
+
+**Event Category**
+- Categorizes your events for better organization
+- Example: `Bot`, `Form`, `Engagement`
+- Optional field that helps group related events
+
+**Event Label**
+- Additional context for your events
+- Example: Campaign names, specific form names, or user segments
+- Useful for detailed analytics segmentation
+
+**Event Value**
+- Numeric value associated with the event
+- Commonly used for conversion values or scoring
+- Supports both static numbers and variable substitution
+
+**Send To**
+- Directs events to specific Google Ads accounts for conversion tracking
+- Format: `AW-CONVERSION_ID` for Google Ads
+- Essential for tracking Google Ads conversions and ROAS
+
+## Features
+
+### Event Tracking
+- **Standard Events**: Track common actions like conversions, leads, purchases
+- **Custom Events**: Create events specific to your business needs
+- **Variable Integration**: Use bot variables in all event parameters
+- **Real-time Tracking**: Events are sent immediately when blocks execute
+
+### User Identification
+- **Automatic Session Tracking**: Users are automatically tracked across interactions
+- **Cross-Platform Support**: Works across web embeds and hosted pages
+- **Privacy Compliant**: Respects user consent and privacy settings
+
+### Data Collection
+- **Enhanced Ecommerce**: Track detailed transaction and product data
+- **Custom Dimensions**: Send additional context with events
+- **Attribution Modeling**: Support for various attribution models
+
+## Advanced Features
+
+### E-commerce Tracking
+For e-commerce applications, you can track detailed transaction data:
+
+```
+Event Action: purchase
+Event Value: {{total_amount}}
+Event Category: ecommerce
+Event Label: {{order_id}}
+```
+
+### Conversion Tracking for Google Ads
+To track conversions for Google Ads campaigns:
+
+```
+Event Action: conversion
+Send To: AW-123456789
+Event Value: {{conversion_value}}
+Event Category: ads
+Event Label: {{campaign_name}}
+```
+
+### Custom Dimensions
+Use event parameters to send custom data:
+
+```
+Event Action: custom_interaction
+Event Category: engagement
+Event Label: {{user_segment}}
+Event Value: {{engagement_score}}
+```
+
+### Multi-Account Tracking
+Send events to multiple Google Analytics properties by using different tracking IDs in separate blocks or by configuring multiple destinations in the "Send To" field.
+
+## Best Practices
+
+### Privacy Compliance
+- **Consent Management**: Ensure proper user consent before initializing tracking
+- **Data Minimization**: Only collect necessary data for your analytics needs
+- **Cookie Compliance**: Follow GDPR, CCPA, and other privacy regulations
+- **Anonymization**: Consider IP anonymization for enhanced privacy
+
+### Tracking Accuracy
+- **Event Naming**: Use consistent, descriptive event names across your flows
+- **Parameter Structure**: Maintain consistent parameter naming conventions
+- **Value Assignment**: Ensure event values are meaningful and consistent
+- **Testing**: Always test events in GA4's Real-time reports before going live
+
+### Performance Optimization
+- **Strategic Placement**: Place tracking blocks at meaningful interaction points
+- **Batch Events**: Avoid excessive event tracking that could impact performance
+- **Error Handling**: Monitor for tracking failures and implement fallbacks
+- **Load Time**: Analytics initialization won't block your bot's functionality
+
+### Data Organization
+- **Category Strategy**: Use consistent categories to organize your events
+- **Label Taxonomy**: Develop a clear labeling system for easy analysis
+- **Custom Parameters**: Plan your custom dimensions and metrics in advance
+- **Conversion Funnels**: Structure events to support funnel analysis
+
+## Troubleshooting
+
+### Tracking Verification
+**Real-time Monitoring**
+- Use GA4's Real-time reports to verify events are being received
+- Check the "Events" section for your custom event names
+- Monitor user activity as it happens in your bot
+
+**Debug Mode**
+- Install the [Google Analytics Debugger](https://chrome.google.com/webstore/detail/google-analytics-debugger/jnkmfdileelhofjcijamephohjechhna) Chrome extension
+- Enable debug mode to see detailed console logs of GA4 events
+- Verify event parameters and values are being sent correctly
+
+### Common Issues
+
+**Events Not Appearing**
+- Verify your Measurement ID is correct and properly formatted
+- Check that the Google Analytics block is actually being executed in your flow
+- Ensure your bot is published and not in preview mode
+- Confirm there are no browser ad-blockers preventing the tracking script
+
+**Data Discrepancies**
+- Allow 24-48 hours for data to appear in standard GA4 reports
+- Use Real-time reports for immediate verification
+- Check for sampling in your reports if dealing with high traffic
+- Verify timezone settings match between your bot and GA4 property
+
+**Conversion Tracking Issues**
+- Confirm your Google Ads account is properly linked to GA4
+- Verify the "Send To" parameter uses the correct conversion ID format
+- Check that conversion goals are properly configured in Google Ads
+- Allow sufficient time for conversion attribution (up to 30 days)
+
+**Variable Substitution Problems**
+- Ensure variables are properly defined and have values when the block executes
+- Test variable values in your bot flow before the Analytics block
+- Use fallback values for optional parameters to avoid empty data
+- Check variable naming conventions and syntax
+
+### Performance Monitoring
+- Monitor your GA4 event quotas to avoid hitting limits
+- Track the success rate of your event implementations
+- Set up alerts for significant drops in event volume
+- Regular audit your tracking implementation for accuracy
+
+### Technical Support
+If you continue experiencing issues:
+1. Test with a fresh GA4 property to isolate configuration issues
+2. Use browser developer tools to inspect network requests
+3. Verify your bot's domain is not restricted in GA4 settings
+4. Check for conflicts with other analytics implementations
+
+For Google Ads conversion tracking specifically, ensure your conversion actions are properly configured and that you're using the correct conversion ID format.

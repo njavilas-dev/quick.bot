@@ -1,0 +1,309 @@
+---
+title: Zapier
+---
+
+import { YoutubeVideo } from '/snippets/youtube-video.mdx'
+
+The Zapier integration block enables seamless automation by triggering Zaps at specific points in your bot flow. This integration allows you to connect your QuickBot conversations with thousands of external applications and services through Zapier's extensive automation platform.
+
+## Configuration Options
+
+### Connection Setup
+
+To set up the Zapier integration:
+
+1. **Zapier Account**: Create or access your Zapier account at [zapier.com](https://zapier.com)
+2. **QuickBot App**: Search for "QuickBot" in Zapier's app directory
+3. **Webhook Configuration**: The integration uses webhook endpoints to trigger your Zaps
+
+<Frame>
+  <img src="/images/builder/blocks/integrations/zapier.png" alt="Zapier block" />
+</Frame>
+
+### Webhook Configuration
+
+The Zapier block inherits full webhook capabilities, providing advanced HTTP request functionality:
+
+**HTTP Methods Supported:**
+- GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS
+
+**Request Configuration:**
+- **URL**: Webhook endpoint (provided by Zapier when creating a Zap)
+- **Headers**: Custom HTTP headers with variable support
+- **Query Parameters**: URL parameters with dynamic values
+- **Request Body**: JSON payload with bot data
+
+### Authentication Options
+
+**Supported Authentication Types:**
+- **No Authentication**: For public endpoints
+- **Basic Authentication**: Username/password combinations
+- **Bearer Token**: API key or OAuth token authentication
+- **Custom Headers**: API keys in custom header formats
+
+## Features
+
+### Data Transfer Capabilities
+
+**Automatic Data Payload:**
+By default, the Zapier block sends comprehensive bot session data:
+
+```json
+{
+  "user": {
+    "id": "user_identifier",
+    "answers": [
+      {
+        "blockId": "block_id",
+        "value": "user_response",
+        "variableId": "variable_name"
+      }
+    ]
+  },
+  "session": {
+    "id": "session_identifier",
+    "createdAt": "timestamp"
+  }
+}
+```
+
+**Custom Body Support:**
+- Toggle custom body mode for specialized payloads
+- Use variables to create dynamic content
+- Support for both JSON and form-encoded data
+
+### Variable Integration
+
+**Dynamic Content:**
+All webhook fields support QuickBot variables:
+- URL endpoints can be dynamically selected
+- Headers can include user-specific authentication
+- Body content can be populated with collected responses
+
+**Variable Formats:**
+- `{{variableName}}`: Simple variable substitution
+- `{{user.email}}`: Access user properties
+- `{{answers.questionId}}`: Reference specific responses
+
+### Response Handling
+
+**Response Variable Mapping:**
+Map webhook response data back to QuickBot variables:
+- Extract specific values from API responses
+- Use JSONPath expressions for nested data
+- Transform response data for subsequent bot logic
+
+**Error Handling:**
+- Built-in retry mechanisms for failed requests
+- Configurable timeout settings (default: 10 seconds, max: 120 seconds)
+- Detailed error logging and debugging information
+
+## Advanced Features
+
+### Conditional Execution
+
+**Client-Side vs Server-Side:**
+- **Server-Side** (Default): Executes during bot conversation
+- **Client-Side**: Executes in user's browser for certain scenarios
+
+### Advanced Request Configuration
+
+**Timeout Management:**
+- Configurable request timeouts (10-120 seconds)
+- Automatic timeout handling for long-running operations
+- Special timeout allowances for AI services
+
+**Custom Headers:**
+Add authentication and metadata headers:
+```
+Authorization: Bearer {{apiToken}}
+Content-Type: application/json
+X-User-ID: {{userId}}
+```
+
+**Query Parameters:**
+Structure URL parameters with variables:
+```
+?user={{email}}&session={{sessionId}}&timestamp={{now}}
+```
+
+### Response Processing
+
+**JSONPath Mapping:**
+Extract specific data from complex API responses:
+- `$.user.id`: Extract user ID from response
+- `$.data[0].value`: Get first array element value
+- `$.status.message`: Access nested status information
+
+**Variable Assignment:**
+Automatically populate QuickBot variables with response data for use in subsequent blocks.
+
+## Best Practices
+
+### Integration Patterns
+
+**Trigger Placement:**
+Position Zapier blocks strategically:
+- **Lead Capture**: After collecting contact information
+- **Form Submission**: Following data collection sequences
+- **Event Tracking**: At key conversion points
+- **Follow-up Actions**: For post-conversation automation
+
+**Data Collection Sequence:**
+```
+Contact Info → Preferences → Needs Assessment → Zapier Trigger → Follow-up
+```
+
+### Performance Optimization
+
+**Request Efficiency:**
+- Use minimal necessary data in request bodies
+- Implement appropriate timeout values
+- Consider async operations for non-critical triggers
+
+**Error Recovery:**
+- Design flows to handle webhook failures gracefully
+- Provide alternative paths when integrations fail
+- Use condition blocks to validate responses
+
+### Security Considerations
+
+**Data Protection:**
+- Only send necessary user data to external services
+- Use HTTPS endpoints for secure data transmission
+- Implement proper authentication for sensitive operations
+- Validate webhook URLs before deployment
+
+**Authentication Best Practices:**
+- Store sensitive credentials as secure variables
+- Use environment-specific API keys
+- Regularly rotate authentication tokens
+- Monitor webhook endpoint security
+
+## Troubleshooting
+
+### Connection Issues
+
+**Invalid Webhook URL:**
+- Verify URL format and accessibility
+- Check for typos in the webhook endpoint
+- Ensure the URL is publicly accessible
+- Test URL directly in browser or API client
+
+**Authentication Failures:**
+- Confirm API credentials are correct
+- Check token expiration dates
+- Verify authentication header format
+- Test authentication separately from bot flow
+
+### Request Configuration Problems
+
+**Timeout Issues:**
+- Increase timeout for slow external services
+- Check network connectivity between servers
+- Monitor external service response times
+- Consider async processing for long operations
+
+**Request Format Errors:**
+- Verify Content-Type headers match body format
+- Check JSON syntax in custom bodies
+- Ensure variable substitutions are valid
+- Test requests with static data first
+
+### Data Flow Problems
+
+**Missing Variables:**
+- Confirm variables exist before webhook execution
+- Check variable naming and case sensitivity
+- Verify variable population in bot flow
+- Use default values for optional variables
+
+**Response Mapping Issues:**
+- Test JSONPath expressions with sample responses
+- Verify response structure matches expectations
+- Check for null or missing response fields
+- Use response validation blocks after webhooks
+
+### Zapier-Specific Issues
+
+**Zap Not Triggering:**
+- Verify Zap is enabled in Zapier dashboard
+- Check webhook URL matches exactly
+- Monitor Zapier task history for errors
+- Test webhook endpoint directly
+
+**Data Not Appearing in Connected Apps:**
+- Review Zap field mappings in Zapier
+- Check data format requirements for target apps
+- Verify required fields are populated
+- Test with sample data in Zapier editor
+
+## Advanced Configuration
+
+### Testing and Debugging
+
+**Test Variables:**
+Configure test data for development:
+- Set up test variable values
+- Use staging webhooks for development
+- Validate responses with known data
+- Monitor request/response logs
+
+**Response Analysis:**
+The webhook debugger provides:
+- Full request details
+- Response status codes
+- Response body content
+- Execution timing information
+
+### Multi-Environment Support
+
+**Environment-Specific Endpoints:**
+Use variables to handle different environments:
+```
+URL: {{webhookBaseUrl}}/zapier/trigger
+Headers: Authorization: Bearer {{apiKey}}
+```
+
+**Configuration Management:**
+- Separate production and testing Zaps
+- Use different webhook endpoints per environment
+- Manage API credentials per deployment stage
+
+## Integration Examples
+
+### Lead Generation Automation
+
+**Flow Structure:**
+1. Collect lead information (name, email, phone)
+2. Trigger Zapier webhook with lead data
+3. Zapier creates records in CRM
+4. Follow-up email automation initiated
+
+**Webhook Configuration:**
+```json
+{
+  "lead": {
+    "name": "{{userName}}",
+    "email": "{{userEmail}}",
+    "phone": "{{userPhone}}",
+    "source": "QuickBot",
+    "interest": "{{productInterest}}"
+  }
+}
+```
+
+### Customer Support Ticketing
+
+**Integration Purpose:**
+Automatically create support tickets for escalated issues.
+
+**Data Flow:**
+1. Bot collects issue details
+2. Determines escalation is needed
+3. Zapier creates ticket in support system
+4. Returns ticket ID for user reference
+
+## Video Tutorial
+
+<YoutubeVideo id="NpEaa2P7qZI" />

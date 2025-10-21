@@ -1,0 +1,24 @@
+{
+  "name": "@quickbot.io/openai-block",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "keywords": [],
+  "author": "Urbiport",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "ai": "^4.0.0",
+    "@ai-sdk/openai": "^1.3.24",
+    "@quickbot.io/ai": "workspace:*",
+    "openai": "4.52.7"
+  },
+  "devDependencies": {
+    "@quickbot.io/forge": "workspace:*",
+    "@quickbot.io/lib": "workspace:*",
+    "@quickbot.io/tsconfig": "workspace:*",
+    "@quickbot.io/variables": "workspace:*",
+    "@types/react": "18.2.15",
+    "ky": "1.2.4",
+    "typescript": "5.4.5"
+  }
+}
