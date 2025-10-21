@@ -1,8 +1,41 @@
-export * from '@prisma/client'
+export {
+    type UserAuth,
+    type UserSession,
+    type UserVerificationToken,
+    type UserNotification,
+    type User,
+    type UserApiToken,
 
-// Named export for enums to avoid vite barrel export bug (https://github.com/nrwl/nx/issues/13704)
-// Temporarily commented out due to build issues - these types are available via export * above
-// export { WorkspaceRole, CollaborationType, BillingPlanType } from '@prisma/client'
+    ChangeRequestStatus,
+    ChangeRequestType,
+    TypeConfirmation,
+    type ChangeRequest,
 
-// Export model types that are needed by other packages
-export type { WorkspaceBillingPlanTier, WorkspaceBillingPlan } from '@prisma/client'
+    type Workspace,
+    type WorkspaceMember,
+    type WorkspaceInvitation,
+    type WorkspaceCustomDomain,
+    type WorkspaceCredential,
+    type WorkspaceDashboardFolder,
+    type WorkspaceBillingPlan,
+    type WorkspaceBillingPlanTier,
+
+    WorkspaceRole,
+    CollaborationType,
+    BillingPlanType,
+
+    type Bot,
+    type BotInvitation,
+    type BotCollaborator,
+    type BotPublic,
+    type BotResult,
+    type BotResultVariableHistory,
+    type BotResultVisitedEdge,
+    type BotLog,
+    type AnswerV2,
+    type Coupon,
+    type Webhook,
+    type ChatSession,
+    type BotThemeTemplate,
+    type UserBannedIp,
+} from '@prisma/client'
