@@ -22,6 +22,16 @@ const indexConfig = {
     dir: 'dist',
     format: 'es',
   },
+  external: (id) => {
+    // Excluir @prisma/client y paquetes workspace que lo usan
+    if (id.includes('@prisma/client')) return true
+    if (id.includes('@quickbot.io/prisma')) return true
+    if (id.includes('@quickbot.io/schemas')) return true
+    if (id.includes('@quickbot.io/bot-engine')) return true
+    if (id.includes('@quickbot.io/env')) return true
+    if (id.includes('@quickbot.io/lib')) return true
+    return false
+  },
   onwarn,
   watch: {
     clearScreen: false,
