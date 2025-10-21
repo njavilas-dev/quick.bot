@@ -1,12 +1,9 @@
 import {
+  type WorkspaceBillingPlanTier as PrismaWorkspaceBillingPlanTier,
+  type WorkspaceBillingPlan as PrismaPlan,
   BillingPlanType,
 } from '@quickbot.io/prisma'
-import { Prisma } from '@prisma/client'
 import { z } from '../../zod'
-
-// Use Prisma generated types
-type PrismaWorkspaceBillingPlanTier = Prisma.WorkspaceBillingPlanTierGetPayload<{}>
-type PrismaPlan = Prisma.WorkspaceBillingPlanGetPayload<{}>
 
 export const chatStripeTierSchema = z.object({
   id: z.string(),
