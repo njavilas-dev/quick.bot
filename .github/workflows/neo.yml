@@ -1,0 +1,491 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["**"]
+  delete:
+    branches: ["feature/**"]
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+  NODE_OPTIONS: --no-node-snapshot --max-old-space-size=16384
+  DATABASE_URL: "postgresql://labs:labs_pass@localhost:5432/labs"
+  DATABASE_DIRECT_URL: "postgresql://labs:labs_pass@localhost:5432/labs"
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: secure
+          POSTGRES_USER: labs
+          POSTGRES_DB: labs
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install system packages
+        run: |
+          sudo apt update
+          sudo apt-get install -y openssl
+          sudo npm install -g node-gyp
+
+      - name: Install Bun globally
+        run: npm install -g bun@latest
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Fix isolated-vm native module
+        run: |
+          cd packages/variables
+          npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
+
+      - name: Copy env to .env
+        run: |
+          chmod +x scripts/setup-env.sh
+          ./scripts/setup-env.sh .env
+
+      - name: Build app
+        run: bun run build
+
+      - name: Apply database migrations
+        run: bun run db:migrate:deploy
+
+      - name: Apply seed data
+        run: bun run db:seed
+
+      - name: Verify builder build output
+        run: |
+          if [ ! -d "apps/builder/.next/standalone" ]; then
+            echo "Error: apps/builder/.next/standalone no generated"
+            exit 1
+          fi
+          echo "✓ apps/builder/.next/standalone generated correctly"
+
+      - name: Verify viewer build output
+        run: |
+          if [ ! -d "apps/viewer/.next/standalone" ]; then
+            echo "Error: apps/viewer/.next/standalone no generated"
+            exit 1
+          fi
+          echo "✓ apps/viewer/.next/standalone generated correctly"
+
+      - name: Upload artifact builder standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: builder-standalone
+          path: apps/builder/.next/standalone
+          retention-days: 1
+
+      - name: Upload artifact viewer standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-standalone
+          path: apps/viewer/.next/standalone
+          retention-days: 1
+
+      - name: Upload dependencies builder
+        uses: actions/upload-artifact@v4
+        with:
+          name: builder-dependencies
+          path: apps/builder/node_modules
+          retention-days: 1
+
+      - name: Upload dependencies viewer
+        uses: actions/upload-artifact@v4
+        with:
+          name: viewer-dependencies
+          path: apps/viewer/node_modules
+          retention-days: 1
+
+  container:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    strategy:
+      matrix:
+        app: [builder, viewer]
+
+    env:
+      docker_build_args: |
+        NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}
+        NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+        NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}
+        NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+        NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+        NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}
+        DATABASE_URL=${{ secrets.DATABASE_URL }}
+        ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}
+        NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+        NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
+        NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+        NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.app }}-standalone
+          path: apps/${{ matrix.app }}/.next/standalone
+
+      - name: Determine tag
+        id: tag
+        run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+
+          case "$BRANCH_NAME" in
+            main)
+              echo "tag=latest" >> $GITHUB_OUTPUT
+              ;;
+            develop)
+              echo "tag=develop" >> $GITHUB_OUTPUT
+              ;;
+            *)
+              echo "tag=$BRANCH_NAME" >> $GITHUB_OUTPUT
+              ;;
+          esac
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build Container
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ghcr.io/${{ github.repository_owner }}/quick.bot:${{ matrix.app }}-${{ steps.tag.outputs.tag }}
+          build-args: |
+            SCOPE=${{ matrix.app }}
+            ${{ env.docker_build_args }}
+
+  migrate:
+    runs-on: ubuntu-latest
+    needs: [build, container]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Bun
+        run: npm install -g bun@latest
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: builder-dependencies
+          path: apps/builder/node_modules
+
+      - name: Set .env
+        run: |
+          if grep -q "^DATABASE_URL=" .env; then
+            sed -i "s|^DATABASE_URL=.*|DATABASE_URL=${{ secrets.DATABASE_URL }}|" .env
+          else
+            echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          fi
+
+          if grep -q "^DATABASE_DIRECT_URL=" .env; then
+            sed -i "s|^DATABASE_DIRECT_URL=.*|DATABASE_DIRECT_URL=${{ secrets.DATABASE_DIRECT_URL }}|" .env
+          else
+            echo "DATABASE_DIRECT_URL=${{ secrets.DATABASE_DIRECT_URL }}" >> .env
+          fi
+
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
+        run: |
+          cd apps/builder
+          echo "Generating Prisma client..."
+          bun run db:generate
+          echo "Checking migration status..."
+          bunx prisma migrate status || echo "Migration status check completed"
+          echo "Running migrations..."
+          bun run db:migrate:deploy
+          echo "Running seed..."
+          bun run db:seed
+
+  deploy-develop:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: (github.event_name == 'push' && github.ref == 'refs/heads/develop') || (github.event_name == 'pull_request' && github.base_ref == 'develop')
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID_VIEWER: ${{ secrets.VERCEL_PROJECT_ID_VIEWER }}
+      VERCEL_PROJECT_ID_BUILDER: ${{ secrets.VERCEL_PROJECT_ID_BUILDER }}
+
+    strategy:
+      matrix:
+        app: [builder, viewer]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Install Bun for Vercel Build
+        run: npm install -g bun@latest
+
+      - name: Vercel Pull (Preview)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+
+      - name: Remove Existing Deployments
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🗑️  Removing existing deployments..."
+          BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+          echo "Current branch: $BRANCH"
+          echo "App: ${{ matrix.app }}"
+          echo "Environment: production"
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="production" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+            echo "   Removing: $url"
+            vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
+          done
+          echo "✅ Cleanup completed"   
+
+      - name: Vercel Build
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --prod --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+
+      - name: Vercel Deploy (Production)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🚀 Deploying to production..."
+          echo "App: ${{ matrix.app }}"
+          
+          vercel deploy --prebuilt --archive=tgz --prod --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
+          
+          echo "✅ Production deployment completed"
+
+  deploy-features:
+    runs-on: ubuntu-latest
+    needs: [build]
+    if: (github.event_name == 'push' && startsWith(github.ref, 'refs/heads/feature')) || (github.event_name == 'pull_request' && (startsWith(github.head_ref, 'feature') || startsWith(github.base_ref, 'feature')))
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_PROJECT_ID_VIEWER: ${{ secrets.VERCEL_PROJECT_ID_VIEWER }}
+      VERCEL_PROJECT_ID_BUILDER: ${{ secrets.VERCEL_PROJECT_ID_BUILDER }}
+
+    strategy:
+      matrix:
+        app: [builder, viewer]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Vercel CLI
+        run: npm i -g vercel@latest
+
+      - name: Install Bun for Vercel Build
+        run: npm install -g bun@latest
+
+      - name: Vercel Pull (Preview)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+
+      - name: Remove Existing Deployments
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🗑️  Removing existing deployments..."
+          BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
+          echo "Current branch: $BRANCH"
+          echo "App: ${{ matrix.app }}"
+          echo "Environment: preview"
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+            echo "   Removing: $url"
+            vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
+          done
+          echo "✅ Cleanup completed"       
+        
+      - name: Vercel Build
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: vercel build --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+
+      - name: Vercel Deploy (Preview)
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🚀 Deploying to preview..."
+          echo "App: ${{ matrix.app }}"
+          echo "Branch: ${{ github.head_ref || github.ref_name }}"
+          echo "Environment: preview"
+          
+          vercel deploy --prebuilt --archive=tgz --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
+          
+          echo "✅ Preview deployment completed"
+
+  deploy-railway:
+    runs-on: ubuntu-latest
+    needs: [build, container, migrate]
+    if: github.ref == 'refs/heads/main'
+    container: ghcr.io/railwayapp/cli:latest
+    strategy:
+      matrix:
+        service: [builder, viewer]
+    env:
+      RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      RAILWAY_SERVICE_ID_BUILDER: 551c8b58-a55d-402a-9cd9-c4667d7d7e4c
+      RAILWAY_SERVICE_ID_VIEWER: dc80e192-990c-4326-8566-66734571aaa7
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select correct SERVICE_ID
+        id: select-service
+        run: |
+          case "${{ matrix.service }}" in
+            builder)
+              echo "RAILWAY_SERVICE_ID=${{ env.RAILWAY_SERVICE_ID_BUILDER }}" >> $GITHUB_ENV
+              ;;
+            viewer)
+              echo "RAILWAY_SERVICE_ID=${{ env.RAILWAY_SERVICE_ID_VIEWER }}" >> $GITHUB_ENV
+              ;;
+          esac
+
+      - name: Set environment variables
+        run: |
+          echo "Setting environment variables for service: ${{ matrix.service }} (${{ env.RAILWAY_SERVICE_ID }})"
+          railway variables \
+           --service=${{ env.RAILWAY_SERVICE_ID }} \
+           --set "DATABASE_URL=${{ secrets.DATABASE_URL }}" \
+           --set "DATABASE_DIRECT_URL=${{ secrets.DATABASE_DIRECT_URL }}" \
+           --set "ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}" \
+           --set "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" \
+           --set "NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}" \
+           --set "NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}" \
+           --set "VERCEL_TOKEN=${{ secrets.VERCEL_TOKEN }}" \
+           --set "NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}" \
+           --set "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" \
+           --set "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" \
+           --set "SMTP_HOST=${{ secrets.SMTP_HOST }}" \
+           --set "SMTP_PORT=${{ secrets.SMTP_PORT }}" \
+           --set "SMTP_SECURE=${{ secrets.SMTP_SECURE }}" \
+           --set "SMTP_AUTH_DISABLED=${{ secrets.SMTP_AUTH_DISABLED }}" \
+           --set "CREDENTIALS_AUTH=${{ secrets.CREDENTIALS_AUTH }}" \
+           --set "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" \
+           --set "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" \
+           --set "S3_BUCKET=${{ secrets.S3_BUCKET }}" \
+           --set "S3_PORT=${{ secrets.S3_PORT }}" \
+           --set "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" \
+           --set "S3_SSL=${{ secrets.S3_SSL }}" \
+           --set "S3_REGION=${{ secrets.S3_REGION }}" \
+           --set "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" \
+           --set "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" \
+           --set "STRIPE_PERSONAL_PRICE_ID=${{ secrets.STRIPE_PERSONAL_PRICE_ID }}" \
+           --set "STRIPE_PERSONAL_CHATS_PRICE_ID=${{ secrets.STRIPE_PERSONAL_CHATS_PRICE_ID }}" \
+           --set "STRIPE_BUSINESS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_PRICE_ID }}" \
+           --set "STRIPE_BUSINESS_CHATS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_CHATS_PRICE_ID }}" \
+           --set "STRIPE_ENTERPRISE_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}" \
+           --set "STRIPE_ENTERPRISE_CHATS_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_CHATS_PRICE_ID }}" \
+           --set "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" \
+           --set "NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}" \
+           --set "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" \
+           --set "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" \
+           --set "NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}" \
+           --set "PLAYWRIGHT_GOOGLE_ACCESS_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}" \
+           --set "PLAYWRIGHT_GOOGLE_REFRESH_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}" \
+           --set "PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}" \
+           --set "PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}" \
+           --set "PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}" \
+           --set "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" \
+           --set "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" \
+           --set "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" \
+           --set "SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}" \
+           --set "SENTRY_ORG=${{ secrets.SENTRY_ORG }}" \
+           --set "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" \
+           --set "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" \
+           --set "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" \
+           --set "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" \
+           --set "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" \
+           --set "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" \
+           --set "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" \
+           --set "NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}" \
+           --set "NEXT_PUBLIC_BETA_ENV=${{ secrets.NEXT_PUBLIC_BETA_ENV }}" \
+           --set "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" \
+           --set "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}"
+
+      - name: Deploy to Railway
+        run: |
+          echo "Deploying service: ${{ matrix.service }} (${{ env.RAILWAY_SERVICE_ID }})"
+          railway redeploy --service ${{ env.RAILWAY_SERVICE_ID }} --yes
+
+  cleanup-feature:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'delete' && startsWith(github.ref, 'refs/heads/feature')
+    strategy:
+      matrix:
+        app: [builder, viewer]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Remove Feature Branch Deployments
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          echo "🗑️  Cleaning up deployments for deleted feature branch..."
+          BRANCH_NAME=$(echo "${{ github.ref }}" | sed 's/refs\/heads\///')
+          echo "Deleted branch: $BRANCH_NAME"
+          echo "App: ${{ matrix.app }}"
+          echo "Environment: preview"
+          
+          vercel list --meta branch="$BRANCH_NAME" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+            echo "   Removing deployment: $url"
+            vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
+          done
+          
+          echo "✅ Cleanup completed for ${{ matrix.app }} (branch: $BRANCH_NAME)"

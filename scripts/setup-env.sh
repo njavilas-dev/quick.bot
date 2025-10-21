@@ -1,0 +1,91 @@
+#!/bin/bash
+
+set -e
+
+OUTPUT_FILE="${1:-.env}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+write_env() {
+    local key="$1"
+    local source="$2"
+    echo "$key=\${{ $source.$key }}" >> "$OUTPUT_FILE"
+}
+
+ALL_SECRET_KEYS=(
+    "ENCRYPTION_SECRET"
+    "NEXTAUTH_URL"
+    "NEXT_PUBLIC_VIEWER_URL"
+    "NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME"
+    "VERCEL_TOKEN"
+    "VERCEL_TEAM_ID"
+    "NEXT_PUBLIC_SMTP_FROM"
+    "SMTP_USERNAME"
+    "SMTP_PASSWORD"
+    "SMTP_HOST"
+    "SMTP_PORT"
+    "SMTP_SECURE"
+    "SMTP_AUTH_DISABLED"
+    "CREDENTIALS_AUTH"
+    "S3_ACCESS_KEY"
+    "S3_SECRET_KEY"
+    "S3_BUCKET"
+    "S3_PORT"
+    "S3_ENDPOINT"
+    "S3_SSL"
+    "S3_REGION"
+    "NEXT_PUBLIC_STRIPE_PUBLIC_KEY"
+    "STRIPE_SECRET_KEY"
+    "STRIPE_PERSONAL_PRICE_ID"
+    "STRIPE_PERSONAL_CHATS_PRICE_ID"
+    "STRIPE_BUSINESS_PRICE_ID"
+    "STRIPE_BUSINESS_CHATS_PRICE_ID"
+    "STRIPE_ENTERPRISE_PRICE_ID"
+    "STRIPE_ENTERPRISE_CHATS_PRICE_ID"
+    "STRIPE_WEBHOOK_SECRET"
+    "NEXT_PUBLIC_GOOGLE_API_KEY"
+    "GOOGLE_CLIENT_ID"
+    "GOOGLE_CLIENT_SECRET"
+    "NEXT_PUBLIC_GIPHY_API_KEY"
+    "PLAYWRIGHT_GOOGLE_ACCESS_TOKEN"
+    "PLAYWRIGHT_GOOGLE_REFRESH_TOKEN"
+    "PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID"
+    "PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID"
+    "PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID"
+    "NODE_OPTIONS"
+    "NEXT_PUBLIC_SENTRY_DSN"
+    "SENTRY_AUTH_TOKEN"
+    "SENTRY_PROJECT"
+    "SENTRY_ORG"
+    "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING"
+    "GITHUB_CLIENT_ID"
+    "GITHUB_CLIENT_SECRET"
+    "DOCKER_PASSWORD"
+    "DOCKER_USERNAME"
+    "GITHUB_TOKEN"
+    "NPM_TOKEN"
+    "NEXT_PUBLIC_SUPPORT_BOT"
+    "NEXT_PUBLIC_BETA_ENV"
+    "NEXT_PUBLIC_POSTHOG_KEY"
+    "NEXT_PUBLIC_POSTHOG_HOST"
+)
+
+ALL_ENV_KEYS=(
+    "DATABASE_URL"
+    "DATABASE_DIRECT_URL"
+)
+
+> "$OUTPUT_FILE"
+
+echo "🔧 Configured environment variables in $OUTPUT_FILE..."
+
+for key in "${ALL_SECRET_KEYS[@]}"; do
+    write_env "$key" "secrets"
+done
+
+for key in "${ALL_ENV_KEYS[@]}"; do
+    write_env "$key" "env"
+done
+
+echo "✅ Configured environment variables correctly"
+echo "📄 Generated file: $OUTPUT_FILE"
+echo "📊 Total variables: $((${#ALL_SECRET_KEYS[@]} + ${#ALL_ENV_KEYS[@]}))"
