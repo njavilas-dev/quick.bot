@@ -59,7 +59,7 @@ jobs:
       - name: Fix isolated-vm native module
         run: |
           cd packages/variables
-          npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
+          bun install isolated-vm@5.0.1
 
       - name: Copy env to .env
         run: |
