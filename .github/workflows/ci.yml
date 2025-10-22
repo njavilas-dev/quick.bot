@@ -159,14 +159,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: builder-standalone
-          path: apps/builder/.next/standalone
+          path: |
+            apps/builder/.next/standalone
+            apps/builder/.next/static
+            apps/builder/public
           retention-days: 1
 
       - name: Upload artifact viewer standalone
         uses: actions/upload-artifact@v4
         with:
           name: viewer-standalone
-          path: apps/viewer/.next/standalone
+          path: |
+            apps/viewer/.next/standalone
+            apps/viewer/.next/static
+            apps/viewer/public
           retention-days: 1
 
       - name: Upload dependencies builder
@@ -214,7 +220,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-standalone
-          path: apps/${{ matrix.app }}/.next/standalone
+          path: apps/${{ matrix.app }}
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
