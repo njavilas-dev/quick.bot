@@ -129,8 +129,63 @@ jobs:
 
       - name: Copy env to .env
         run: |
-          chmod +x scripts/setup-env.sh
-          ./scripts/setup-env.sh .env
+          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
+          echo "DATABASE_DIRECT_URL=${{ env.DATABASE_DIRECT_URL }}" >> .env
+          echo "ENCRYPTION_SECRET=${{ secrets.ENCRYPTION_SECRET }}" >> .env
+          echo "NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}" >> .env
+          echo "NEXT_PUBLIC_VIEWER_URL=${{ secrets.NEXT_PUBLIC_VIEWER_URL }}" >> .env
+          echo "NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME=${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}" >> .env
+          echo "VERCEL_TOKEN=${{ secrets.VERCEL_TOKEN }}" >> .env
+          echo "VERCEL_TEAM_ID=${{ secrets.VERCEL_TEAM_ID }}" >> .env
+          echo "NEXT_PUBLIC_SMTP_FROM=${{ secrets.NEXT_PUBLIC_SMTP_FROM }}" >> .env
+          echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
+          echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
+          echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
+          echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
+          echo "SMTP_SECURE=${{ secrets.SMTP_SECURE }}" >> .env
+          echo "SMTP_AUTH_DISABLED=${{ secrets.SMTP_AUTH_DISABLED }}" >> .env
+          echo "CREDENTIALS_AUTH=${{ secrets.CREDENTIALS_AUTH }}" >> .env
+          echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
+          echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
+          echo "S3_BUCKET=${{ secrets.S3_BUCKET }}" >> .env
+          echo "S3_PORT=${{ secrets.S3_PORT }}" >> .env
+          echo "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" >> .env
+          echo "S3_SSL=${{ secrets.S3_SSL }}" >> .env
+          echo "S3_REGION=${{ secrets.S3_REGION }}" >> .env
+          echo "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" >> .env
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
+          echo "STRIPE_PERSONAL_PRICE_ID=${{ secrets.STRIPE_PERSONAL_PRICE_ID }}" >> .env
+          echo "STRIPE_PERSONAL_CHATS_PRICE_ID=${{ secrets.STRIPE_PERSONAL_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_BUSINESS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_PRICE_ID }}" >> .env
+          echo "STRIPE_BUSINESS_CHATS_PRICE_ID=${{ secrets.STRIPE_BUSINESS_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_ENTERPRISE_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}" >> .env
+          echo "STRIPE_ENTERPRISE_CHATS_PRICE_ID=${{ secrets.STRIPE_ENTERPRISE_CHATS_PRICE_ID }}" >> .env
+          echo "STRIPE_WEBHOOK_SECRET=${{ secrets.STRIPE_WEBHOOK_SECRET }}" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "NEXT_PUBLIC_GIPHY_API_KEY=${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}" >> .env
+          echo "PLAYWRIGHT_GOOGLE_ACCESS_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}" >> .env
+          echo "PLAYWRIGHT_GOOGLE_REFRESH_TOKEN=${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}" >> .env
+          echo "PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID=${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}" >> .env
+          echo "NODE_OPTIONS=${{ secrets.NODE_OPTIONS }}" >> .env
+          echo "NEXT_PUBLIC_SENTRY_DSN=${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}" >> .env
+          echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
+          echo "SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}" >> .env
+          echo "SENTRY_ORG=${{ secrets.SENTRY_ORG }}" >> .env
+          echo "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" >> .env
+          echo "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" >> .env
+          echo "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" >> .env
+          echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> .env
+          echo "DOCKER_USERNAME=${{ secrets.DOCKER_USERNAME }}" >> .env
+          echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
+          echo "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" >> .env
+          echo "NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}" >> .env
+          echo "NEXT_PUBLIC_BETA_ENV=${{ secrets.NEXT_PUBLIC_BETA_ENV }}" >> .env
+          echo "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
+          echo "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
 
       - name: Build app
         run: bun run build
