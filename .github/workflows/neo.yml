@@ -61,7 +61,8 @@ env:
   SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
   GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
   GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
-  SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING: ${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}
+  SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING: 1
+  NEXT_PUBLIC_BETA_ENV: 'false'
 
   NODE_OPTIONS: --no-node-snapshot --max-old-space-size=16384
   DATABASE_URL: 'postgresql://labs:labs_pass@localhost:5432/labs'
@@ -141,16 +142,16 @@ jobs:
           echo "SMTP_USERNAME=${{ secrets.SMTP_USERNAME }}" >> .env
           echo "SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }}" >> .env
           echo "SMTP_HOST=${{ secrets.SMTP_HOST }}" >> .env
-          echo "SMTP_PORT=${{ secrets.SMTP_PORT }}" >> .env
-          echo "SMTP_SECURE=${{ secrets.SMTP_SECURE }}" >> .env
-          echo "SMTP_AUTH_DISABLED=${{ secrets.SMTP_AUTH_DISABLED }}" >> .env
-          echo "CREDENTIALS_AUTH=${{ secrets.CREDENTIALS_AUTH }}" >> .env
+          echo "SMTP_PORT=${{ env.SMTP_PORT }}" >> .env
+          echo "SMTP_SECURE=${{ env.SMTP_SECURE }}" >> .env
+          echo "SMTP_AUTH_DISABLED=${{ env.SMTP_AUTH_DISABLED }}" >> .env
+          echo "CREDENTIALS_AUTH=${{ env.CREDENTIALS_AUTH }}" >> .env
           echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
           echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
           echo "S3_BUCKET=${{ secrets.S3_BUCKET }}" >> .env
-          echo "S3_PORT=${{ secrets.S3_PORT }}" >> .env
-          echo "S3_ENDPOINT=${{ secrets.S3_ENDPOINT }}" >> .env
-          echo "S3_SSL=${{ secrets.S3_SSL }}" >> .env
+          echo "S3_PORT=${{ env.S3_PORT }}" >> .env
+          echo "S3_ENDPOINT=${{ env.S3_ENDPOINT }}" >> .env
+          echo "S3_SSL=${{ env.S3_SSL }}" >> .env
           echo "S3_REGION=${{ secrets.S3_REGION }}" >> .env
           echo "NEXT_PUBLIC_STRIPE_PUBLIC_KEY=${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}" >> .env
           echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> .env
@@ -175,7 +176,7 @@ jobs:
           echo "SENTRY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> .env
           echo "SENTRY_PROJECT=${{ secrets.SENTRY_PROJECT }}" >> .env
           echo "SENTRY_ORG=${{ secrets.SENTRY_ORG }}" >> .env
-          echo "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ secrets.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" >> .env
+          echo "SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING=${{ env.SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING }}" >> .env
           echo "GITHUB_CLIENT_ID=${{ secrets.GITHUB_CLIENT_ID }}" >> .env
           echo "GITHUB_CLIENT_SECRET=${{ secrets.GITHUB_CLIENT_SECRET }}" >> .env
           echo "DOCKER_PASSWORD=${{ secrets.DOCKER_PASSWORD }}" >> .env
@@ -183,7 +184,7 @@ jobs:
           echo "GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}" >> .env
           echo "NPM_TOKEN=${{ secrets.NPM_TOKEN }}" >> .env
           echo "NEXT_PUBLIC_SUPPORT_BOT=${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}" >> .env
-          echo "NEXT_PUBLIC_BETA_ENV=${{ secrets.NEXT_PUBLIC_BETA_ENV }}" >> .env
+          echo "NEXT_PUBLIC_BETA_ENV=${{ env.NEXT_PUBLIC_BETA_ENV }}" >> .env
           echo "NEXT_PUBLIC_POSTHOG_KEY=${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}" >> .env
           echo "NEXT_PUBLIC_POSTHOG_HOST=${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}" >> .env
 
