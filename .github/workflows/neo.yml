@@ -100,8 +100,10 @@ jobs:
           sudo apt-get install -y openssl
           sudo npm install -g node-gyp
 
-      - name: Install Bun globally
-        run: npm install -g bun@latest
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.2.7
 
       - name: Cache Bun dependencies
         uses: actions/cache@v4
@@ -115,9 +117,7 @@ jobs:
         run: bun install
 
       - name: Fix isolated-vm native module
-        run: |
-          cd packages/variables
-          bun install isolated-vm@5.0.1
+        run: cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
 
       - name: Fix Turborepo lockfile warning
         run: touch bun.lockb
