@@ -13,9 +13,9 @@ permissions:
   packages: write
 
 env:
-  CI: ${{ secrets.CI }}
-  TEST_ENV: ${{ secrets.TEST_ENV }}
-  NODE_ENV: ${{ secrets.NODE_ENV }}
+  CI: 1
+  TEST_ENV: true
+  NODE_ENV: production
   ENCRYPTION_SECRET: ${{ secrets.ENCRYPTION_SECRET }}
   NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
   NEXT_PUBLIC_VIEWER_URL: ${{ secrets.NEXT_PUBLIC_VIEWER_URL }}
@@ -26,10 +26,10 @@ env:
   SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
   SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
   SMTP_HOST: ${{ secrets.SMTP_HOST }}
-  SMTP_PORT: ${{ secrets.SMTP_PORT }}
-  SMTP_SECURE: ${{ secrets.SMTP_SECURE }}
-  SMTP_AUTH_DISABLED: ${{ secrets.SMTP_AUTH_DISABLED }}
-  CREDENTIALS_AUTH: ${{ secrets.CREDENTIALS_AUTH }}
+  SMTP_PORT: 465
+  SMTP_SECURE: true
+  SMTP_AUTH_DISABLED: false
+  CREDENTIALS_AUTH: true
   S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
   S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
   S3_BUCKET: ${{ secrets.S3_BUCKET }}
