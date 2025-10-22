@@ -16,29 +16,11 @@ const packageJson = JSON.parse(fs.readFileSync('package.json', 'utf8'))
 const packageVersion = packageJson.version
 const preamble = `// v${packageVersion}`
 
-// Obtener workspace packages de devDependencies
-const workspacePackages = Object.entries(packageJson.devDependencies || {})
-  .filter(([_, version]) => version.startsWith('workspace:'))
-  .map(([name]) => name)
-
-// Lista de paquetes externos (dependencies + workspace packages)
-const externalPackages = [
-  ...Object.keys(packageJson.dependencies || {}),
-  ...workspacePackages,
-  '@prisma/client',
-]
-
 const indexConfig = {
   input: './src/index.ts',
   output: {
     dir: 'dist',
     format: 'es',
-  },
-  external: (id) => {
-    // Los paquetes en node_modules se bundlean
-    if (id.includes('node_modules')) return false
-    // Marcar como externos los workspace packages y dependencies
-    return externalPackages.some((pkg) => id === pkg || id.startsWith(`${pkg}/`))
   },
   onwarn,
   watch: {
@@ -46,12 +28,7 @@ const indexConfig = {
     exclude: ['node_modules/**', 'dist/**', '*.d.ts', '**/*.d.ts'],
   },
   plugins: [
-    resolve({
-      extensions,
-      moduleDirectories: ['node_modules'],
-      preferBuiltins: false,
-      browser: true,
-    }),
+    resolve({ extensions }),
     commonjs(),
     babel({
       babelHelpers: 'bundled',
@@ -60,6 +37,9 @@ const indexConfig = {
       extensions,
     }),
     typescriptPaths({ preserveExtensions: true }),
+    typescript({
+      noEmitOnError: !process.env.ROLLUP_WATCH,
+    }),
     postcss({
       plugins: [autoprefixer(), tailwindcss()],
       extract: false,

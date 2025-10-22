@@ -15,8 +15,6 @@
     "declarationMap": true,
     "outDir": "dist",
     "noEmit": false,
-    "emitDeclarationOnly": true,
-    "skipLibCheck": true,
-    "skipDefaultLibCheck": true
+    "emitDeclarationOnly": true
   }
 }
