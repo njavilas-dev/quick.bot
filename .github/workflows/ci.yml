@@ -116,14 +116,6 @@ jobs:
         with:
           bun-version: 1.2.7
 
-      #- name: Cache Bun dependencies
-      #  uses: actions/cache@v4
-      #  with:
-      #    path: ~/.bun/install/cache
-      #    key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-bun-
-
       - name: Install dependencies
         run: bun install
 
@@ -223,6 +215,12 @@ jobs:
         with:
           name: ${{ matrix.app }}-standalone
           path: apps/${{ matrix.app }}/.next/standalone
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.app }}-dependencies
+          path: apps/${{ matrix.app }}/node_modules
 
       - name: Determine tag
         id: tag
