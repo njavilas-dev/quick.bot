@@ -340,6 +340,41 @@ jobs:
           name: ${{ matrix.app }}-dependencies
           path: /tmp/${{ matrix.app }}/node_modules
 
+      - name: Create .vercel/output structure for --prebuilt
+        run: |
+          echo "📁 Creating .vercel/output structure..."
+          cd /tmp/${{ matrix.app }}
+          
+          # Create .vercel/output directory
+          mkdir -p .vercel/output
+          
+          # Copy standalone files to .vercel/output
+          if [ -d ".next/standalone" ]; then
+            echo "Copying standalone files to .vercel/output..."
+            cp -r .next/standalone/* .vercel/output/
+          fi
+          
+          # Copy static files to .vercel/output
+          if [ -d ".next/static" ]; then
+            echo "Copying static files to .vercel/output..."
+            mkdir -p .vercel/output/.next/static
+            cp -r .next/static/* .vercel/output/.next/static/
+          fi
+          
+          # Copy public files to .vercel/output
+          if [ -d "public" ]; then
+            echo "Copying public files to .vercel/output..."
+            cp -r public .vercel/output/
+          fi
+          
+          # Copy node_modules to .vercel/output
+          if [ -d "node_modules" ]; then
+            echo "Copying node_modules to .vercel/output..."
+            cp -r node_modules .vercel/output/
+          fi
+          
+          echo "✅ .vercel/output structure created"
+
       - name: Create minimal package.json for Vercel
         run: |
           cat > /tmp/${{ matrix.app }}/package.json << 'EOF'
@@ -386,7 +421,7 @@ jobs:
           echo "🚀 Deploying to production..."
           echo "App: ${{ matrix.app }}"
           
-          vercel deploy --prod --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
+          vercel deploy --prebuilt --archive=tgz --prod --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
           
           echo "✅ Production deployment completed"
 
@@ -419,6 +454,41 @@ jobs:
         with:
           name: ${{ matrix.app }}-dependencies
           path: /tmp/${{ matrix.app }}/node_modules
+
+      - name: Create .vercel/output structure for --prebuilt
+        run: |
+          echo "📁 Creating .vercel/output structure..."
+          cd /tmp/${{ matrix.app }}
+          
+          # Create .vercel/output directory
+          mkdir -p .vercel/output
+          
+          # Copy standalone files to .vercel/output
+          if [ -d ".next/standalone" ]; then
+            echo "Copying standalone files to .vercel/output..."
+            cp -r .next/standalone/* .vercel/output/
+          fi
+          
+          # Copy static files to .vercel/output
+          if [ -d ".next/static" ]; then
+            echo "Copying static files to .vercel/output..."
+            mkdir -p .vercel/output/.next/static
+            cp -r .next/static/* .vercel/output/.next/static/
+          fi
+          
+          # Copy public files to .vercel/output
+          if [ -d "public" ]; then
+            echo "Copying public files to .vercel/output..."
+            cp -r public .vercel/output/
+          fi
+          
+          # Copy node_modules to .vercel/output
+          if [ -d "node_modules" ]; then
+            echo "Copying node_modules to .vercel/output..."
+            cp -r node_modules .vercel/output/
+          fi
+          
+          echo "✅ .vercel/output structure created"
 
       - name: Create minimal package.json for Vercel
         run: |
@@ -468,7 +538,7 @@ jobs:
           echo "Branch: ${{ github.head_ref || github.ref_name }}"
           echo "Environment: preview"
           
-          vercel deploy --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
+          vercel deploy --prebuilt --archive=tgz --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
           
           echo "✅ Preview deployment completed"
 
