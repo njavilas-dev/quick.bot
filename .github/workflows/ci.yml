@@ -347,6 +347,7 @@ jobs:
             "name": "${{ matrix.app }}",
             "version": "1.0.0",
             "scripts": {
+              "vercel-build": "echo 'Skipping build - using pre-built files'",
               "start": "node server.js"
             },
             "engines": {
@@ -426,6 +427,7 @@ jobs:
             "name": "${{ matrix.app }}",
             "version": "1.0.0",
             "scripts": {
+              "vercel-build": "echo 'Skipping build - using pre-built files'",
               "start": "node server.js"
             },
             "engines": {
