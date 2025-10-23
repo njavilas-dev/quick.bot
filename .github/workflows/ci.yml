@@ -340,6 +340,21 @@ jobs:
           name: ${{ matrix.app }}-dependencies
           path: /tmp/${{ matrix.app }}/node_modules
 
+      - name: Create minimal package.json for Vercel
+        run: |
+          cat > /tmp/${{ matrix.app }}/package.json << 'EOF'
+          {
+            "name": "${{ matrix.app }}",
+            "version": "1.0.0",
+            "scripts": {
+              "start": "node server.js"
+            },
+            "engines": {
+              "node": ">=22.0.0"
+            }
+          }
+          EOF
+
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
 
@@ -403,6 +418,21 @@ jobs:
         with:
           name: ${{ matrix.app }}-dependencies
           path: /tmp/${{ matrix.app }}/node_modules
+
+      - name: Create minimal package.json for Vercel
+        run: |
+          cat > /tmp/${{ matrix.app }}/package.json << 'EOF'
+          {
+            "name": "${{ matrix.app }}",
+            "version": "1.0.0",
+            "scripts": {
+              "start": "node server.js"
+            },
+            "engines": {
+              "node": ">=22.0.0"
+            }
+          }
+          EOF
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
