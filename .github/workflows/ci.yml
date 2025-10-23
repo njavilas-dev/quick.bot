@@ -328,16 +328,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 22
+          name: ${{ matrix.app }}-standalone
+          path: apps/${{ matrix.app }}
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.app }}-dependencies
+          path: apps/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
-
-      - name: Install Bun for Vercel Build
-        run: npm install -g bun@latest
 
       - name: Vercel Pull (Preview)
         env:
@@ -358,11 +362,6 @@ jobs:
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
           echo "✅ Cleanup completed"   
-
-      - name: Vercel Build
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel build --prod --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
 
       - name: Vercel Deploy (Production)
         env:
@@ -393,16 +392,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Download artifact
+        uses: actions/download-artifact@v4
         with:
-          node-version: 22
+          name: ${{ matrix.app }}-standalone
+          path: apps/${{ matrix.app }}
+
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.app }}-dependencies
+          path: apps/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
-
-      - name: Install Bun for Vercel Build
-        run: npm install -g bun@latest
 
       - name: Vercel Pull (Preview)
         env:
@@ -423,11 +426,6 @@ jobs:
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
           echo "✅ Cleanup completed"       
-        
-      - name: Vercel Build
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel build --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
 
       - name: Vercel Deploy (Preview)
         env:
