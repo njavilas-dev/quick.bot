@@ -332,64 +332,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-standalone
-          path: /tmp/${{ matrix.app }}
+          path: apps/${{ matrix.app }}
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-dependencies
-          path: /tmp/${{ matrix.app }}/node_modules
-
-      - name: Create .vercel/output structure for --prebuilt
-        run: |
-          echo "📁 Creating .vercel/output structure..."
-          cd /tmp/${{ matrix.app }}
-          
-          # Create .vercel/output directory
-          mkdir -p .vercel/output
-          
-          # Copy standalone files to .vercel/output
-          if [ -d ".next/standalone" ]; then
-            echo "Copying standalone files to .vercel/output..."
-            cp -r .next/standalone/* .vercel/output/
-          fi
-          
-          # Copy static files to .vercel/output
-          if [ -d ".next/static" ]; then
-            echo "Copying static files to .vercel/output..."
-            mkdir -p .vercel/output/.next/static
-            cp -r .next/static/* .vercel/output/.next/static/
-          fi
-          
-          # Copy public files to .vercel/output
-          if [ -d "public" ]; then
-            echo "Copying public files to .vercel/output..."
-            cp -r public .vercel/output/
-          fi
-          
-          # Copy node_modules to .vercel/output
-          if [ -d "node_modules" ]; then
-            echo "Copying node_modules to .vercel/output..."
-            cp -r node_modules .vercel/output/
-          fi
-          
-          echo "✅ .vercel/output structure created"
-
-      - name: Create minimal package.json for Vercel
-        run: |
-          cat > /tmp/${{ matrix.app }}/package.json << 'EOF'
-          {
-            "name": "${{ matrix.app }}",
-            "version": "1.0.0",
-            "scripts": {
-              "vercel-build": "echo 'Skipping build - using pre-built files'",
-              "start": "node server.js"
-            },
-            "engines": {
-              "node": ">=22.0.0"
-            }
-          }
-          EOF
+          path: apps/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
@@ -408,11 +357,15 @@ jobs:
           echo "Current branch: $BRANCH"
           echo "App: ${{ matrix.app }}"
           echo "Environment: production"
-          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="production" --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="production" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
             echo "   Removing: $url"
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
           echo "✅ Cleanup completed"   
+
+      - name: List directories
+        run: |
+          ls -la apps/${{ matrix.app }}
 
       - name: Vercel Deploy (Production)
         env:
@@ -421,7 +374,7 @@ jobs:
           echo "🚀 Deploying to production..."
           echo "App: ${{ matrix.app }}"
           
-          vercel deploy --prebuilt --archive=tgz --prod --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
+          vercel deploy --prebuilt --archive=tgz --prod --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
           
           echo "✅ Production deployment completed"
 
@@ -447,64 +400,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-standalone
-          path: /tmp/${{ matrix.app }}
+          path: apps/${{ matrix.app }}
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-dependencies
-          path: /tmp/${{ matrix.app }}/node_modules
-
-      - name: Create .vercel/output structure for --prebuilt
-        run: |
-          echo "📁 Creating .vercel/output structure..."
-          cd /tmp/${{ matrix.app }}
-          
-          # Create .vercel/output directory
-          mkdir -p .vercel/output
-          
-          # Copy standalone files to .vercel/output
-          if [ -d ".next/standalone" ]; then
-            echo "Copying standalone files to .vercel/output..."
-            cp -r .next/standalone/* .vercel/output/
-          fi
-          
-          # Copy static files to .vercel/output
-          if [ -d ".next/static" ]; then
-            echo "Copying static files to .vercel/output..."
-            mkdir -p .vercel/output/.next/static
-            cp -r .next/static/* .vercel/output/.next/static/
-          fi
-          
-          # Copy public files to .vercel/output
-          if [ -d "public" ]; then
-            echo "Copying public files to .vercel/output..."
-            cp -r public .vercel/output/
-          fi
-          
-          # Copy node_modules to .vercel/output
-          if [ -d "node_modules" ]; then
-            echo "Copying node_modules to .vercel/output..."
-            cp -r node_modules .vercel/output/
-          fi
-          
-          echo "✅ .vercel/output structure created"
-
-      - name: Create minimal package.json for Vercel
-        run: |
-          cat > /tmp/${{ matrix.app }}/package.json << 'EOF'
-          {
-            "name": "${{ matrix.app }}",
-            "version": "1.0.0",
-            "scripts": {
-              "vercel-build": "echo 'Skipping build - using pre-built files'",
-              "start": "node server.js"
-            },
-            "engines": {
-              "node": ">=22.0.0"
-            }
-          }
-          EOF
+          path: apps/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
@@ -512,7 +414,7 @@ jobs:
       - name: Vercel Pull (Preview)
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }}   
+        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
 
       - name: Remove Existing Deployments
         env:
@@ -523,7 +425,7 @@ jobs:
           echo "Current branch: $BRANCH"
           echo "App: ${{ matrix.app }}"
           echo "Environment: preview"
-          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
             echo "   Removing: $url"
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
