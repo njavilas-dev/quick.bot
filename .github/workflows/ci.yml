@@ -346,7 +346,7 @@ jobs:
       - name: Vercel Pull (Preview)
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }}   
+        run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
 
       - name: Remove Existing Deployments
         env:
@@ -440,7 +440,7 @@ jobs:
           echo "Branch: ${{ github.head_ref || github.ref_name }}"
           echo "Environment: preview"
           
-          vercel deploy --prebuilt --archive=tgz --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
+          vercel deploy --prebuilt --archive=tgz --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
           
           echo "✅ Preview deployment completed"
 
