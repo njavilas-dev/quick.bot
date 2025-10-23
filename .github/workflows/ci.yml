@@ -332,13 +332,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-standalone
-          path: apps/${{ matrix.app }}
+          path: /tmp/${{ matrix.app }}
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-dependencies
-          path: apps/${{ matrix.app }}/node_modules
+          path: /tmp/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
@@ -346,7 +346,7 @@ jobs:
       - name: Vercel Pull (Preview)
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+        run: vercel pull --yes --environment=production --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }}   
 
       - name: Remove Existing Deployments
         env:
@@ -357,7 +357,7 @@ jobs:
           echo "Current branch: $BRANCH"
           echo "App: ${{ matrix.app }}"
           echo "Environment: production"
-          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="production" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="production" --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
             echo "   Removing: $url"
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
@@ -370,7 +370,7 @@ jobs:
           echo "🚀 Deploying to production..."
           echo "App: ${{ matrix.app }}"
           
-          vercel deploy --prod --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
+          vercel deploy --prod --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=develop" --meta "app=${{ matrix.app }}" --meta "environment=production"
           
           echo "✅ Production deployment completed"
 
@@ -396,13 +396,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-standalone
-          path: apps/${{ matrix.app }}
+          path: /tmp/${{ matrix.app }}
 
       - name: Download dependencies
         uses: actions/download-artifact@v4
         with:
           name: ${{ matrix.app }}-dependencies
-          path: apps/${{ matrix.app }}/node_modules
+          path: /tmp/${{ matrix.app }}/node_modules
 
       - name: Install Vercel CLI
         run: npm i -g vercel@latest
@@ -410,7 +410,7 @@ jobs:
       - name: Vercel Pull (Preview)
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }}   
+        run: vercel pull --yes --environment=preview --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }}   
 
       - name: Remove Existing Deployments
         env:
@@ -421,7 +421,7 @@ jobs:
           echo "Current branch: $BRANCH"
           echo "App: ${{ matrix.app }}"
           echo "Environment: preview"
-          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
+          vercel list --meta branch="$BRANCH" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
             echo "   Removing: $url"
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
@@ -436,7 +436,7 @@ jobs:
           echo "Branch: ${{ github.head_ref || github.ref_name }}"
           echo "Environment: preview"
           
-          vercel deploy --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
+          vercel deploy --token "$VERCEL_TOKEN" --cwd /tmp/${{ matrix.app }} --meta "branch=${{ github.head_ref }}" --meta "app=${{ matrix.app }}" --meta "environment=preview"
           
           echo "✅ Preview deployment completed"
 
