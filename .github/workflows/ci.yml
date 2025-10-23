@@ -363,9 +363,12 @@ jobs:
           done
           echo "✅ Cleanup completed"   
 
-      - name: List directories
-        run: |
-          ls -la apps/${{ matrix.app }}
+      - name: Upload Vercel config
+        uses: actions/upload-artifact@v4
+        with:
+          name: vercel-config
+          path: apps/${{ matrix.app }}/.vercel
+          retention-days: 1
 
       - name: Vercel Deploy (Production)
         env:
