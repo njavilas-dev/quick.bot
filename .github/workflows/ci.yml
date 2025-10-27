@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
     env:
-      CI: ${{ secrets.TEST_CI }}
-      TEST_ENV: ${{ secrets.TEST_TEST_ENV }}
-      NODE_ENV: ${{ secrets.TEST_NODE_ENV }}
+      CI: 1
+      TEST_ENV: true
+      NODE_ENV: production
       ENCRYPTION_SECRET: ${{ secrets.TEST_ENCRYPTION_SECRET }}
       NEXTAUTH_URL: ${{ secrets.TEST_NEXTAUTH_URL }}
       NEXT_PUBLIC_VIEWER_URL: ${{ secrets.TEST_NEXT_PUBLIC_VIEWER_URL }}
