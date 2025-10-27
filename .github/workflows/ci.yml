@@ -12,72 +12,71 @@ permissions:
   contents: read
   packages: write
 
-env:
-  CI: 1
-  TEST_ENV: true
-  NODE_ENV: production
-  ENCRYPTION_SECRET: SECRET_REMOVED
-  NEXTAUTH_URL: http://localhost:3000
-  NEXT_PUBLIC_VIEWER_URL: http://localhost:3001
-  NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME: quick-bot-viewer
-  VERCEL_TOKEN: SECRET_REMOVED
-  VERCEL_TEAM_ID: SECRET_REMOVED
-  NEXT_PUBLIC_SMTP_FROM: noreply@quick.bot
-  SMTP_USERNAME: SECRET_REMOVED
-  SMTP_PASSWORD: SECRET_REMOVED
-  SMTP_HOST: email-smtp.us-east-2.amazonaws.com
-  SMTP_PORT: 465
-  SMTP_SECURE: true
-  SMTP_AUTH_DISABLED: false
-  CREDENTIALS_AUTH: true
-  S3_ACCESS_KEY: SECRET_REMOVED
-  S3_SECRET_KEY: SECRET_REMOVED
-  S3_BUCKET: quickbot-dev
-  S3_PORT: 443
-  S3_ENDPOINT: s3.us-east-2.amazonaws.com
-  S3_SSL: true
-  S3_REGION: us-east-2
-  NEXT_PUBLIC_STRIPE_PUBLIC_KEY: SECRET_REMOVED
-  STRIPE_SECRET_KEY: SECRET_REMOVED
-  STRIPE_PERSONAL_PRICE_ID: price_1Q7a4zGBX1iL5M9BZe5BieXN
-  STRIPE_PERSONAL_CHATS_PRICE_ID: price_1Q7g4BGBX1iL5M9Bwut6jTas
-  STRIPE_BUSINESS_PRICE_ID: price_1Q7g5gGBX1iL5M9BEu2hwvBJ
-  STRIPE_BUSINESS_CHATS_PRICE_ID: price_1Q7gJpGBX1iL5M9BOv7bV6xc
-  STRIPE_ENTERPRISE_PRICE_ID: price_1QKPHyGBX1iL5M9B9acykRCi
-  STRIPE_ENTERPRISE_CHATS_PRICE_ID: price_1QKPLEGBX1iL5M9BYp3DKpY6
-  STRIPE_WEBHOOK_SECRET: SECRET_REMOVED
-  NEXT_PUBLIC_GOOGLE_API_KEY: SECRET_REMOVED
-  GOOGLE_CLIENT_ID: SECRET_REMOVED
-  GOOGLE_CLIENT_SECRET: SECRET_REMOVED
-  NEXT_PUBLIC_GIPHY_API_KEY: SECRET_REMOVED
-  PLAYWRIGHT_GOOGLE_ACCESS_TOKEN: SECRET_REMOVED
-  PLAYWRIGHT_GOOGLE_REFRESH_TOKEN: SECRET_REMOVED
-  PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID: cus_R2iVJ3XSv337wP
-  PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID: cus_R4s2tzX9PYvNXs
-  PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID: cus_RCorfy125pqmpX
-  NODE_OPTIONS: --no-node-snapshot --max-old-space-size=8192
-  NEXT_PUBLIC_SENTRY_DSN: SECRET_REMOVED
-  SENTRY_AUTH_TOKEN: SECRET_REMOVED
-  SENTRY_PROJECT: quickbot
-  SENTRY_ORG: urbiport
-  GITHUB_CLIENT_ID: 534b549dd17709a743a2
-  GITHUB_CLIENT_SECRET: 7adb03507504fb1a54422f6c3c697277cfd000a9
-  SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING: 1
-
-  DATABASE_URL: 'postgresql://labs:labs_pass@localhost:5432/labs'
-  DATABASE_DIRECT_URL: 'postgresql://labs:labs_pass@localhost:5432/labs'
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  NEXT_PUBLIC_SUPPORT_BOT: ${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
-  NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
-  NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
     env:
-      DATABASE_URL: 'postgresql://labs:secure@localhost:5432/labs'
-      DATABASE_DIRECT_URL: 'postgresql://labs:secure@localhost:5432/labs'
+      CI: ${{ secrets.TEST_CI }}
+      TEST_ENV: ${{ secrets.TEST_TEST_ENV }}
+      NODE_ENV: ${{ secrets.TEST_NODE_ENV }}
+      ENCRYPTION_SECRET: ${{ secrets.TEST_ENCRYPTION_SECRET }}
+      NEXTAUTH_URL: ${{ secrets.TEST_NEXTAUTH_URL }}
+      NEXT_PUBLIC_VIEWER_URL: ${{ secrets.TEST_NEXT_PUBLIC_VIEWER_URL }}
+      NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME: ${{ secrets.TEST_NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+      VERCEL_TOKEN: ${{ secrets.TEST_VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: ${{ secrets.TEST_VERCEL_TEAM_ID }}
+      NEXT_PUBLIC_SMTP_FROM: ${{ secrets.TEST_NEXT_PUBLIC_SMTP_FROM }}
+      SMTP_USERNAME: ${{ secrets.TEST_SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.TEST_SMTP_PASSWORD }}
+      SMTP_HOST: ${{ secrets.TEST_SMTP_HOST }}
+      SMTP_PORT: 465
+      SMTP_SECURE: true
+      SMTP_AUTH_DISABLED: false
+      CREDENTIALS_AUTH: true
+      S3_ACCESS_KEY: ${{ secrets.TEST_S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.TEST_S3_SECRET_KEY }}
+      S3_BUCKET: ${{ secrets.TEST_S3_BUCKET }}
+      S3_PORT: ${{ secrets.TEST_S3_PORT }}
+      S3_ENDPOINT: ${{ secrets.TEST_S3_ENDPOINT }}
+      S3_SSL: ${{ secrets.TEST_S3_SSL }}
+      S3_REGION: ${{ secrets.TEST_S3_REGION }}
+      NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${{ secrets.TEST_NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.TEST_STRIPE_SECRET_KEY }}
+      STRIPE_PERSONAL_PRICE_ID: ${{ secrets.TEST_STRIPE_PERSONAL_PRICE_ID }}
+      STRIPE_PERSONAL_CHATS_PRICE_ID: ${{ secrets.TEST_STRIPE_PERSONAL_CHATS_PRICE_ID }}
+      STRIPE_BUSINESS_PRICE_ID: ${{ secrets.TEST_STRIPE_BUSINESS_PRICE_ID }}
+      STRIPE_BUSINESS_CHATS_PRICE_ID: ${{ secrets.TEST_STRIPE_BUSINESS_CHATS_PRICE_ID }}
+      STRIPE_ENTERPRISE_PRICE_ID: ${{ secrets.TEST_STRIPE_ENTERPRISE_PRICE_ID }}
+      STRIPE_ENTERPRISE_CHATS_PRICE_ID: ${{ secrets.TEST_STRIPE_ENTERPRISE_CHATS_PRICE_ID }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.TEST_STRIPE_WEBHOOK_SECRET }}
+      NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.TEST_NEXT_PUBLIC_GOOGLE_API_KEY }}
+      GOOGLE_CLIENT_ID: ${{ secrets.TEST_GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.TEST_GOOGLE_CLIENT_SECRET }}
+      NEXT_PUBLIC_GIPHY_API_KEY: ${{ secrets.TEST_NEXT_PUBLIC_GIPHY_API_KEY }}
+      PLAYWRIGHT_GOOGLE_ACCESS_TOKEN: ${{ secrets.TEST_PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}
+      PLAYWRIGHT_GOOGLE_REFRESH_TOKEN: ${{ secrets.TEST_PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}
+      PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
+      NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.TEST_NEXT_PUBLIC_SENTRY_DSN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.TEST_SENTRY_AUTH_TOKEN }}
+      SENTRY_PROJECT: ${{ secrets.TEST_SENTRY_PROJECT }}
+      SENTRY_ORG: ${{ secrets.TEST_SENTRY_ORG }}
+      SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING: 1
+      NEXT_PUBLIC_BETA_ENV: 'false'
+
+      NODE_OPTIONS: --no-node-snapshot --max-old-space-size=16384
+      DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
+      DATABASE_DIRECT_URL: ${{ secrets.TEST_DATABASE_DIRECT_URL }}
+
+      DOCKER_PASSWORD: ${{ secrets.TEST_DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ secrets.TEST_DOCKER_USERNAME }}
+      NPM_TOKEN: ${{ secrets.TEST_NPM_TOKEN }}
+      NEXT_PUBLIC_SUPPORT_BOT: ${{ secrets.TEST_NEXT_PUBLIC_SUPPORT_BOT }}
+      NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.TEST_NEXT_PUBLIC_POSTHOG_KEY }}
+      NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.TEST_NEXT_PUBLIC_POSTHOG_HOST }}
+
     services:
       postgres:
         image: postgres:15
@@ -181,6 +180,142 @@ jobs:
           cd apps/builder
           bun run test --project=auth --project=inputs --project=other --max-failures=5
 
+  build:
+    runs-on: ubuntu-latest
+    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
+    needs: test
+    env:
+      CI: 1
+      TEST_ENV: true
+      NODE_ENV: production
+      ENCRYPTION_SECRET: ${{ secrets.ENCRYPTION_SECRET }}
+      NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+      NEXT_PUBLIC_VIEWER_URL: ${{ secrets.NEXT_PUBLIC_VIEWER_URL }}
+      NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME: ${{ secrets.NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_TEAM_ID: ${{ secrets.VERCEL_TEAM_ID }}
+      NEXT_PUBLIC_SMTP_FROM: ${{ secrets.NEXT_PUBLIC_SMTP_FROM }}
+      SMTP_USERNAME: ${{ secrets.SMTP_USERNAME }}
+      SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+      SMTP_HOST: ${{ secrets.SMTP_HOST }}
+      SMTP_PORT: 465
+      SMTP_SECURE: true
+      SMTP_AUTH_DISABLED: false
+      CREDENTIALS_AUTH: true
+      S3_ACCESS_KEY: ${{ secrets.S3_ACCESS_KEY }}
+      S3_SECRET_KEY: ${{ secrets.S3_SECRET_KEY }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      S3_PORT: ${{ secrets.S3_PORT }}
+      S3_ENDPOINT: ${{ secrets.S3_ENDPOINT }}
+      S3_SSL: ${{ secrets.S3_SSL }}
+      S3_REGION: ${{ secrets.S3_REGION }}
+      NEXT_PUBLIC_STRIPE_PUBLIC_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLIC_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      STRIPE_PERSONAL_PRICE_ID: ${{ secrets.STRIPE_PERSONAL_PRICE_ID }}
+      STRIPE_PERSONAL_CHATS_PRICE_ID: ${{ secrets.STRIPE_PERSONAL_CHATS_PRICE_ID }}
+      STRIPE_BUSINESS_PRICE_ID: ${{ secrets.STRIPE_BUSINESS_PRICE_ID }}
+      STRIPE_BUSINESS_CHATS_PRICE_ID: ${{ secrets.STRIPE_BUSINESS_CHATS_PRICE_ID }}
+      STRIPE_ENTERPRISE_PRICE_ID: ${{ secrets.STRIPE_ENTERPRISE_PRICE_ID }}
+      STRIPE_ENTERPRISE_CHATS_PRICE_ID: ${{ secrets.STRIPE_ENTERPRISE_CHATS_PRICE_ID }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
+      NEXT_PUBLIC_GOOGLE_API_KEY: ${{ secrets.NEXT_PUBLIC_GOOGLE_API_KEY }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      NEXT_PUBLIC_GIPHY_API_KEY: ${{ secrets.NEXT_PUBLIC_GIPHY_API_KEY }}
+      PLAYWRIGHT_GOOGLE_ACCESS_TOKEN: ${{ secrets.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}
+      PLAYWRIGHT_GOOGLE_REFRESH_TOKEN: ${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}
+      PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
+      NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      SENTRY_SUPPRESS_GLOBAL_ERROR_HANDLER_FILE_WARNING: 1
+      NEXT_PUBLIC_BETA_ENV: 'false'
+
+      NODE_OPTIONS: --no-node-snapshot --max-old-space-size=16384
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      DATABASE_DIRECT_URL: ${{ secrets.DATABASE_DIRECT_URL }}
+
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NEXT_PUBLIC_SUPPORT_BOT: ${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
+      NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
+      NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
+      
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_PASSWORD: secure
+          POSTGRES_USER: labs
+          POSTGRES_DB: labs
+        options: >-
+          --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install system packages
+        run: |
+          sudo apt update
+          sudo apt-get install -y openssl
+          sudo npm install -g node-gyp
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: 1.2.7
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Fix isolated-vm native module
+        run: cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
+
+      - name: Fix Turborepo lockfile warning
+        run: touch bun.lockb
+
+      - name: Generate Prisma client
+        run: |
+          cd packages/prisma
+          bun run prisma:generate
+
+      - name: Build app
+        run: bun run build
+
+      - name: Apply database migrations
+        run: bun run db:migrate:deploy
+
+      - name: Apply seed data
+        run: bun run db:seed
+
+      - name: Verify builder build output
+        run: |
+          if [ ! -d "apps/builder/.next/standalone" ]; then
+            echo "Error: apps/builder/.next/standalone no generated"
+            exit 1
+          fi
+          echo "✓ apps/builder/.next/standalone generated correctly"
+
+      - name: Verify viewer build output
+        run: |
+          if [ ! -d "apps/viewer/.next/standalone" ]; then
+            echo "Error: apps/viewer/.next/standalone no generated"
+            exit 1
+          fi
+          echo "✓ apps/viewer/.next/standalone generated correctly"
+
       - name: Upload artifact builder standalone
         uses: actions/upload-artifact@v4
         with:
@@ -214,6 +349,7 @@ jobs:
           name: viewer-dependencies
           path: apps/viewer/node_modules
           retention-days: 1
+
 
   container:
     runs-on: ubuntu-latest
