@@ -155,6 +155,38 @@ jobs:
           fi
           echo "✓ apps/viewer/.next/standalone generated correctly"
 
+      - name: Install Stripe CLI
+        run: |
+          curl -s https://packages.stripe.dev/api/security/keypair/stripe-cli-gpg/public | gpg --dearmor | sudo tee /usr/share/keyrings/stripe.gpg > /dev/null
+          echo "deb [signed-by=/usr/share/keyrings/stripe.gpg] https://packages.stripe.dev/stripe-cli-debian-local stable main" | sudo tee -a /etc/apt/sources.list.d/stripe.list
+          sudo apt update
+          sudo apt install stripe
+
+      - name: Install Playwright Browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Start viewer server
+        run: |
+          cd apps/viewer
+          bun run start &
+          npx wait-on http://localhost:3001
+
+      - name: Start builder server
+        run: |
+          cd apps/builder
+          bun run start &
+          npx wait-on http://localhost:3000
+
+      - name: Run viewer tests
+        run: |
+          cd apps/viewer
+          bun run test --max-failures=5
+
+      - name: Run builder tests
+        run: |
+          cd apps/builder
+          bun run test --project=auth --project=inputs --project=other --max-failures=5
+
       - name: Upload artifact builder standalone
         uses: actions/upload-artifact@v4
         with:
