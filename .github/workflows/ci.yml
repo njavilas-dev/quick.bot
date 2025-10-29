@@ -185,11 +185,11 @@ jobs:
 
       - name: Verify viewer server is running
         run: |
-          curl -f http://localhost:3001/health || curl -f http://localhost:3001 || echo "Viewer health check skipped"
+          curl -f http://localhost:3001/health
 
       - name: Verify builder server is running
         run: |
-          curl -f http://localhost:3000/health || curl -f http://localhost:3000 || echo "Builder health check skipped"
+          curl -f http://localhost:3000/health
 
       - name: Run viewer tests
         run: |
