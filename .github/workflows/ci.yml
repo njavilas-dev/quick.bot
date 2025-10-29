@@ -183,9 +183,12 @@ jobs:
           sleep 5
           npx wait-on http://localhost:3000 --timeout 60000 || (cat /tmp/builder.log && exit 1)
 
-      - name: Verify servers are running
+      - name: Verify viewer server is running
         run: |
           curl -f http://localhost:3001/health || curl -f http://localhost:3001 || echo "Viewer health check skipped"
+
+      - name: Verify builder server is running
+        run: |
           curl -f http://localhost:3000/health || curl -f http://localhost:3000 || echo "Builder health check skipped"
 
       - name: Run viewer tests
