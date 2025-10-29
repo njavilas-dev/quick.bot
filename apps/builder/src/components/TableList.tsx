@@ -110,7 +110,7 @@ export const TableList = <T extends object>({
             {children({ item, onItemChange: handleCellChange(itemIndex) })}
             <ActionsBar
               isVisible={hoveredItemIndex === itemIndex}
-              onOpenSettings={() => {}}
+              onOpenSettings={() => { }}
               onDuplicate={duplicateItem(itemIndex)}
               onDelete={deleteItem(itemIndex)}
               isOpenSettingsHidden={true}

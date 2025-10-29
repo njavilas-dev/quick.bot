@@ -78,7 +78,7 @@ export const startWhatsAppPreview = authenticatedProcedure
 
     const sessionId = `wa-preview-${to}`
 
-    const existingSession = await prisma.chatSession.findFirst({
+    const existingSession = await prisma.chatSession.findUnique({
       where: {
         id: sessionId,
       },

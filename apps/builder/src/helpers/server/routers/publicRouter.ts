@@ -14,6 +14,7 @@ import { customDomainsRouter } from '@/features/customDomains/api/router'
 import { publicWhatsAppRouter } from '@/features/whatsapp/router'
 import { folderRouter } from '@/features/folders/api/router'
 import { invitationsRouter } from '@/features/invitations/api/router'
+import { inboxRouter } from '@/features/inbox/api/router'
 
 export const publicRouter = router({
   getLinkedBots,
@@ -31,4 +32,5 @@ export const publicRouter = router({
   customDomains: customDomainsRouter,
   whatsApp: publicWhatsAppRouter,
   folders: folderRouter,
+  inbox: inboxRouter,
 })

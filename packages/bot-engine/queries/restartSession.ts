@@ -7,18 +7,17 @@ type Props = {
 }
 
 export const restartSession = async ({ id, state }: Props) => {
-  if (id) {
-    await prisma.chatSession.deleteMany({
-      where: {
-        id,
+  if (!id) {
+    return prisma.chatSession.create({
+      data: {
+        state,
       },
     })
   }
 
-  return prisma.chatSession.create({
-    data: {
-      id,
-      state,
-    },
+  return prisma.chatSession.upsert({
+    where: { id },
+    update: { state },
+    create: { id, state },
   })
 }

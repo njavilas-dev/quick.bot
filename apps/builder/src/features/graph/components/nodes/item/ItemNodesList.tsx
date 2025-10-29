@@ -1,4 +1,4 @@
-import { Flex, Portal, Stack, Text, useEventListener } from '@chakra-ui/react'
+import { Flex, Portal, Stack, useEventListener } from '@chakra-ui/react'
 import { useBot } from '@/features/editor/providers/BotProvider'
 import { BlockIndices, BlockWithItems } from '@quickbot.io/schemas'
 import React, { useEffect, useRef, useState } from 'react'
@@ -12,8 +12,9 @@ import {
 } from '@/features/graph/providers/GraphDragAndDropProvider'
 import { useGraph } from '@/features/graph/providers/GraphProvider'
 import { Coordinates } from '@dnd-kit/utilities'
-import { BlockSourceEndpoint } from '../../endpoints/BlockSourceEndpoint'
 import { InputBlockType } from '@quickbot.io/schemas/features/blocks/inputs/constants'
+import { LogicBlockType } from '@quickbot.io/schemas/features/blocks/logic/constants'
+import { ItemNodeOtherwise } from './ItemNodeOtherwise'
 import { useTranslate } from '@tolgee/react'
 
 type Props = {
@@ -22,6 +23,7 @@ type Props = {
 }
 
 export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Props) => {
+  const { t } = useTranslate()
   const { bot, createItem, detachItemFromBlock } = useBot()
   const { draggedItem, setDraggedItem, mouseOverBlock } = useBlockDnd()
   const placeholderRefs = useRef<HTMLDivElement[]>([])
@@ -35,7 +37,9 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
   const useOtherOption =
     block.type === InputBlockType.CHOICE
       ? block.options?.otherOption
-      : false
+      : block.type === LogicBlockType.CONDITION
+        ? true
+        : false
 
   const [position, setPosition] = useState({
     x: 0,
@@ -71,7 +75,7 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
   useEventListener(
     mouseOverBlock ? mouseOverBlock.element : null,
     'mousemove',
-    mouseOverBlock ? handleMouseMoveOnBlock : () => {},
+    mouseOverBlock ? handleMouseMoveOnBlock : () => { },
   )
 
   const handleMouseUpOnGroup = (e: MouseEvent) => {
@@ -96,7 +100,7 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
   useEventListener(
     mouseOverBlock ? mouseOverBlock.element : null,
     'mouseup',
-    mouseOverBlock ? handleMouseUpOnGroup : () => {},
+    mouseOverBlock ? handleMouseUpOnGroup : () => { },
     {
       capture: true,
     },
@@ -104,19 +108,19 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
 
   const handleBlockMouseDown =
     (itemIndex: number) =>
-    (
-      { absolute, relative }: { absolute: Coordinates; relative: Coordinates },
-      item: DraggableItem,
-    ) => {
-      if (!bot || block.items.length <= 1) return
-      placeholderRefs.current.splice(itemIndex + 1, 1)
-      detachItemFromBlock({ groupIndex, blockIndex, itemIndex })
-      setPosition(absolute)
-      setRelativeCoordinates(relative)
-      setDraggedItem({
-        ...item,
-      })
-    }
+      (
+        { absolute, relative }: { absolute: Coordinates; relative: Coordinates },
+        item: DraggableItem,
+      ) => {
+        if (!bot || block.items.length <= 1) return
+        placeholderRefs.current.splice(itemIndex + 1, 1)
+        detachItemFromBlock({ groupIndex, blockIndex, itemIndex })
+        setPosition(absolute)
+        setRelativeCoordinates(relative)
+        setDraggedItem({
+          ...item,
+        })
+      }
 
   const stopPropagating = (e: React.MouseEvent) => e.stopPropagation()
 
@@ -127,6 +131,10 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
   }
 
   const groupId = bot?.groups.at(groupIndex)?.id
+
+  const defaultLabel = block.type === InputBlockType.CHOICE
+    ? t('blocks.inputs.button.else.label')
+    : t('blocks.logic.condition.otherwise.label')
 
   return (
     <Stack flex={1} spacing={1} maxW="full" onClick={stopPropagating}>
@@ -151,7 +159,11 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
         </Stack>
       ))}
       {isLastBlock && useOtherOption && groupId && (
-        <DefaultItemNode block={block} groupId={groupId} />
+        <ItemNodeOtherwise
+          block={block}
+          groupId={groupId}
+          label={defaultLabel}
+        />
       )}
       {draggedItem && draggedItem.blockId === block.id && (
         <Portal>
@@ -176,33 +188,5 @@ export const ItemNodesList = ({ block, indices: { groupIndex, blockIndex } }: Pr
         </Portal>
       )}
     </Stack>
-  )
-}
-
-const DefaultItemNode = ({ block, groupId }: { block: BlockWithItems; groupId: string }) => {
-  const { t } = useTranslate()
-
-  return (
-    <Flex
-      px="4"
-      py="2"
-      borderWidth="1px"
-      borderColor="divider.lighter"
-      bgColor="bg.normal"
-      borderRadius="md"
-      pos="relative"
-      align="center"
-      cursor="not-allowed"
-    >
-      <Text color="text.light">{t('blocks.inputs.button.else.label')}</Text>
-      <BlockSourceEndpoint
-        source={{
-          blockId: block.id,
-        }}
-        groupId={groupId}
-        pos="absolute"
-        right="-49px"
-      />
-    </Flex>
   )
 }

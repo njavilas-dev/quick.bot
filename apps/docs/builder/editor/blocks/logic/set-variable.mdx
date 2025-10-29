@@ -23,33 +23,12 @@ conversation, enabling dynamic content and sophisticated data handling.
 
 ### Value Type Selection
 
-The Set Variable block offers 18 different ways to set variable values:
+The Set Variable block offers multiple ways to set variable values:
 
 #### Static Values
 
 - **Custom**: Set any text value or JavaScript expression
 - **Empty**: Reset variable to undefined state
-- **Random ID**: Generate unique identifier using CUID algorithm
-
-#### User Data (WhatsApp only)
-
-- **Phone Number**: User's WhatsApp phone number
-- **Contact Name**: User's WhatsApp display name
-
-#### Date and Time
-
-- **Now**: Current date and time in ISO format
-- **Today**: Current date without time
-- **Yesterday**: Previous day's date
-- **Tomorrow**: Next day's date
-- **Moment of the Day**: Time-based greeting (morning/afternoon/evening/night)
-
-#### System Values
-
-- **Environment Name**: Platform identifier (web/whatsapp)
-- **Result ID**: Current conversation result identifier
-- **User ID**: Unique user identifier for the session
-- **Transcript**: Complete conversation history
 
 #### Data Manipulation
 
@@ -170,43 +149,56 @@ the value(s) to the list.
   the provided value(s).
 - If the variable is an array, it will concatenate the provided value(s) to the existing array.
 
-## Environment name
-
-This will set your variable with either `web` or `whatsapp` depending on the environment.
-
-## Transcript
-
-This preset value will save the entire conversation transcript in a variable. It is super useful to
-provide context to an AI block or to send it as a recap with the
+This is useful to provide context to an AI block or to send it as a recap with the
 [Send email](../integrations/send-email) block.
 
 <YoutubeVideo id="NpEaa2P7qZI" />
 
-## Result ID
+**Store current date/time:**
 
-This will set your variable with the current result ID. The result ID is the ID that corresponds to
-a row of your [Results](../../../results/table) table. It can be considered like a User ID for
-the currently chatting user.
+```
+{{system_now}}
+{{system_today}}
+{{system_yesterday}}
+{{system_tomorrow}}
+```
 
-## Yesterday, Now, Tomorrow
+**Store environment information:**
 
-This will set your variable with the specified date and time in ISO format. You can optionally
-provide a time zone to convert the date to the specified time zone.
+```
+{{system_platform}}  // Returns "web" or "whatsapp"
+{{system_device}}    // Returns "mobile" or "desktop"
+```
 
-## Random ID
+**Store unique identifiers:**
 
-This will set your variable with a random ID with the CUID algorithm.
+```
+{{system_randomId}}  // Generate unique ID with CUID algorithm
+```
 
-## Moment of the day
+**Create time-based greeting:**
 
-It will set your variable with either one of these values based on the user's time of the day:
-`morning`, `afternoon`, `evening`, `night`.
+```
+{{system_momentOfTheDay}}  // Returns "morning", "afternoon", "evening", or "night"
+```
 
 Then you can use this variable to conditionally display content:
 
 <Frame style={{ maxWidth: '400px' }}>
   <img src="/images/builder/blocks/logic/moment-condition.png" alt="Moment of the day condition" />
 </Frame>
+
+**WhatsApp-specific data:**
+
+```
+{{system_whatsapp_number}}  // User's phone number (WhatsApp only)
+{{system_whatsapp_name}}    // User's contact name (WhatsApp only)
+```
+
+<Info>
+  See the complete list of [System Variables](../../variables#system-variables) for all available
+  options and detailed documentation.
+</Info>
 
 ## Map item with same index
 
@@ -226,18 +218,10 @@ This value block allows you to find the `Id` from `Ids` with the same index as `
   />
 </Frame>
 
-## Phone number
-
-Only available in WhatsApp. This will set your variable with the user's phone number.
-
-## Contact name
-
-Only available in WhatsApp. This will set your variable with the user's name.
-
 ## Save in results
 
-By default, new variables are not persisted in the [Results](../../../results/table) table. They are only
-stored for the current user chat session. Enabling this option will save the variable in the
+By default, new variables are not persisted in the [Results](../../../results/table) table. They are
+only stored for the current user chat session. Enabling this option will save the variable in the
 `Results` table.
 
 ## Execute on client

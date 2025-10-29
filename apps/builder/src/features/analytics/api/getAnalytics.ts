@@ -46,9 +46,8 @@ export const getAnalytics = authenticatedProcedure
           totalViewsPerDay: [],
           totalStartsPerDay: [],
           totalCompletedPerDay: [],
-          conversionRate: 0,
-          viewToStartRate: 0,
           completionRate: 0,
+          viewToStartRate: 0,
           dropOffRate: 0,
         },
       }
@@ -198,9 +197,8 @@ export const getAnalytics = authenticatedProcedure
             'none'
 
     // Calculate conversion rates
-    const conversionRate = totalStarts > 0 ? (totalCompleted / totalStarts) * 100 : 0
+    const completionRate = totalStarts > 0 ? (totalCompleted / totalStarts) * 100 : 0
     const viewToStartRate = totalViews > 0 ? (totalStarts / totalViews) * 100 : 0
-    const completionRate = totalViews > 0 ? (totalCompleted / totalViews) * 100 : 0
     const dropOffRate = totalStarts > 0 ? ((totalStarts - totalCompleted) / totalStarts) * 100 : 0
 
     const stats: Stats = {
@@ -214,9 +212,8 @@ export const getAnalytics = authenticatedProcedure
       totalStartsPerDay: formatStatsData(totalStartsPerDay, fillMissingType),
       // @ts-expect-error For some reason Typescript don't recognize properties of prisma
       totalCompletedPerDay: formatStatsData(totalCompletedPerDay, fillMissingType),
-      conversionRate: Math.round(conversionRate * 100) / 100, // Round to 2 decimal places
+      completionRate: Math.round(completionRate * 100) / 100, // Round to 2 decimal places
       viewToStartRate: Math.round(viewToStartRate * 100) / 100,
-      completionRate: Math.round(completionRate * 100) / 100,
       dropOffRate: Math.round(dropOffRate * 100) / 100,
     }
 

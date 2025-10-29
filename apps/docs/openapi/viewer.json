@@ -5630,41 +5630,7 @@
                                   "type": {
                                     "type": "string",
                                     "enum": [
-                                      "Now",
-                                      "Yesterday",
-                                      "Tomorrow"
-                                    ]
-                                  },
-                                  "timeZone": {
-                                    "type": "string"
-                                  }
-                                },
-                                "required": [
-                                  "type"
-                                ]
-                              },
-                              {
-                                "type": "object",
-                                "properties": {
-                                  "variableId": {
-                                    "type": "string"
-                                  },
-                                  "isExecutedOnClient": {
-                                    "type": "boolean"
-                                  },
-                                  "type": {
-                                    "type": "string",
-                                    "enum": [
-                                      "Today",
-                                      "Moment of the day",
-                                      "Empty",
-                                      "Environment name",
-                                      "User ID",
-                                      "Result ID",
-                                      "Random ID",
-                                      "Phone number",
-                                      "Contact name",
-                                      "Transcript"
+                                      "Empty"
                                     ]
                                   }
                                 },
@@ -7990,41 +7956,7 @@
                       "type": {
                         "type": "string",
                         "enum": [
-                          "Now",
-                          "Yesterday",
-                          "Tomorrow"
-                        ]
-                      },
-                      "timeZone": {
-                        "type": "string"
-                      }
-                    },
-                    "required": [
-                      "type"
-                    ]
-                  },
-                  {
-                    "type": "object",
-                    "properties": {
-                      "variableId": {
-                        "type": "string"
-                      },
-                      "isExecutedOnClient": {
-                        "type": "boolean"
-                      },
-                      "type": {
-                        "type": "string",
-                        "enum": [
-                          "Today",
-                          "Moment of the day",
-                          "Empty",
-                          "Environment name",
-                          "User ID",
-                          "Result ID",
-                          "Random ID",
-                          "Phone number",
-                          "Contact name",
-                          "Transcript"
+                          "Empty"
                         ]
                       }
                     },

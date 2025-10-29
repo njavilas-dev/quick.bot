@@ -82,7 +82,6 @@ export const ItemNode = ({ item, block, indices, onMouseDown, connectionDisabled
             pos="relative"
             ref={setMultipleRefs([ref, itemRef])}
             w="full"
-            pr="1"
           >
             {'displayCondition' in item &&
               item.displayCondition?.isEnabled &&
@@ -98,7 +97,7 @@ export const ItemNode = ({ item, block, indices, onMouseDown, connectionDisabled
               _hover={{ shadow: 'md' }}
               transition="box-shadow 200ms, border-color 200ms"
               w="full"
-              p={block.type === InputBlockType.CHOICE ? '0' : '3'}
+              p={4}
               shadow="sm"
               bg={isConditionItem && conditionValidation.hasError ? 'red.100' : 'bg.normal'}
               borderRadius="md"

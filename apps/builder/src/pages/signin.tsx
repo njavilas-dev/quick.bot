@@ -1,8 +1,13 @@
+import { AuthLayout } from '@/components/layouts/AuthLayout'
 import { SignInPage } from '@/features/auth/components/SignInPage'
-import { useHydration } from '@/hooks/useHydration'
+import type { ReactNode } from 'react'
 
-export default function Page() {
-  const isHydrated = useHydration()
-  if (!isHydrated) return null
+function Page() {
   return <SignInPage />
 }
+
+Page.getLayout = function getLayout(page: ReactNode) {
+  return <AuthLayout>{page}</AuthLayout>
+}
+
+export default Page

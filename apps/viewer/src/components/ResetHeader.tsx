@@ -13,6 +13,7 @@ export const ResetHeader: React.FC<MinimalHeaderProps> = ({ className, publicId,
     if (publicId) {
       wipeExistingChatStateInStorage(publicId)
     }
+
     onReset?.()
     window.location.reload()
   }

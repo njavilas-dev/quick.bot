@@ -23,7 +23,7 @@ export type FunnelChartProps = {
 
 export const FunnelChart: React.FC<FunnelChartProps> = ({
   data,
-  title = 'Conversion Funnel',
+  title = 'Conversion funnel',
   showPercentages = true,
   height = 300
 }) => {
@@ -68,7 +68,7 @@ export const FunnelChart: React.FC<FunnelChartProps> = ({
     series: [
       {
         type: 'funnel',
-        name: 'Conversion Funnel',
+        name: 'Conversion funnel',
         data: data.map(item => [item.name, item.value]),
       },
     ],

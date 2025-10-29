@@ -117,6 +117,7 @@
   "blocks.inputs.button.conditionContent.if.label": "IF",
   "blocks.inputs.button.default.label": "Default",
   "blocks.inputs.button.else.label": "Else",
+  "blocks.logic.condition.otherwise.label": "Autrement",
   "blocks.inputs.button.openSettings.ariaLabel": "Ouvrir les paramètres",
   "blocks.inputs.button.settings.dynamicData.infoText.label": "Si défini, les boutons seront affichés dynamiquement et basés sur le contenu de la variable.",
   "blocks.inputs.button.settings.dynamicData.label": "Données dynamique:",

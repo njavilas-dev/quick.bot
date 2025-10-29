@@ -1,10 +1,10 @@
 import type { NextPageWithLayout } from '@/pages/_app'
-import Layout from '@/components/layouts/Layout'
 import type { ReactNode } from 'react'
 import { AccountNotificationsForm } from '@/features/account/components/AccountNotificationsForm'
 import { Stack, Text } from '@chakra-ui/react'
 import { BoxCard, H2 } from '@urbiport/ui'
 import { useTranslate } from '@tolgee/react'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const NotificationsPage: NextPageWithLayout = () => {
   const { t } = useTranslate()
@@ -22,7 +22,7 @@ const NotificationsPage: NextPageWithLayout = () => {
 }
 
 NotificationsPage.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default NotificationsPage

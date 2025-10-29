@@ -1,17 +1,16 @@
-import { Alert, AlertIcon, Stack, Tag, Text } from '@chakra-ui/react'
+import { Stack } from '@chakra-ui/react'
 import { CodeEditorWithVariables } from '@/components/inputs/CodeEditorWithVariables'
 import { SetVariableBlock, Variable } from '@quickbot.io/schemas'
 
 import { FormControl, Switch } from '@urbiport/ui'
 import { Select } from '@urbiport/ui'
-import { WhatsAppLogo } from '@urbiport/icons'
 import {
   defaultSetVariableOptions,
   hiddenTypes,
   sessionOnlySetVariableOptions,
   valueTypes,
 } from '@quickbot.io/schemas/features/blocks/logic/setVariable/constants'
-import { InputTextWithVariables, TextareaWithVariables } from '@/components/inputs'
+import { TextareaWithVariables } from '@/components/inputs'
 import { isDefined } from '@quickbot.io/lib'
 import { useBot } from '@/features/editor/providers/BotProvider'
 import { isInputBlock } from '@quickbot.io/schemas/helpers'
@@ -75,14 +74,13 @@ export const SetVariableSettings = ({ options, onOptionsChange }: Props) => {
           items={setVarTypes.map((type) => ({
             label: type,
             value: type,
-            icon: type === 'Contact name' || type === 'Phone number' ? <WhatsAppLogo /> : undefined,
           }))}
           onSelect={updateValueType}
         />
       </FormControl>
       {selectedVariable && !isSessionOnly && !isLinkedToAnswer && (
         <FormControl
-          direction='row'
+          direction="row"
           label={t('blocks.logic.variables.saveInResults.label')}
           moreInfoTooltip={t('blocks.logic.variables.saveInResults.tooltip')}
         >
@@ -269,57 +267,7 @@ const SetVariableValue = ({
         </FormControl>
       )
     }
-    case 'Moment of the day': {
-      return (
-        <Alert>
-          <AlertIcon />
-          <Text>
-            {t('blocks.logic.variables.switch.moment.1')}{' '}
-            <Tag>{t('blocks.logic.variables.switch.moment.2')}</Tag>,{' '}
-            <Tag>{t('blocks.logic.variables.switch.moment.3')}</Tag>,{' '}
-            <Tag>{t('blocks.logic.variables.switch.moment.4')}</Tag>{' '}
-            {t('blocks.logic.variables.switch.moment.5')}{' '}
-            <Tag>{t('blocks.logic.variables.switch.moment.6')}</Tag>{' '}
-            {t('blocks.logic.variables.switch.moment.7')}{' '}
-          </Text>
-        </Alert>
-      )
-    }
-    case 'Environment name': {
-      return (
-        <Alert>
-          <AlertIcon />
-          <Text>
-            {t('blocks.logic.variables.switch.whatsapp.1')}{' '}
-            <Tag>{t('blocks.logic.variables.switch.whatsapp.2')}</Tag>{' '}
-            {t('blocks.logic.variables.switch.whatsapp.3')}{' '}
-            <Tag>{t('blocks.logic.variables.switch.whatsapp.4')}</Tag>.
-          </Text>
-        </Alert>
-      )
-    }
-    case 'Now':
-    case 'Yesterday':
-    case 'Tomorrow': {
-      return (
-        <FormControl direction="row" label={t('blocks.logic.variables.now.timezone.label')}>
-          <InputTextWithVariables
-            withVariableButton={true}
-            onChange={(timeZone) => onOptionsChange({ ...options, timeZone })}
-            defaultValue={options.timeZone}
-            placeholder={t('blocks.logic.variables.now.timezone.placeholder')}
-          />
-        </FormControl>
-      )
-    }
-    case 'Contact name':
-    case 'Phone number':
-    case 'Random ID':
-    case 'User ID':
-    case 'Today':
-    case 'Result ID':
     case 'Empty':
-    case 'Transcript':
       return null
   }
 }

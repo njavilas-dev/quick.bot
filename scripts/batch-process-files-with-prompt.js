@@ -5,7 +5,13 @@ const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 const axios = require('axios');
 
-const OPENAI_API_KEY = 'sk-proj-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'; //NOSONAR
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+
+if (!OPENAI_API_KEY) {
+  console.error('Error: OPENAI_API_KEY environment variable is not set');
+  console.error('Please set it using: export OPENAI_API_KEY=your-api-key');
+  process.exit(1);
+}
 
 const promptTemplate = `
 You are a Playwright test refactoring specialist. Transform the following test code to match this pattern:

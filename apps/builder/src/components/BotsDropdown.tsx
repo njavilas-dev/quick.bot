@@ -1,25 +1,43 @@
-import React, { useState, useEffect } from 'react'
-import { HStack, MenuItem, Text, Spinner } from '@chakra-ui/react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { HStack, MenuItem, Text } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@urbiport/icons'
 import { DropdownMenu, useToast } from '@urbiport/ui'
 import { useWorkspace } from '@/hooks/useWorkspace'
 import { BotIcon } from '@/components/BotIcon'
 import { useBots } from '@/hooks/useBots'
 import { useTranslate } from '@tolgee/react'
+import { useRouter } from 'next/router'
 
-interface BotsDropdownProps {
-  selectedBotId?: string
-  onBotChange?: (botId: string) => void
-}
-
-export const BotsDropdown: React.FC<BotsDropdownProps> = ({
-  selectedBotId,
-  onBotChange,
-}) => {
+export const BotsDropdown = () => {
+  const router = useRouter()
   const { t } = useTranslate()
   const { showToast } = useToast()
   const { workspace } = useWorkspace()
   const [displayName, setDisplayName] = useState<string | undefined>(undefined)
+
+  // Get current botId from path params
+  const selectedBotId = typeof router.query.botId === 'string' ? router.query.botId : undefined
+
+  const onBotChange = useCallback((botId: string) => {
+    // Replace the current botId in the URL with the new one
+    const currentPath = router.asPath
+
+    let newPath: string
+    if (selectedBotId) {
+      // If there's already a botId, replace it
+      newPath = currentPath.replace(selectedBotId, botId)
+    } else if (router.pathname.includes('[botId]')) {
+      // If the route has [botId] param, replace it
+      newPath = `${router.pathname.replace('[botId]', botId)}${router.asPath.includes('?') ? router.asPath.substring(router.asPath.indexOf('?')) : ''}`
+    } else {
+      // If the route doesn't have [botId] param (e.g., /analytics), append it
+      const basePath = router.pathname
+      const queryString = router.asPath.includes('?') ? router.asPath.substring(router.asPath.indexOf('?')) : ''
+      newPath = `${basePath}/${botId}${queryString}`
+    }
+
+    router.push(newPath)
+  }, [router, selectedBotId])
 
   const { bots, isLoading } = useBots({
     workspaceId: workspace?.id ?? '',
@@ -35,7 +53,7 @@ export const BotsDropdown: React.FC<BotsDropdownProps> = ({
 
   // Auto-select first bot if none is selected
   useEffect(() => {
-    if (!isLoading && bots && bots.length > 0 && !selectedBotId && onBotChange) {
+    if (!isLoading && bots && bots.length > 0 && !selectedBotId) {
       onBotChange(bots[0].id)
       setDisplayName(bots[0].name)
     }
@@ -68,9 +86,7 @@ export const BotsDropdown: React.FC<BotsDropdownProps> = ({
   } else if (!isLoading && bots && bots.length > 0) {
     menuButtonContent = bots[0].name
   } else if (!isLoading && (!bots || bots.length === 0)) {
-    menuButtonContent = 'No bots'
-  } else {
-    menuButtonContent = <Spinner size="sm" />
+    menuButtonContent = 'No bots...'
   }
 
   return (
@@ -79,15 +95,24 @@ export const BotsDropdown: React.FC<BotsDropdownProps> = ({
       matchWidth={false}
       menuButton={menuButtonContent}
       menuButtonProps={{
-        'aria-label': 'Select Bot',
-        isLoading: isLoading,
+        'aria-label': 'Switch Bot',
+        isLoading,
         rightIcon: <ChevronDownIcon />,
         variant: 'unstyled',
         bg: 'transparent',
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        size: 'sm',
+        justifyContent: 'flex-start',
+        maxWidth: '260px',
+        sx: {
+          '& > span:first-of-type': {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            flex: '1',
+            minWidth: '0',
+          }
+        }
       }}
     >
       {bots?.map((bot) => (

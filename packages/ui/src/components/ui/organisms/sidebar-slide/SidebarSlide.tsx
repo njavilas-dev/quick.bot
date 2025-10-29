@@ -85,8 +85,8 @@ export const SidebarSlide: React.FC<SidebarSlideProps> = ({
       transition="transform 350ms cubic-bezier(0.075, 0.82, 0.165, 1) 0s"
       h="full"
     >
-      <Flex py={3} direction="column" userSelect="none" overflowY="auto" gap={6} px={4}>
-        <Flex w="full" mt={0} justify="space-between" h="48px">
+      <Flex py={3} direction="column" userSelect="none" overflowY="auto" px={4} gap={3}>
+        <Flex w="full" mt={0} justify="space-between">
           <H3>{title}</H3>
           <Tooltip
             label={

@@ -42,6 +42,7 @@ test('should send an email', async ({ page }) => {
   await page.waitForTimeout(5000)
   await page.goto(`${env.NEXTAUTH_URL}/analytics/${botId}/answers`)
   await page.waitForLoadState('domcontentloaded')
+  await page.waitForTimeout(2000)
   await page.click('button[aria-label="Expand logs"]', { timeout: 20000 })
   await expect(page.locator('text="Email successfully sent"')).toBeVisible({ timeout: 20000 })
 })

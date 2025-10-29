@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from 'next'
 import Link from 'next/link'
 import React, { useState, type ReactNode, useEffect } from 'react'
-import Layout from '@/components/layouts/Layout'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 import type { NextPageWithLayout } from '@/pages/_app'
 import {
   Table,
@@ -30,6 +30,7 @@ import {
   ToolIcon,
   ColorBrushIcon,
   FilterIcon,
+  EmailIcon,
 } from '@urbiport/icons'
 import { useBots } from '@/hooks/useBots'
 import { useWorkspace } from '@/hooks/useWorkspace'
@@ -328,6 +329,12 @@ const Page: NextPageWithLayout = () => {
                             Deploy
                           </MenuItem>
                           <MenuItem
+                            onClick={() => router.push(`/inbox/${bot.id}`)}
+                            icon={<EmailIcon color="text.light" />}
+                          >
+                            Inbox
+                          </MenuItem>
+                          <MenuItem
                             isDisabled={!allowResults}
                             onClick={() => router.push(`/analytics/${bot.id}`)}
                             icon={<BarChartIcon color="text.light" />}
@@ -389,7 +396,7 @@ const Page: NextPageWithLayout = () => {
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default Page

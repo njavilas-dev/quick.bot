@@ -15,9 +15,9 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "ai": "^4.0.0",
     "@ai-sdk/anthropic": "^1.2.12",
     "@quickbot.io/ai": "workspace:*",
-    "@quickbot.io/openai-block": "workspace:*"
+    "@quickbot.io/openai-block": "workspace:*",
+    "ai": "^4.0.0"
   }
 }

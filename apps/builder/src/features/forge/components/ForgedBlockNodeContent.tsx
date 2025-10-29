@@ -45,7 +45,9 @@ export const ForgedBlockNodeContent = ({ block, indices }: Props) => {
 
   const isConfigured = block.options?.action && (!blockDef?.auth || block.options.credentialsId)
   const hasValidationErrors =
-    integrationValidation.hasCredentialsError || integrationValidation.hasRequiredFieldsError
+    integrationValidation.hasCredentialsError ||
+    integrationValidation.hasRequiredFieldsError ||
+    integrationValidation.hasMissingVariablesError
 
   return (
     <Stack>

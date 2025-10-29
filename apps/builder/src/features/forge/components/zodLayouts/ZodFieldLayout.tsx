@@ -20,7 +20,6 @@ import {
   AccordionPanel,
   FormLabel,
   Stack,
-  Box,
 } from '@chakra-ui/react'
 import { ForgedBlockDefinition, ForgedBlock } from '@quickbot.io/forge-repository/types'
 import { FormControl, Select, Switch } from '@urbiport/ui'
@@ -397,36 +396,34 @@ const ZodArrayContent = ({
       width={layout?.mergeWithLastField ? 'full' : undefined}
       marginTop={layout?.mergeWithLastField ? '-3' : undefined}
     >
-      <Box mt="25px">
-        <TableList
-          onItemsChange={(items) => {
-            onDataChange(items)
-          }}
-          initialItems={data}
-          addLabel={`Add ${layout?.itemLabel ?? ''}`}
-          isOrdered={layout?.isOrdered}
-        >
-          {({ item, onItemChange }) => (
-            <Stack
-              p="4"
-              borderRadius="md"
-              flex="1"
-              borderWidth="1px"
-              borderColor="divider.light"
-              maxW="100%"
-            >
-              <ZodFieldLayout
-                schema={schema._def.type}
-                blockDef={blockDef}
-                blockOptions={blockOptions}
-                data={item}
-                isInAccordion={isInAccordion}
-                onDataChange={onItemChange}
-              />
-            </Stack>
-          )}
-        </TableList>
-      </Box>
+      <TableList
+        onItemsChange={(items) => {
+          onDataChange(items)
+        }}
+        initialItems={data}
+        addLabel={`Add ${layout?.itemLabel ?? ''}`}
+        isOrdered={layout?.isOrdered}
+      >
+        {({ item, onItemChange }) => (
+          <Stack
+            p="4"
+            borderRadius="md"
+            flex="1"
+            borderWidth="1px"
+            borderColor="divider.light"
+            maxW="100%"
+          >
+            <ZodFieldLayout
+              schema={schema._def.type}
+              blockDef={blockDef}
+              blockOptions={blockOptions}
+              data={item}
+              isInAccordion={isInAccordion}
+              onDataChange={onItemChange}
+            />
+          </Stack>
+        )}
+      </TableList>
     </FormControl>
   )
 }

@@ -246,14 +246,6 @@
       "graphCoordinates": { "x": 2455.03, "y": 208.82 },
       "blocks": [
         {
-          "id": "kj2amicd12ep88qd7z5ry5py",
-          "type": "Set variable",
-          "options": {
-            "variableId": "vig2qkffhfib01ptwfp5lxhgq",
-            "type": "Transcript"
-          }
-        },
-        {
           "id": "iaf9mfqhyp3tmo5srtepke4b",
           "type": "openai",
           "options": {
@@ -262,7 +254,7 @@
             "messages": [
               {
                 "role": "system",
-                "content": "You work for INGA an ecommerce that sells reusable sponges and reusable paper towels.\n\nYour job is to estimate how much the client would save if he decide to buy INGA products knowing that:\n\n4 INGA sponges = 100 disposable sponges\n1 INGA paper towel roll = 200 disposable paper towel rolls\n\nThe average price of a disposable sponge is 0.90€ and the average price of a disposable paper towels roll is 0.80€\n\nINGA offers a pack of 4 sponges and 1 paper towel roll at 50€\n\nHere is what the user replied:\n\n<context>\n{{Transcript}}\n</context>\n\nProvide the savings first and only then a quick summary of how it was computed"
+                "content": "You work for INGA an ecommerce that sells reusable sponges and reusable paper towels.\n\nYour job is to estimate how much the client would save if he decide to buy INGA products knowing that:\n\n4 INGA sponges = 100 disposable sponges\n1 INGA paper towel roll = 200 disposable paper towel rolls\n\nThe average price of a disposable sponge is 0.90€ and the average price of a disposable paper towels roll is 0.80€\n\nINGA offers a pack of 4 sponges and 1 paper towel roll at 50€\n\nHere is what the user replied:\n\n<context>\n{{Conversation}}\n</context>\n\nProvide the savings first and only then a quick summary of how it was computed"
               }
             ],
             "responseMapping": [
@@ -542,11 +534,6 @@
     {
       "id": "vbcffz9tiylldmtx0laxmimfq",
       "name": "AI Gen",
-      "isSavedVariable": false
-    },
-    {
-      "id": "vig2qkffhfib01ptwfp5lxhgq",
-      "name": "Transcript",
       "isSavedVariable": false
     }
   ],

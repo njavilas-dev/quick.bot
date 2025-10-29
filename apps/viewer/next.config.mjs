@@ -72,26 +72,6 @@ const nextConfig = {
     config.resolve.alias['minio'] = false
     config.resolve.alias['qrcode'] = false
     config.resolve.alias['isolated-vm'] = false
-    
-    // Fix for PostHog Node.js imports in browser
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      'child_process': false,
-      'fs': false,
-      'net': false,
-      'tls': false,
-      'crypto': false,
-      'stream': false,
-      'util': false,
-      'url': false,
-      'zlib': false,
-      'http': false,
-      'https': false,
-      'assert': false,
-      'os': false,
-      'path': false,
-    }
-    
     return config
   },
   async redirects() {

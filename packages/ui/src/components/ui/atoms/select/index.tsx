@@ -173,6 +173,7 @@ export const Select = <T extends SelectItem>(props: SelectProps<T>) => {
       return (
         <Box display="flex" alignItems="center" gap={1}>
           <IconButton
+            as="span"
             onClick={clearSelection}
             icon={<CloseIcon />}
             aria-label="Clear"

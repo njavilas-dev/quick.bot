@@ -7,7 +7,7 @@ import { HardDriveIcon } from '@urbiport/icons'
 import { useRouter } from 'next/router'
 import { type ReactNode, useState } from 'react'
 import type { NextPageWithLayout } from '@/pages/_app'
-import LayoutBotBuilder from '@/components/layouts/LayoutBotBuilder'
+import { BotLayout } from '@/components/layouts/BotLayout'
 import { RadioButtons } from '@urbiport/ui'
 import { useUser } from '@/hooks/useUser'
 
@@ -45,15 +45,15 @@ const Page: NextPageWithLayout = () => {
         options={
           workspaces
             ? workspaces?.map((workspace) => ({
-              value: workspace.id,
-              label: (
-                <HStack w="full">
-                  <BotIcon icon={workspace.icon ?? HardDriveIcon} size="sm" />
-                  <Text>{workspace.name}</Text>
-                  <PlanTag plan={workspace.billingPlan.key} />
-                </HStack>
-              ),
-            }))
+                value: workspace.id,
+                label: (
+                  <HStack w="full">
+                    <BotIcon icon={workspace.icon ?? HardDriveIcon} size="sm" />
+                    <Text>{workspace.name}</Text>
+                    <PlanTag plan={workspace.billingPlan.key} />
+                  </HStack>
+                ),
+              }))
             : []
         }
         value={selectedWorkspaceId}
@@ -73,7 +73,7 @@ const Page: NextPageWithLayout = () => {
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <LayoutBotBuilder>{page}</LayoutBotBuilder>
+  return <BotLayout>{page}</BotLayout>
 }
 
 export default Page

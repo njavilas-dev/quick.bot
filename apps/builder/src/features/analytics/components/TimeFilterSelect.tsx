@@ -1,6 +1,6 @@
 import { Button, MenuItem, HStack, Text } from '@chakra-ui/react'
 import { ChevronDownIcon } from '@urbiport/icons'
-import { DropdownMenu } from '@urbiport/ui'
+import { DropdownMenu, MoreInfoTooltip } from '@urbiport/ui'
 import { useTranslate } from '@tolgee/react'
 import { timeFilterValues, timeFilterLabels } from '../constants'
 
@@ -19,7 +19,14 @@ export const TimeFilterSelect = ({
 
   return (
     <HStack justify="space-between">
-      {showLabel && <Text>{t('dashboard.label.filterFor')}</Text>}
+      {showLabel && (
+        <HStack spacing={1}>
+          <Text>{t('dashboard.label.filterFor')}</Text>
+          <MoreInfoTooltip>
+            Select the time period for viewing analytics data (today, last 7 days, 30 days, 90 days, or all time)
+          </MoreInfoTooltip>
+        </HStack>
+      )}
       <DropdownMenu
         placement="bottom-start"
         matchWidth={false}

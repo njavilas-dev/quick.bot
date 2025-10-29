@@ -37,10 +37,6 @@ botsToFix.json
 snapshots
 
 .env
-.env.test
-.env.dev.example
-.env.preview.example
-.env.prod.example
 .bot-build
 .tolgee
 logs

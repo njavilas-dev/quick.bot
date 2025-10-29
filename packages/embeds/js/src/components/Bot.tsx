@@ -70,8 +70,10 @@ export const Bot = (props: BotProps & { class?: string }) => {
       prefilledVariables[key] = value
     })
     const botIdFromProps = typeof props.bot === 'string' ? props.bot : undefined
+
     const isPreview = typeof props.bot !== 'string' || (props.isPreview ?? false)
     const resultIdInStorage = getExistingResultIdFromStorage(botIdFromProps)
+
     const { data, error } = await startChatQuery({
       stripeRedirectStatus: urlParams.get('redirect_status') ?? undefined,
       bot: props.bot,
@@ -132,14 +134,17 @@ export const Bot = (props: BotProps & { class?: string }) => {
       (data.bot.settings.general?.rememberUser?.isEnabled ??
         defaultSettings.general.rememberUser.isEnabled)
     ) {
-      if (resultIdInStorage && resultIdInStorage !== data.resultId)
-        wipeExistingChatStateInStorage(data.bot.id)
+      if (resultIdInStorage && resultIdInStorage !== data.resultId) {
+        wipeExistingChatStateInStorage(botIdFromProps)
+      }
+
       const storage =
         data.bot.settings.general?.rememberUser?.storage ??
         defaultSettings.general.rememberUser.storage
 
       setResultInStorage(storage as 'local' | 'session' | undefined)(botIdFromProps, data.resultId)
-      const initialChatInStorage = getInitialChatReplyFromStorage(data.bot.id)
+
+      const initialChatInStorage = getInitialChatReplyFromStorage(botIdFromProps)
       if (initialChatInStorage && initialChatInStorage.bot.publishedAt && data.bot.publishedAt) {
         if (
           new Date(initialChatInStorage.bot.publishedAt).getTime() ===
@@ -148,23 +153,23 @@ export const Bot = (props: BotProps & { class?: string }) => {
           setInitialChatReply(initialChatInStorage)
         } else {
           // Restart chat by resetting remembered state
-          wipeExistingChatStateInStorage(data.bot.id)
+          wipeExistingChatStateInStorage(botIdFromProps)
           setInitialChatReply(data)
           setInitialChatReplyInStorage(data, {
-            botId: data.bot.id,
+            botId: botIdFromProps,
             storage: storage as 'session' | 'local' | undefined,
           })
         }
       } else {
         setInitialChatReply(data)
         setInitialChatReplyInStorage(data, {
-          botId: data.bot.id,
+          botId: botIdFromProps,
           storage: storage as 'session' | 'local' | undefined,
         })
       }
       props.onChatStatePersisted?.(true)
     } else {
-      wipeExistingChatStateInStorage(data.bot.id)
+      wipeExistingChatStateInStorage(botIdFromProps || data.bot.id)
       setInitialChatReply(data)
       if (data.input?.id && props.onNewInputBlock) props.onNewInputBlock(data.input)
       if (data.logs) props.onNewLogs?.(data.logs)

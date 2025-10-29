@@ -39,13 +39,8 @@ export const useUser = () => {
 
   const resolvedUser = session?.user ? sanitizeUser(session?.user as Partial<User>) : undefined
 
-  const isSignInPath = useMemo(
-    () =>
-      ['/signin', '/signup', '/forgot-password', '/reset-password', '/verify-email'].includes(
-        router.pathname,
-      ),
-    [router.pathname],
-  )
+  // Ya no necesitamos rutas hardcodeadas - los layouts de auth evitan el loop
+  const isSignInPath = false
 
   const isPathPublicFriendly = useMemo(
     () => /\/bot\/.+\/(flow|theme|settings)/.test(router.pathname),

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { HStack, MenuItem, MenuDivider, Text, Spacer, Spinner } from '@chakra-ui/react'
+import { HStack, MenuItem, MenuDivider, Text, Spacer } from '@chakra-ui/react'
 import { ChevronDownIcon, PlusIcon } from '@urbiport/icons'
 import { DropdownMenu, useToast } from '@urbiport/ui'
 import { useWorkspace } from '@/hooks/useWorkspace'
@@ -93,9 +93,7 @@ export const WorkspaceDropdown = () => {
   } else if (displayName) {
     menuButtonContent = displayName
   } else if (!isWorkspacesLoading && workspaces?.length === 0) {
-    menuButtonContent = 'No workspaces'
-  } else {
-    menuButtonContent = <Spinner />
+    menuButtonContent = 'No workspaces...'
   }
 
   return (
@@ -105,14 +103,24 @@ export const WorkspaceDropdown = () => {
       menuButton={menuButtonContent}
       menuButtonProps={{
         'aria-label': 'Switch Workspace',
-        isLoading: isLoading,
+        isLoading,
         loadingText: loadingMessage,
         rightIcon: <ChevronDownIcon />,
         variant: 'unstyled',
         bg: 'transparent',
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-start',
+        maxWidth: '260px',
+        sx: {
+          '& > span:first-of-type': {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            flex: '1',
+            minWidth: '0',
+          }
+        }
       }}
     >
       {workspaces?.map((w) => (

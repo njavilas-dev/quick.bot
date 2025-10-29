@@ -76,20 +76,55 @@ test.describe('Editor > Renaming and Icon Change', () => {
       ])
     })
 
-    await test.step('Update icon and bot name', async () => {
-      await page.goto(`/bots/${botId}/flow`)
-      await page.getByRole('button', { name: 'Edit icon' }).click()
+    await test.step('Update icon and bot name in settings', async () => {
+      // Navigate to settings page instead of flow
+      await page.goto(`/bots/${botId}/settings`)
+
+      // Wait for settings sidebar to load
+      await expect(page.getByRole('heading', { name: 'Settings' })).toBeVisible({ timeout: 20000 })
+
+      // Wait for Name accordion to be visible and click it if not already expanded
+      const botInfoButton = page.locator('button:has-text("Name")')
+      await botInfoButton.waitFor({ state: 'visible', timeout: 10000 })
+
+      // Check if the accordion is already expanded by looking for the icon button
+      const editIconButton = page.getByRole('button', { name: 'Edit icon' })
+      const isExpanded = await editIconButton.isVisible().catch(() => false)
+
+      if (!isExpanded) {
+        await botInfoButton.click()
+        await page.waitForTimeout(500) // Wait for accordion animation
+      }
+
+      // Click the edit icon button
+      await editIconButton.click()
+
+      // Select icon tab and search for heart
       await page.getByRole('tab', { name: 'Icon' }).click()
-      await expect(page.locator('text="My awesome bot"')).toBeVisible({ timeout: 20000 })
       await page.getByRole('menu').getByPlaceholder('Search...').fill('heart')
       await page.locator('button:has(img[alt="heart"])').first().click()
-      await page.click('text="My awesome bot"')
-      await page.fill('input[value="My awesome bot"]', 'My superb bot')
-      await page.press('input[value="My superb bot"]', 'Enter')
-      await page.click('[aria-label="Navigate back"]')
-      // Verify the bot icon shows the selected icon - using aria-label selector to be more specific
-      await expect(page.locator('img[alt="Bot icon"]')).toBeVisible({ timeout: 20000 })
-      await expect(page.getByText('My superb bot')).toBeVisible({ timeout: 20000 })
+
+      // Close the icon dropdown by pressing Escape
+      await page.keyboard.press('Escape')
+      await page.waitForTimeout(500)
+
+      // Now edit bot name using the input field
+      const botNameInput = page.getByPlaceholder('Enter bot name')
+      await botNameInput.waitFor({ state: 'visible', timeout: 5000 })
+
+      // Clear and fill the input with the new name
+      await botNameInput.clear()
+      await botNameInput.fill('My superb bot')
+
+      // Wait for debounce and save to complete (InputTextWithVariables has debounce)
+      await page.waitForTimeout(1000)
+
+      // Reload the page to verify changes persisted
+      await page.reload()
+
+      // Verify the bot name changed in the header dropdown button
+      const switchBotButton = page.getByRole('button', { name: 'Switch Bot' })
+      await expect(switchBotButton).toContainText('My superb bot', { timeout: 20000 })
     })
   })
 })

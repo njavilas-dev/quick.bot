@@ -88,10 +88,36 @@ const parseRememberUserStorage = (
     : localStorage
 
 export const wipeExistingChatStateInStorage = (botId: string) => {
-  Object.keys(localStorage).forEach((key) => {
-    if (key.startsWith(`bot-${botId}`)) localStorage.removeItem(key)
-  })
-  Object.keys(sessionStorage).forEach((key) => {
-    if (key.startsWith(`bot-${botId}`)) sessionStorage.removeItem(key)
+  // Try to get the internal bot.id from initialChatReply
+  let internalBotId: string | undefined
+  try {
+    const initialChatReply = getInitialChatReplyFromStorage(botId)
+    if (initialChatReply?.bot?.id) {
+      internalBotId = initialChatReply.bot.id
+    }
+  } catch {
+    // Ignore errors, we'll just use the publicId
+  }
+
+  // Create prefixes for both publicId and internal bot.id
+  const prefixes = [
+    `bot-${botId}`,
+    `resultId-${botId}`,
+  ]
+
+  // If we found an internal bot.id different from publicId, add those prefixes too
+  if (internalBotId && internalBotId !== botId) {
+    prefixes.push(`bot-${internalBotId}`)
+    prefixes.push(`resultId-${internalBotId}`)
+  }
+
+  const storages = [localStorage, sessionStorage]
+
+  storages.forEach((storage) => {
+    Object.keys(storage).forEach((key) => {
+      if (prefixes.some((prefix) => key.startsWith(prefix))) {
+        storage.removeItem(key)
+      }
+    })
   })
 }

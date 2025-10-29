@@ -14,7 +14,8 @@ export const useVariableTag = (variableId?: string) => {
 
   return React.useMemo(() => {
     if (!variableId) return null
-    const variableName = bot?.variables.find((v) => v.id === variableId)?.name ?? ''
+    const variableName = bot?.variables.find((v) => v.id === variableId)?.name
+    if (!variableName || variableName.trim() === '') return null
     return <SetVariableTag variableName={variableName} />
   }, [bot, variableId])
 }

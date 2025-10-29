@@ -117,6 +117,7 @@
   "blocks.inputs.button.conditionContent.if.label": "Se",
   "blocks.inputs.button.default.label": "Predefinito",
   "blocks.inputs.button.else.label": "Altro",
+  "blocks.logic.condition.otherwise.label": "Altrimenti",
   "blocks.inputs.button.openSettings.ariaLabel": "Apri Impostazioni",
   "blocks.inputs.button.settings.dynamicData.infoText.label": "Se definiti, i pulsanti verranno visualizzati dinamicamente in base al contenuto della variabile.",
   "blocks.inputs.button.settings.dynamicData.label": "Dati dinamici:",

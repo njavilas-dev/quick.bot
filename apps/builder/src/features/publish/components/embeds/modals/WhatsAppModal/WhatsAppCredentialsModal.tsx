@@ -1,4 +1,10 @@
-import { useToast, InputTextCopy, StepIndicator, StepSeparator, Select as UiSelect } from '@urbiport/ui'
+import {
+  useToast,
+  InputTextCopy,
+  StepIndicator,
+  StepSeparator,
+  Select as UiSelect,
+} from '@urbiport/ui'
 import { CheckIcon, ChevronLeftIcon, ChevronRightIcon, PhoneIcon, UserIcon } from '@urbiport/icons'
 import { InputTextWithVariables } from '@/components/inputs'
 import { useWorkspace } from '@/hooks/useWorkspace'
@@ -592,6 +598,7 @@ const PhoneNumber = ({
   wabaId: string
   setWabaId: (id: string) => void
 }) => {
+  const { t } = useTranslate()
   const { data: businessAccounts, isLoading: isBusinessAccountsLoading } =
     trpc.whatsAppInternal.getWhatsAppBusinessAccounts.useQuery(
       {
@@ -624,57 +631,101 @@ const PhoneNumber = ({
       },
     )
 
+  const showPhoneNumbersAlertInfo =
+    (businessAccounts && businessAccounts.length === 0) ||
+    (!isPhoneNumbersLoading && phoneNumbers && phoneNumbers?.length === 0)
+
   return (
     <OrderedList spacing={4}>
       <ListItem>
         <Text>Select a Whatsapp Business Account</Text>
         <VStack spacing={4}>
-          <FormControl isRequired helperText="WhatsApp Business Account">
-            {isBusinessAccountsLoading ? (
-              <Spinner />
-            ) : (
+          {isBusinessAccountsLoading && <Spinner />}
+          {!isBusinessAccountsLoading && businessAccounts && businessAccounts.length > 0 && (
+            <FormControl isRequired helperText="WhatsApp Business Account">
               <UiSelect
                 placeholder="Select WhatsApp Business Account"
-                items={businessAccounts?.map((account) => ({
-                  icon: <UserIcon />,
-                  label: account.name,
-                  value: account.id,
-                  badge: <Badge colorScheme="gray" fontSize="xs">{account.id}</Badge>
-                })) || []}
+                items={
+                  businessAccounts?.map((account) => ({
+                    icon: <UserIcon />,
+                    label: account.name,
+                    value: account.id,
+                    badge: (
+                      <Badge colorScheme="gray" fontSize="xs">
+                        {account.id}
+                      </Badge>
+                    ),
+                  })) || []
+                }
                 selectedItem={wabaId}
                 onSelect={(value) => setWabaId(value || '')}
                 withClear={false}
                 usePortal={true}
                 zIndex={10000}
               />
-            )}
-          </FormControl>
+            </FormControl>
+          )}
+          {!isBusinessAccountsLoading && businessAccounts?.length === 0 && (
+            <Alert status="info">
+              <Text>
+                {t('whatsappModal.noBusinessAccount')}
+                <Link
+                  href={`https://business.facebook.com/latest/settings/whatsapp_account?business_id=${businessId}`}
+                  isExternal
+                  textDecoration="underline"
+                >
+                  {t('whatsappModal.noBusinessAccount.link')}
+                </Link>
+              </Text>
+            </Alert>
+          )}
         </VStack>
       </ListItem>
       <ListItem>
         <Stack>
           <Text>Select a phone number</Text>
           <VStack spacing={4}>
-            <FormControl isRequired helperText="Phone number">
-              {isPhoneNumbersLoading ? (
-                <Spinner />
-              ) : (
+            {isPhoneNumbersLoading && businessAccounts && businessAccounts.length > 0 && (
+              <Spinner />
+            )}
+            {!isPhoneNumbersLoading && phoneNumbers && phoneNumbers?.length > 0 && (
+              <FormControl isRequired helperText="Phone number">
                 <UiSelect
                   placeholder="Select phone number"
-                  items={phoneNumbers?.map((phoneNumber) => ({
-                    icon: <PhoneIcon />,
-                    label: phoneNumber.verified_name,
-                    value: phoneNumber.id,
-                    badge: <Badge colorScheme="blue" fontSize="xs">{phoneNumber.display_phone_number}</Badge>
-                  })) || []}
+                  items={
+                    phoneNumbers?.map((phoneNumber) => ({
+                      icon: <PhoneIcon />,
+                      label: phoneNumber.verified_name,
+                      value: phoneNumber.id,
+                      badge: (
+                        <Badge colorScheme="blue" fontSize="xs">
+                          {phoneNumber.display_phone_number}
+                        </Badge>
+                      ),
+                    })) || []
+                  }
                   selectedItem={initialPhoneNumberId}
                   onSelect={(value) => setPhoneNumberId(value || '')}
                   withClear={false}
                   usePortal={true}
                   zIndex={10000}
                 />
-              )}
-            </FormControl>
+              </FormControl>
+            )}
+            {showPhoneNumbersAlertInfo && (
+              <Alert status="info">
+                <Text>
+                  {t('whatsappModal.noPhoneNumber')}
+                  <Link
+                    href={`https://business.facebook.com/latest/whatsapp_manager/phone_numbers/?business_id=${businessId}&asset_id=${wabaId}`}
+                    isExternal
+                    textDecoration="underline"
+                  >
+                    {t('whatsappModal.noPhoneNumber.link')}
+                  </Link>
+                </Text>
+              </Alert>
+            )}
           </VStack>
         </Stack>
       </ListItem>
@@ -694,8 +745,9 @@ const Webhook = ({
   botId: string
 }) => {
   const { workspace } = useWorkspace()
-  const webhookUrl = `${env.NEXT_PUBLIC_VIEWER_URL.at(1) ?? env.NEXT_PUBLIC_VIEWER_URL[0]
-    }/api/v1/workspaces/${workspace?.id}/whatsapp/${credentialsId}/webhook`
+  const webhookUrl = `${
+    env.NEXT_PUBLIC_VIEWER_URL.at(1) ?? env.NEXT_PUBLIC_VIEWER_URL[0]
+  }/api/v1/workspaces/${workspace?.id}/whatsapp/${credentialsId}/webhook`
 
   // Check if webhook is verified (token deleted by Facebook)
   const { data: currentToken } = trpc.whatsAppInternal.getVerificationToken.useQuery(

@@ -1,5 +1,10 @@
 import { useBot } from '@/features/editor/providers/BotProvider'
 import { VariableTag } from '@/features/graph/components/nodes/block/VariableTag'
+import { useMemo, memo } from 'react'
+
+// Pre-compile regex patterns outside component for better performance
+const INLINE_CODE_REGEX = /\{\{=(.*?=\}\})/g
+const VARIABLE_REGEX = /\{\{(.*?\}\})/g
 
 export const PlateText = ({
   text,
@@ -25,35 +30,42 @@ export const PlateText = ({
   return <PlateTextContent text={text} />
 }
 
-const PlateTextContent = ({ text }: { text: string }) => {
+const PlateTextContent = memo(({ text }: { text: string }) => {
   const { bot } = useBot()
 
-  return (
-    <>
-      {text.split(/\{\{=(.*?=\}\})/g).map((str, idx) => {
-        if (str.endsWith('=}}')) {
+  // Create a Map for O(1) variable lookups instead of O(n) array.find()
+  const variablesMap = useMemo(() => {
+    if (!bot?.variables) return new Map()
+    return new Map(bot.variables.map((variable) => [variable.name, variable]))
+  }, [bot?.variables])
+
+  // Memoize the parsed content to avoid re-parsing on every render
+  const parsedContent = useMemo(() => {
+    return text.split(INLINE_CODE_REGEX).map((str, idx) => {
+      if (str.endsWith('=}}')) {
+        return (
+          <span className="slate-inline-code" key={`code-${idx}`}>
+            {str.trim().slice(0, -3)}
+          </span>
+        )
+      }
+      return str.split(VARIABLE_REGEX).map((str, subIdx) => {
+        if (str.endsWith('}}')) {
+          const variableName = str.trim().slice(0, -2)
+          const matchingVariable = variablesMap.get(variableName)
+          if (!matchingVariable) {
+            return '{{' + str
+          }
           return (
-            <span className="slate-inline-code" key={idx}>
-              {str.trim().slice(0, -3)}
-            </span>
+            <VariableTag key={`var-${idx}-${subIdx}`} variableName={variableName} />
           )
         }
-        return str.split(/\{\{(.*?\}\})/g).map((str, idx) => {
-          if (str.endsWith('}}')) {
-            const variableName = str.trim().slice(0, -2)
-            const matchingVariable = bot?.variables.find(
-              (variable) => variable.name === variableName,
-            )
-            if (!matchingVariable) {
-              return '{{' + str
-            }
-            return (
-              <VariableTag key={idx} variableName={str.trim().slice(0, -2)} />
-            )
-          }
-          return str
-        })
-      })}
-    </>
-  )
-}
+        return str
+      })
+    })
+  }, [text, variablesMap])
+
+  return <>{parsedContent}</>
+})
+
+PlateTextContent.displayName = 'PlateTextContent'

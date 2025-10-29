@@ -1,6 +1,14 @@
 import React, { useState } from 'react'
 import { useTranslate } from '@tolgee/react'
-import { SimpleGrid, Stack, Text, useEventListener, Portal, Menu, IconButton } from '@chakra-ui/react'
+import {
+  SimpleGrid,
+  Stack,
+  Text,
+  useEventListener,
+  Portal,
+  Menu,
+  IconButton,
+} from '@chakra-ui/react'
 import { BlockCard } from './BlockCard'
 import { forgedBlocks } from '@quickbot.io/forge-repository/definitions'
 import { BubbleBlockType } from '@quickbot.io/schemas/features/blocks/bubbles/constants'
@@ -114,13 +122,15 @@ export const FlowSideMenu: React.FC = () => {
             leftIcon={<SearchIcon color="text.light" />}
             rightIcon={
               <>
-                {searchValue && <IconButton
-                  aria-label="Clear search"
-                  icon={<CloseIcon />}
-                  size="xs"
-                  variant="ghost"
-                  onClick={handleOnClearSearch}
-                />}
+                {searchValue && (
+                  <IconButton
+                    aria-label="Clear search"
+                    icon={<CloseIcon />}
+                    size="xs"
+                    variant="ghost"
+                    onClick={handleOnClearSearch}
+                  />
+                )}
               </>
             }
           />

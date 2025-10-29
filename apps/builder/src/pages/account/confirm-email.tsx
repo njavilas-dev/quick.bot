@@ -4,8 +4,10 @@ import { Text, Button, VStack, Alert, AlertIcon, Spinner } from '@chakra-ui/reac
 import { useTranslate } from '@tolgee/react'
 import { useSession } from 'next-auth/react'
 import { SignInPageLayout } from '@/features/auth/components/SignInLayout'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
+import type { ReactNode } from 'react'
 
-export default function ConfirmEmailPage() {
+function ConfirmEmailPage() {
   const { t } = useTranslate()
   const router = useRouter()
   const { data: session, status: sessionStatus } = useSession()
@@ -227,3 +229,9 @@ export default function ConfirmEmailPage() {
     </SignInPageLayout>
   )
 }
+
+ConfirmEmailPage.getLayout = function getLayout(page: ReactNode) {
+  return <AccountLayout>{page}</AccountLayout>
+}
+
+export default ConfirmEmailPage

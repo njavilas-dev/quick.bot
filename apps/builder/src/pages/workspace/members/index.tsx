@@ -1,19 +1,19 @@
 import React, { type ReactNode } from 'react'
 import { MembersList } from '@/features/workspace/components/MembersList'
-import Layout from '@/components/layouts/Layout'
 import type { NextPageWithLayout } from '@/pages/_app'
 import { BoxCard } from '@urbiport/ui'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const MembersWorkspace: NextPageWithLayout = () => {
   return (
-      <BoxCard>
+    <BoxCard>
       <MembersList />
     </BoxCard>
   )
 }
 
 MembersWorkspace.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default MembersWorkspace

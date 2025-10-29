@@ -1,10 +1,10 @@
 import type { NextPageWithLayout } from '@/pages/_app'
 import type { ReactNode } from 'react'
-import Layout from '@/components/layouts/Layout'
 import { ResultsTableContainer } from '@/features/results/components/ResultsTableContainer'
 import { ResultsProvider } from '@/features/results/ResultsProvider'
 import { useRouter } from 'next/router'
 import { useAnalyticsStats } from '@/features/analytics/hooks/useAnalyticsStats'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter()
@@ -13,7 +13,7 @@ const Page: NextPageWithLayout = () => {
 
   const { stats, timeFilter, setTimeFilter, refetch } = useAnalyticsStats({
     botId: selectedBotId,
-    enabled: !!selectedBotId
+    enabled: !!selectedBotId,
   })
 
   const handleDeletedResults = () => {
@@ -35,7 +35,7 @@ const Page: NextPageWithLayout = () => {
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default Page

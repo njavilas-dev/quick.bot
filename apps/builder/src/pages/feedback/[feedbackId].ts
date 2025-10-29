@@ -6,7 +6,7 @@ import { getAuthOptions } from '../api/auth/[...nextauth]'
 import { GetServerSidePropsContext } from 'next'
 import { env } from '@quickbot.io/env'
 
-export default function Page() {
+function Page() {
   return null
 }
 
@@ -17,7 +17,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
       redirect: {
         permanent: false,
-        destination: `/signin?redirectPath=%2Ffeedback%2F${feedbackId}`,
+        destination: `/signin?redirectPath=${encodeURIComponent(`/feedback/${feedbackId}`)}`,
       },
     }
   const sleekplanToken = createSSOToken(session?.user as User)
@@ -40,3 +40,5 @@ const createSSOToken = (user: User) => {
 
   return sign(userData, env.SLEEKPLAN_SSO_KEY, { algorithm: 'HS256' })
 }
+
+export default Page

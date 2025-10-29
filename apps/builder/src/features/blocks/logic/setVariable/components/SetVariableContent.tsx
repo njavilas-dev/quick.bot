@@ -1,22 +1,36 @@
-import { Box, Wrap } from '@chakra-ui/react'
+import { Box, Wrap, VStack } from '@chakra-ui/react'
 import { useBot } from '@/features/editor/providers/BotProvider'
-import { SetVariableBlock, Variable } from '@quickbot.io/schemas'
+import { SetVariableBlock, Variable, BlockV6 } from '@quickbot.io/schemas'
 import { byId } from '@quickbot.io/lib'
 import { VariableTag } from '@/features/graph/components/nodes/block/VariableTag'
 import { PlateText } from '@/features/blocks/bubbles/textBubble/components/plate/PlateText'
-import { SetVariableTag } from '@/features/graph/components/nodes/block/SetVariableTag'
+import { LogicBlockType } from '@quickbot.io/schemas/features/blocks/logic/constants'
+import { useIntegrationValidation } from '@/features/graph/hooks/useIntegrationValidation'
+import { ValidationMessage } from '@/features/graph/components/nodes/block/ValidationMessage'
 
 export const SetVariableContent = ({ block }: { block: SetVariableBlock }) => {
   const { bot } = useBot()
   const variableName = bot?.variables.find(byId(block.options?.variableId))?.name ?? ''
+
+  // Create a block-like object to validate variables
+  const blockForValidation = {
+    type: LogicBlockType.SET_VARIABLE,
+    options: block.options,
+  } as unknown as BlockV6
+  const integrationValidation = useIntegrationValidation(blockForValidation)
+  const hasValidationErrors = integrationValidation.hasMissingVariablesError
+
   return (
-    <Box color="text.light" noOfLines={4}>
-      {variableName === '' ? (
-        'Click to edit...'
-      ) : (
-        <Expression options={block.options} variables={bot?.variables ?? []} />
-      )}
-    </Box>
+    <VStack w="full" align="start" spacing={1}>
+      <Box color="text.light" noOfLines={4}>
+        {variableName === '' ? (
+          'Click to edit...'
+        ) : (
+          <Expression options={block.options} variables={bot?.variables ?? []} />
+        )}
+      </Box>
+      {hasValidationErrors && <ValidationMessage validation={integrationValidation} />}
+    </VStack>
   )
 }
 
@@ -28,7 +42,7 @@ const Expression = ({
   variables: Variable[]
 }): JSX.Element | null => {
   const variableName = (
-    <SetVariableTag variableName={variables.find(byId(options?.variableId))?.name ?? ''} />
+    <VariableTag variableName={variables.find(byId(options?.variableId))?.name ?? ''} />
   )
   switch (options?.type) {
     case 'Custom':
@@ -70,28 +84,5 @@ const Expression = ({
         </Wrap>
       )
     }
-    case 'Random ID':
-    case 'Today':
-    case 'Now':
-    case 'Tomorrow':
-    case 'User ID':
-    case 'Result ID':
-    case 'Moment of the day':
-    case 'Environment name':
-    case 'Transcript':
-    case 'Yesterday': {
-      return (
-        <Wrap>
-          {variableName} = <VariableTag variableName={`System.${options.type}`} />
-        </Wrap>
-      )
-    }
-    case 'Contact name':
-    case 'Phone number':
-      return (
-        <Wrap>
-          {variableName} = <VariableTag variableName={`Whatsapp.${options.type}`} />
-        </Wrap>
-      )
   }
 }

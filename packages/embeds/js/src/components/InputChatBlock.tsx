@@ -31,14 +31,25 @@ type Props = {
 }
 
 export const InputChatBlock = (props: Props) => {
-  const { getAnswer, setAnswer } = useInputAnswer()
+  const { getAnswer, setAnswer, chatChunks } = useInputAnswer()
 
   const [localAnswer, setLocalAnswer] = persist(createSignal<InputSubmitContent>(), {
     key: `bot-${props.context.bot.id}-input-${props.chunkIndex}`,
     storage: props.context.storage,
   })
 
-  const answer = () => getAnswer(props.chunkIndex)
+  const answer = () => {
+    // First, try to get answer from the chunk (persisted with messages)
+    const chunkAnswer = chatChunks()[props.chunkIndex]?.input?.answer
+    if (chunkAnswer) return chunkAnswer
+
+    // Fallback to context (for backwards compatibility during transition)
+    const contextAnswer = getAnswer(props.chunkIndex)
+    if (contextAnswer) return contextAnswer
+
+    // Last fallback to local storage (legacy)
+    return localAnswer()
+  }
 
   const handleSubmit = async (content: InputSubmitContent) => {
     setLocalAnswer(content)

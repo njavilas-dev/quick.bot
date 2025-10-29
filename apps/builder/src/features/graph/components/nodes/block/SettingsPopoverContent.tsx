@@ -4,9 +4,6 @@ import {
   PopoverBody,
   useEventListener,
   Portal,
-  Stack,
-  SlideFade,
-  Flex,
 } from '@chakra-ui/react'
 import { Block, BlockOptions, BlockWithOptions, BlockIndices } from '@quickbot.io/schemas'
 import { useRef, useState } from 'react'
@@ -35,7 +32,7 @@ import { PhoneInputBubbleForm } from '@/features/blocks/inputs/phone/components/
 import { GoogleSheetsSettings } from '@/features/blocks/integrations/googleSheets/components/GoogleSheetsSettings'
 import { ChatwootSettings } from '@/features/blocks/integrations/chatwoot/components/ChatwootSettings'
 import { AbTestSettings } from '@/features/blocks/logic/abTest/components/AbTestSettings'
-import { SettingsHoverBar } from './SettingsHoverBar'
+import { BlockSettingsActionBar } from './BlockSettingsActionBar'
 import { PixelSettings } from '@/features/blocks/integrations/pixel/components/PixelSettings'
 import { InputBlockType } from '@quickbot.io/schemas/features/blocks/inputs/constants'
 import { IntegrationBlockType } from '@quickbot.io/schemas/features/blocks/integrations/constants'
@@ -78,34 +75,21 @@ export const SettingsPopoverContent = ({ onExpandClick, ...props }: Props) => {
               onMouseEnter={() => setIsHovering(true)}
               onMouseLeave={() => setIsHovering(false)}
             >
-              <Stack spacing={3}>
-                <Flex
-                  w="full"
-                  pos="absolute"
-                  top="-56px"
-                  height="64px"
-                  right={0}
-                  justifyContent="flex-end"
-                  align="center"
-                >
-                  <SlideFade in={isHovering} unmountOnExit>
-                    <SettingsHoverBar
-                      onExpandClick={onExpandClick}
-                      onVideoOnboardingClick={onToggle}
-                      blockType={props.block.type}
-                      blockDef={blockDef}
-                      isVideoOnboardingItemDisplayed={hasOnboardingVideo({
-                        blockType: props.block.type,
-                        blockDef,
-                      })}
-                      block={props.block}
-                      indices={props.indices}
-                      groupId={props.groupId || ''}
-                    />
-                  </SlideFade>
-                </Flex>
-                <BlockSettings {...props} />
-              </Stack>
+              <BlockSettingsActionBar
+                onExpandClick={onExpandClick}
+                onVideoOnboardingClick={onToggle}
+                blockType={props.block.type}
+                blockDef={blockDef}
+                isVideoOnboardingItemDisplayed={hasOnboardingVideo({
+                  blockType: props.block.type,
+                  blockDef,
+                })}
+                block={props.block}
+                indices={props.indices}
+                groupId={props.groupId || ''}
+                isHovering={isHovering}
+              />
+              <BlockSettings {...props} />
             </PopoverBody>
           )}
         </VideoOnboardingPopover.Root>

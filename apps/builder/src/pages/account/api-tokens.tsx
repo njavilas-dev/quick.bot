@@ -1,11 +1,11 @@
 import { AccountApiTokensList } from '@/features/account/components/AccountApiTokensList'
 import { useUser } from '@/hooks/useUser'
 import type { NextPageWithLayout } from '@/pages/_app'
-import Layout from '@/components/layouts/Layout'
 import type { ReactNode } from 'react'
 import { Stack, Text } from '@chakra-ui/react'
 import { useTranslate } from '@tolgee/react'
 import { BoxCard, H2 } from '@urbiport/ui'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const ApiTokensPage: NextPageWithLayout = () => {
   const { user } = useUser()
@@ -25,7 +25,6 @@ const ApiTokensPage: NextPageWithLayout = () => {
 }
 
 ApiTokensPage.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
-
 export default ApiTokensPage

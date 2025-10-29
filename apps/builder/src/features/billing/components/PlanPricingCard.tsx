@@ -34,10 +34,6 @@ export const PlanPricingCard = ({
   const { t } = useTranslate()
   const { label } = usePlanPricing(isCurrent, isDowngrade, isPopular)
 
-  console.debug({
-    planInformation,
-  })
-
   return (
     <Box
       zIndex={'1'}

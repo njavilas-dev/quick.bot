@@ -1,9 +1,9 @@
 import { WorkspaceSettingsForm } from '@/features/workspace/components/WorkspaceSettingsForm'
 import type { ReactNode } from 'react'
-import Layout from '@/components/layouts/Layout'
 import type { NextPageWithLayout } from '@/pages/_app'
 import { BoxCard, H2 } from '@urbiport/ui'
 import { Stack, Text } from '@chakra-ui/react'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const SettingsWorkspace: NextPageWithLayout = () => {
   return (
@@ -20,7 +20,7 @@ const SettingsWorkspace: NextPageWithLayout = () => {
 }
 
 SettingsWorkspace.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default SettingsWorkspace

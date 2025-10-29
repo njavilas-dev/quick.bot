@@ -44,7 +44,7 @@ export const updateBotInSession = async ({ user, sessionId }: Props) => {
 
   const newSessionState = updateSessionState(session.state, publicBot)
 
-  await prisma.chatSession.updateMany({
+  await prisma.chatSession.update({
     where: { id: session.id },
     data: { state: newSessionState },
   })
@@ -60,14 +60,14 @@ const updateSessionState = (
   botsQueue: currentState.botsQueue.map((botInQueue, index) =>
     index === 0
       ? {
-          ...botInQueue,
-          bot: {
-            ...botInQueue.bot,
-            edges: newBot.edges,
-            groups: newBot.groups,
-            variables: updateVariablesInSession(botInQueue.bot.variables, newBot.variables),
-          },
-        }
+        ...botInQueue,
+        bot: {
+          ...botInQueue.bot,
+          edges: newBot.edges,
+          groups: newBot.groups,
+          variables: updateVariablesInSession(botInQueue.bot.variables, newBot.variables),
+        },
+      }
       : botInQueue,
   ) as SessionState['botsQueue'],
 })
@@ -76,9 +76,9 @@ const updateVariablesInSession = (
   currentVariables: Variable[],
   newVariables: Bot['variables'],
 ): Variable[] => [
-  ...currentVariables,
-  ...newVariables.filter(
-    (newVariable) =>
-      !currentVariables.find((currentVariable) => currentVariable.id === newVariable.id),
-  ),
-]
+    ...currentVariables,
+    ...newVariables.filter(
+      (newVariable) =>
+        !currentVariables.find((currentVariable) => currentVariable.id === newVariable.id),
+    ),
+  ]

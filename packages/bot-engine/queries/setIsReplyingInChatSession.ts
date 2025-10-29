@@ -6,12 +6,12 @@ type Props = {
 }
 export const setIsReplyingInChatSession = async ({ existingSessionId, newSessionId }: Props) => {
   if (existingSessionId) {
-    return prisma.chatSession.updateMany({
+    return prisma.chatSession.update({
       where: { id: existingSessionId },
       data: { isReplying: true },
     })
   }
-  return prisma.chatSession.createMany({
+  return prisma.chatSession.create({
     data: { id: newSessionId, isReplying: true, state: {} },
   })
 }

@@ -6,7 +6,7 @@ import { createId } from '@quickbot.io/lib/createId';
 import { getTestAsset } from '@/test/utils/getTestAsset';
 import { selectVariable, insertVariable, waitForPreview } from '@quickbot.io/playwright/testHelpers';
 
-test.describe('Blocks > Google Sheets Integration', () => {
+test.describe.serial('Blocks > Google Sheets Integration', () => {
   test.beforeAll(async () => {
     await test.step('Access token should be defined', async () => {
       expect(env.PLAYWRIGHT_GOOGLE_ACCESS_TOKEN).toBeDefined();

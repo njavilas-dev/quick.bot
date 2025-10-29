@@ -2,21 +2,11 @@ import Highcharts from 'highcharts'
 import HighchartsMore from 'highcharts/highcharts-more'
 import HighchartsFunnel from 'highcharts/modules/funnel'
 import { GetServerSidePropsContext } from 'next'
-import React, { useRef, useState, type ReactNode, useMemo } from 'react'
+import React, { type ReactNode, useState, useMemo } from 'react'
 import { useTranslate } from '@tolgee/react'
 import { useBots } from '@/hooks/useBots'
 import { useWorkspace } from '@/hooks/useWorkspace'
-import {
-  Box,
-  Button,
-  Divider,
-  Flex,
-  HStack,
-  Icon,
-  Skeleton,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
+import { Box, Button, Divider, Flex, HStack, Icon, Skeleton, Stack, Text } from '@chakra-ui/react'
 import { RobotIcon, BookIcon, CheckCircleIcon } from '@urbiport/icons'
 import {
   UserChatInfoCard,
@@ -28,22 +18,21 @@ import {
   MoreInfoTooltip,
 } from '@urbiport/ui'
 import {
-  defaultStatFilter,
-  statFilterValues,
   statFilterLabels,
   statFilterDescriptions,
   conversionFilterLabels,
   ConversionFilterType,
+  StatFilterType,
 } from '@/features/analytics/constants'
 import { useAnalyticsStats } from '@/features/analytics/hooks/useAnalyticsStats'
 import { TimeFilterSelect } from '@/features/analytics/components/TimeFilterSelect'
 import { StatFilterSelect } from '@/features/analytics/components/StatFilterSelect'
 import { ConversionFilterSelect } from '@/features/analytics/components/ConversionFilterSelect'
-import Layout from '@/components/layouts/Layout'
 import type { NextPageWithLayout } from '@/pages/_app'
 import { BarChart } from '@/components/highchart/bar-chart'
 import { FunnelChart } from '@/components/highchart/funnel-chart'
 import Link from 'next/link'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 // Initialize Highcharts modules
 if (typeof Highcharts === 'object') {
@@ -55,8 +44,10 @@ const Page: NextPageWithLayout = () => {
   const { t } = useTranslate()
   const { showToast } = useToast()
   const { workspace } = useWorkspace()
-  const [statFilter, setStatFilter] = useState<(typeof statFilterValues)[number]>(defaultStatFilter)
-  const [conversionFilter, setConversionFilter] = useState<ConversionFilterType>('conversionRate')
+  const [statFilter, setStatFilter] = useState<StatFilterType | string>('view')
+  const [conversionFilter, setConversionFilter] = useState<ConversionFilterType | string>(
+    'completionRate',
+  )
 
   const { bots, isLoading: isBotsLoading } = useBots({
     workspaceId: workspace?.id ?? '',
@@ -72,18 +63,22 @@ const Page: NextPageWithLayout = () => {
 
   const botIds = useMemo(() => bots?.map((bot) => bot.id) ?? [], [bots])
 
-  const { stats, timeFilter, setTimeFilter, isLoading: isStatsLoading } = useAnalyticsStats({
+  const {
+    stats,
+    timeFilter,
+    setTimeFilter,
+    isLoading: isStatsLoading,
+  } = useAnalyticsStats({
     botId: botIds,
-    enabled: botIds.length > 0
+    enabled: botIds.length > 0,
   })
 
   const isLoading = isBotsLoading || isStatsLoading
 
-  const ref = useRef<HTMLDivElement | null>(null)
-
-  const currentStatMetricLabel = statFilterLabels[statFilter]
-  const currentStatMetricDescription = statFilterDescriptions[statFilter]
-  const currentConversionMetricLabel = conversionFilterLabels[conversionFilter]
+  const currentStatMetricLabel = statFilterLabels[statFilter as StatFilterType]
+  const currentStatMetricDescription = statFilterDescriptions[statFilter as StatFilterType]
+  const currentConversionMetricLabel =
+    conversionFilterLabels[conversionFilter as ConversionFilterType]
 
   const getChartColor = (filter: string) => {
     switch (filter) {
@@ -93,12 +88,10 @@ const Page: NextPageWithLayout = () => {
         return '#4FD1C7' // Teal for Started
       case 'completed':
         return '#FFB800' // Orange for Completed
-      case 'conversionRate':
-        return '#9F7AEA' // Purple for Conversion Rate
+      case 'completionRate':
+        return '#9F7AEA' // Purple for Completion Rate
       case 'viewToStartRate':
         return '#38B2AC' // Dark Teal for View to Start
-      case 'completionRate':
-        return '#ED8936' // Dark Orange for Completion Rate
       case 'dropOffRate':
         return '#E53E3E' // Red for Drop-off Rate
       default:
@@ -122,7 +115,7 @@ const Page: NextPageWithLayout = () => {
         formatter: function () {
           return new Date(this.value).toLocaleDateString('es-ES', {
             month: 'short',
-            day: 'numeric'
+            day: 'numeric',
           })
         },
         style: {
@@ -186,7 +179,7 @@ const Page: NextPageWithLayout = () => {
             date = new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
               month: 'short',
               day: 'numeric',
-              year: 'numeric'
+              year: 'numeric',
             })
           } else {
             date = 'Date not available'
@@ -220,17 +213,17 @@ const Page: NextPageWithLayout = () => {
         data:
           !isLoading && stats
             ? (() => {
-              switch (statFilter) {
-                case 'view':
-                  return stats.totalViewsPerDay.map((item) => [item.date, item.count])
-                case 'started':
-                  return stats.totalStartsPerDay.map((item) => [item.date, item.count])
-                case 'completed':
-                  return stats.totalCompletedPerDay.map((item) => [item.date, item.count])
-                default:
-                  return stats.totalViewsPerDay.map((item) => [item.date, item.count])
-              }
-            })()
+                switch (statFilter) {
+                  case 'view':
+                    return stats.totalViewsPerDay.map((item) => [item.date, item.count])
+                  case 'started':
+                    return stats.totalStartsPerDay.map((item) => [item.date, item.count])
+                  case 'completed':
+                    return stats.totalCompletedPerDay.map((item) => [item.date, item.count])
+                  default:
+                    return stats.totalViewsPerDay.map((item) => [item.date, item.count])
+                }
+              })()
             : [],
         dataLabels: {
           enabled: false,
@@ -243,45 +236,47 @@ const Page: NextPageWithLayout = () => {
         data:
           !isLoading && stats
             ? (() => {
-              switch (conversionFilter) {
-                case 'conversionRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const started = startItem?.count || 0
-                    const completed = completedItem?.count || 0
-                    const rate = started > 0 ? (completed / started) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'viewToStartRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const views = viewItem.count
-                    const started = startItem?.count || 0
-                    const rate = views > 0 ? (started / views) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'completionRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const views = viewItem.count
-                    const completed = completedItem?.count || 0
-                    const rate = views > 0 ? (completed / views) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'dropOffRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const started = startItem?.count || 0
-                    const completed = completedItem?.count || 0
-                    const rate = started > 0 ? ((started - completed) / started) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                default:
-                  return stats.totalViewsPerDay.map((item) => [item.date, 0])
-              }
-            })()
+                switch (conversionFilter) {
+                  case 'completionRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(
+                        (s) => s.date === viewItem.date,
+                      )
+                      const completedItem = stats.totalCompletedPerDay.find(
+                        (c) => c.date === viewItem.date,
+                      )
+                      const started = startItem?.count || 0
+                      const completed = completedItem?.count || 0
+                      const rate = started > 0 ? (completed / started) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  case 'viewToStartRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(
+                        (s) => s.date === viewItem.date,
+                      )
+                      const views = viewItem.count
+                      const started = startItem?.count || 0
+                      const rate = views > 0 ? (started / views) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  case 'dropOffRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(
+                        (s) => s.date === viewItem.date,
+                      )
+                      const completedItem = stats.totalCompletedPerDay.find(
+                        (c) => c.date === viewItem.date,
+                      )
+                      const started = startItem?.count || 0
+                      const completed = completedItem?.count || 0
+                      const rate = started > 0 ? ((started - completed) / started) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  default:
+                    return stats.totalViewsPerDay.map((item) => [item.date, 0])
+                }
+              })()
             : [],
         dataLabels: {
           enabled: false,
@@ -295,15 +290,18 @@ const Page: NextPageWithLayout = () => {
     ],
   } as Highcharts.Options
 
-  const funnelData = !isLoading && stats ? [
-    { name: 'Views', value: stats.totalViews },
-    { name: 'Started', value: stats.totalStarts },
-    { name: 'Completed', value: stats.totalCompleted },
-  ] : [
-    { name: 'Views', value: 0 },
-    { name: 'Started', value: 0 },
-    { name: 'Completed', value: 0 },
-  ]
+  const funnelData =
+    !isLoading && stats
+      ? [
+          { name: 'Views', value: stats.totalViews },
+          { name: 'Started', value: stats.totalStarts },
+          { name: 'Completed', value: stats.totalCompleted },
+        ]
+      : [
+          { name: 'Views', value: 0 },
+          { name: 'Started', value: 0 },
+          { name: 'Completed', value: 0 },
+        ]
 
   return (
     <BoxCard>
@@ -325,14 +323,18 @@ const Page: NextPageWithLayout = () => {
                   title={t('dashboard.label.userChat.totalStarted')}
                   content={!isLoading && stats ? stats.totalStarts : 0}
                   loading={isLoading}
-                  conversionPercentage={!isLoading && stats ? `${stats.viewToStartRate}% views rate` : '0%'}
+                  conversionPercentage={
+                    !isLoading && stats ? `${stats.viewToStartRate}% started rate` : '0%'
+                  }
                 />
                 <Divider orientation="vertical" borderColor="divider.lighter" height="auto" />
                 <UserChatInfoCard
                   title={t('dashboard.label.userChat.totalCompleted')}
                   content={!isLoading && stats ? stats.totalCompleted : 0}
                   loading={isLoading}
-                  conversionPercentage={!isLoading && stats ? `${stats.conversionRate}% conversion rate` : '0%'}
+                  conversionPercentage={
+                    !isLoading && stats ? `${stats.completionRate}% completion rate` : '0%'
+                  }
                 />
               </StackCard>
             </Stack>
@@ -343,12 +345,7 @@ const Page: NextPageWithLayout = () => {
                   {currentStatMetricLabel}
                   <MoreInfoTooltip>{currentStatMetricDescription}</MoreInfoTooltip>
                 </H2>
-                <Box ref={ref}>
-                  <TimeFilterSelect
-                    value={timeFilter}
-                    onChange={setTimeFilter}
-                  />
-                </Box>
+                <TimeFilterSelect value={timeFilter} onChange={setTimeFilter} />
               </Stack>
 
               <Stack spacing={3}>
@@ -359,10 +356,7 @@ const Page: NextPageWithLayout = () => {
                     </Text>
                   </Stack>
                   <HStack spacing={4}>
-                    <StatFilterSelect
-                      value={statFilter}
-                      onChange={setStatFilter}
-                    />
+                    <StatFilterSelect value={statFilter} onChange={setStatFilter} />
                     <ConversionFilterSelect
                       value={conversionFilter}
                       onChange={setConversionFilter}
@@ -370,13 +364,17 @@ const Page: NextPageWithLayout = () => {
                   </HStack>
                 </Stack>
                 <BoxCard>
-                  {stats ? <BarChart options={combinedChartOptions} /> : <Skeleton height="300px" />}
+                  {stats ? (
+                    <BarChart options={combinedChartOptions} />
+                  ) : (
+                    <Skeleton height="300px" />
+                  )}
                 </BoxCard>
               </Stack>
             </Stack>
 
             <Stack spacing={3}>
-              <H2>Conversion Funnel</H2>
+              <H2>Conversion funnel</H2>
               <BoxCard>
                 {stats ? <FunnelChart data={funnelData} /> : <Skeleton height="300px" />}
               </BoxCard>
@@ -406,13 +404,10 @@ const Page: NextPageWithLayout = () => {
                 <Icon as={RobotIcon} boxSize={6} color="white" />
               </Box>
               <H3>Builder</H3>
-              <Text color="text.light">Create your bot to start increate your user conversion rate.</Text>
-              <Button
-                as={Link}
-                size="sm"
-                variant="outline:primary"
-                href="/bots"
-              >
+              <Text color="text.light">
+                Create your bot to start increate your user conversion rate.
+              </Text>
+              <Button as={Link} size="sm" variant="outline:primary" href="/bots">
                 CREATE BOT
               </Button>
             </Stack>
@@ -435,7 +430,9 @@ const Page: NextPageWithLayout = () => {
                 <Icon as={BookIcon} boxSize={6} color="white" />
               </Box>
               <H3>Documentation</H3>
-              <Text color="text.light">Learn how to use Quick.bot with our comprehensive guides</Text>
+              <Text color="text.light">
+                Learn how to use Quick.bot with our comprehensive guides
+              </Text>
               <Button
                 as={Link}
                 size="sm"
@@ -486,7 +483,7 @@ const Page: NextPageWithLayout = () => {
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <Layout hideWorkspaceDropdown={true}>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default Page
@@ -498,10 +495,10 @@ export const getServerSideProps = async (context: GetServerSidePropsContext) => 
     (callbackUrl ? new URL(callbackUrl).searchParams.get('redirectPath') : undefined)
   return redirectPath
     ? {
-      redirect: {
-        permanent: false,
-        destination: redirectPath,
-      },
-    }
+        redirect: {
+          permanent: false,
+          destination: redirectPath,
+        },
+      }
     : { props: {} }
 }

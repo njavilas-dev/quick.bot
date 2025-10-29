@@ -1,19 +1,24 @@
-import { Skeleton, Stack, Text } from '@chakra-ui/react'
+import { HStack, Skeleton, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
+import { MoreInfoTooltip } from '../more-info-tooltip'
 
 type Props = {
   title: string
   content: number | string
   loading?: boolean
   conversionPercentage?: number | string
+  tooltip?: string
 }
 
-export const UserChatInfoCard = ({ title, loading, content, conversionPercentage, ...props }: Props) => {
+export const UserChatInfoCard = ({ title, loading, content, conversionPercentage, tooltip, ...props }: Props) => {
   return (
     <Stack spacing={4} flexGrow={1} {...props}>
-      <Text color="text.light" fontWeight="medium">
-        {title}
-      </Text>
+      <HStack spacing={1}>
+        <Text color="text.light" fontWeight="medium">
+          {title}
+        </Text>
+        {tooltip && <MoreInfoTooltip>{tooltip}</MoreInfoTooltip>}
+      </HStack>
       {!loading ? (
         <Stack spacing={1}>
           <Text fontSize="34px" color="text.normal" fontWeight="medium">

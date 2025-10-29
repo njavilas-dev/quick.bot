@@ -1147,14 +1147,6 @@
       "graphCoordinates": { "x": 4905.35, "y": -60.75 },
       "blocks": [
         {
-          "id": "heto2wo9f08d4ypr40hvrfww",
-          "type": "Set variable",
-          "options": {
-            "variableId": "vwgpda1jav43mrn4cx2gxp0ym",
-            "type": "Transcript"
-          }
-        },
-        {
           "id": "jsm97vs0varhi8mh7knggojd",
           "type": "openai",
           "options": {
@@ -1164,7 +1156,7 @@
             "messages": [
               {
                 "role": "system",
-                "content": "Your job is to provide the skin typology of the user.\n\nYou compute this typology based on 3 metrics and each metric has different levels:\n- Skin aging: A (absent), D (discreet), V (visible), P (pronounced)\n- Oxydation factors: E (exposed), P (protected)\n- Sebum Production: - (low), . (balanced), + (high)\n\nWith these metrics you can categorize the skin.\n\nExamples:\n- \"PP-\" for an aging protected skin with low sebum production\n- \"AE+\" for an exposed non aging skin with lot of sebum production\n\nYou are working for a company called Typology and you are selling skin care products. Your job is to provide the skin typology of the user.\n\nYour answer should be based on the context inside the <context> XML element\n\n<context>\n{{Transcript}}\n</context>\n\nYour report is meant to be read by the user so make it friendly and interesting to read.\n\nFirst provide the typology and then explain it."
+                "content": "Your job is to provide the skin typology of the user.\n\nYou compute this typology based on 3 metrics and each metric has different levels:\n- Skin aging: A (absent), D (discreet), V (visible), P (pronounced)\n- Oxydation factors: E (exposed), P (protected)\n- Sebum Production: - (low), . (balanced), + (high)\n\nWith these metrics you can categorize the skin.\n\nExamples:\n- \"PP-\" for an aging protected skin with low sebum production\n- \"AE+\" for an exposed non aging skin with lot of sebum production\n\nYou are working for a company called Typology and you are selling skin care products. Your job is to provide the skin typology of the user.\n\nYour answer should be based on the context inside the <context> XML element\n\n<context>\n{{Conversation}}\n</context>\n\nYour report is meant to be read by the user so make it friendly and interesting to read.\n\nFirst provide the typology and then explain it."
               }
             ],
             "responseMapping": [{ "variableId": "vdpuiv26xmgtrwg1aq8owoxej" }]
@@ -1404,11 +1396,6 @@
     {
       "id": "vdpuiv26xmgtrwg1aq8owoxej",
       "name": "Gen AI",
-      "isSavedVariable": false
-    },
-    {
-      "id": "vwgpda1jav43mrn4cx2gxp0ym",
-      "name": "Transcript",
       "isSavedVariable": false
     },
     {

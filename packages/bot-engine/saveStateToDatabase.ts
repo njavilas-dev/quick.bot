@@ -31,17 +31,31 @@ export const saveStateToDatabase = async ({
     (action) => action.expectsDedicatedReply,
   )
 
-  const isCompleted = Boolean(
-    !input && !containsSetVariableClientSideAction && !hasEmbedBubbleWithWaitEvent,
-  )
-
   const queries: Prisma.PrismaPromise<any>[] = []
 
   const resultId = state.botsQueue[0].resultId
 
+  // If no sessionId provided, try to reuse existing session from resultId
+  if (!id && resultId) {
+    const existingResult = await prisma.botResult.findUnique({
+      where: { id: resultId },
+      select: { lastChatSessionId: true },
+    })
+
+    if (existingResult?.lastChatSessionId) {
+      const existingSession = await prisma.chatSession.findUnique({
+        where: { id: existingResult.lastChatSessionId },
+      })
+      if (existingSession) {
+        id = existingResult.lastChatSessionId
+      }
+    }
+  }
+
   if (id) {
-    if (isCompleted && resultId) queries.push(deleteSession(id))
-    else queries.push(updateSession({ id, state, isReplying: false }))
+    // if (isCompleted && resultId) queries.push(deleteSession(id))
+    // else queries.push(updateSession({ id, state, isReplying: false }))
+    queries.push(updateSession({ id, state, isReplying: false }))
   }
 
   const session = id

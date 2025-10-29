@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { NextPageWithLayout } from '@/pages/_app'
-import LayoutBotBuilder from '@/components/layouts/LayoutBotBuilder'
+import { BotLayout } from '@/components/layouts/BotLayout'
 import { SettingsPage } from '@/features/settings/SettingsPage'
 
 const Page: NextPageWithLayout = () => {
@@ -8,7 +8,7 @@ const Page: NextPageWithLayout = () => {
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <LayoutBotBuilder>{page}</LayoutBotBuilder>
+  return <BotLayout>{page}</BotLayout>
 }
 
 export default Page

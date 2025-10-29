@@ -40,7 +40,19 @@ export const updateRow = async (
       return { outgoingEdgeId, logs }
     }
 
-    const rows = await sheet.getRows()
+    // Load all rows from the sheet
+    const allRows = await sheet.getRows()
+
+    // Filter out completely empty rows by checking if ALL values are empty
+    const rows = allRows.filter((row) => {
+      const rowData = row.toObject()
+      // Check if at least one value in the row is non-empty
+      const hasNonEmptyValue = Object.values(rowData).some(value => {
+        const stringValue = String(value ?? '').trim()
+        return stringValue !== ''
+      })
+      return hasNonEmptyValue
+    })
 
     const filteredRows = rows.filter((row) => {
       if (referenceCell) {
@@ -66,9 +78,19 @@ export const updateRow = async (
       sheet.headerValues,
     )
 
-    // Use the simple approach: update rows using the row objects directly
+    // Use batch update approach to avoid API quota issues
     let updatedRowsCount = 0
-    for (const filteredRow of filteredRows) {
+    const MAX_ROWS_TO_UPDATE = 100 // Limit to avoid quota issues
+    const rowsToUpdate = filteredRows.slice(0, MAX_ROWS_TO_UPDATE)
+
+    if (filteredRows.length > MAX_ROWS_TO_UPDATE) {
+      logs.push({
+        status: 'info',
+        description: `Found ${filteredRows.length} matching rows, updating first ${MAX_ROWS_TO_UPDATE} to avoid API quota limits`,
+      })
+    }
+
+    for (const filteredRow of rowsToUpdate) {
       try {
         for (const key in parsedValues) {
           filteredRow.set(key, parsedValues[key].value)

@@ -1,5 +1,5 @@
 import { executeWait } from './blocks/logic/wait/executeWait'
-import { LogicBlock, SessionState, SetVariableHistoryItem } from '@quickbot.io/schemas'
+import { LogicBlock, SessionState } from '@quickbot.io/schemas'
 import { ExecuteLogicResponse } from './types'
 import { executeScript } from './blocks/logic/script/executeScript'
 import { executeJumpBlock } from './blocks/logic/jump/executeJumpBlock'
@@ -12,13 +12,10 @@ import { LogicBlockType } from '@quickbot.io/schemas/features/blocks/logic/const
 
 export const executeLogic =
   (state: SessionState) =>
-  async (
-    block: LogicBlock,
-    setVariableHistory: SetVariableHistoryItem[],
-  ): Promise<ExecuteLogicResponse> => {
+  async (block: LogicBlock): Promise<ExecuteLogicResponse> => {
     switch (block.type) {
       case LogicBlockType.SET_VARIABLE:
-        return executeSetVariable(state, block, setVariableHistory)
+        return executeSetVariable(state, block)
       case LogicBlockType.CONDITION:
         return executeConditionBlock(state, block)
       case LogicBlockType.REDIRECT:

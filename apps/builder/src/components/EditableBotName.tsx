@@ -5,8 +5,9 @@ import { useTranslate } from '@tolgee/react'
 type EditableProps = {
   defaultName: string
   onNewName: (newName: string) => void
+  placeholder?: string
 }
-export const EditableBotName = ({ defaultName, onNewName }: EditableProps) => {
+export const EditableBotName = ({ defaultName, onNewName, placeholder }: EditableProps) => {
   const { t } = useTranslate()
   const [currentName, setCurrentName] = useState(defaultName)
 
@@ -20,7 +21,7 @@ export const EditableBotName = ({ defaultName, onNewName }: EditableProps) => {
     <Tooltip label={t('rename')}>
       <Editable value={currentName} onChange={setCurrentName} onSubmit={submitNewName}>
         <EditablePreview noOfLines={2} cursor="pointer" />
-        <EditableInput />
+        <EditableInput placeholder={placeholder} />
       </Editable>
     </Tooltip>
   )

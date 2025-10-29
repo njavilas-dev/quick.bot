@@ -9,7 +9,8 @@ type Props = {
 
 export const PixelNodeBody = ({ options }: Props) => {
   const integrationValidation = useIntegrationValidation({ type: 'Pixel', options } as PixelBlock)
-  const hasValidationErrors = integrationValidation.hasRequiredFieldsError
+  const hasValidationErrors =
+    integrationValidation.hasRequiredFieldsError || integrationValidation.hasMissingVariablesError
 
   return (
     <Stack>

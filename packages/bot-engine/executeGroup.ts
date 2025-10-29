@@ -29,6 +29,7 @@ import { ExecuteIntegrationResponse, ExecuteLogicResponse } from './types'
 import { createId } from '@quickbot.io/lib/createId'
 import { BubbleBlockWithDefinedContent, parseBubbleBlock } from './parseBubbleBlock'
 import { BubbleBlockType } from '@quickbot.io/schemas/features/blocks/bubbles/constants'
+import { updateConversation, extractMessageText } from './updateConversation'
 
 type ContextProps = {
   version: 1 | 2
@@ -93,6 +94,26 @@ export const executeGroup = async (
         textBubbleContentFormat,
       })
       messages.push(message)
+
+      // Update conversation with bot message
+      const messageText = extractMessageText(message)
+      if (messageText) {
+        newSessionState = {
+          ...newSessionState,
+          botsQueue: newSessionState.botsQueue.map((bot, index) =>
+            index === 0
+              ? {
+                ...bot,
+                bot: {
+                  ...bot.bot,
+                  variables: updateConversation(bot.bot.variables, 'bot', messageText),
+                },
+              }
+              : bot,
+          ),
+        }
+      }
+
       if (message.type === BubbleBlockType.EMBED && message.content.waitForEvent?.isEnabled) {
         return {
           messages,
@@ -126,10 +147,10 @@ export const executeGroup = async (
       }
     const executionResponse = (
       isLogicBlock(block)
-        ? await executeLogic(newSessionState)(block, setVariableHistory)
+        ? await executeLogic(newSessionState)(block)
         : isIntegrationBlock(block)
-        ? await executeIntegration(newSessionState)(block)
-        : null
+          ? await executeIntegration(newSessionState)(block)
+          : null
     ) as ExecuteLogicResponse | ExecuteIntegrationResponse | null
 
     if (!executionResponse) continue
@@ -249,66 +270,66 @@ export const executeGroup = async (
 
 const computeRuntimeOptions =
   (state: SessionState) =>
-  (block: InputBlock): Promise<RuntimeOptions> | undefined => {
-    switch (block.type) {
-      case InputBlockType.PAYMENT: {
-        return computePaymentInputRuntimeOptions(state)(block.options)
+    (block: InputBlock): Promise<RuntimeOptions> | undefined => {
+      switch (block.type) {
+        case InputBlockType.PAYMENT: {
+          return computePaymentInputRuntimeOptions(state)(block.options)
+        }
       }
     }
-  }
 
 export const parseInput =
   (state: SessionState) =>
-  async (block: InputBlock): Promise<ContinueChatResponse['input']> => {
-    switch (block.type) {
-      case InputBlockType.CHOICE: {
-        return injectVariableValuesInButtonsInputBlock(state)(block)
-      }
-      case InputBlockType.NUMBER: {
-        const parsedBlock = deepParseVariables(state.botsQueue[0].bot.variables)({
-          ...block,
-          prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
-        })
-        return {
-          ...parsedBlock,
-          options: {
-            ...parsedBlock.options,
-            min: isNotEmpty(parsedBlock.options?.min as string)
-              ? Number(parsedBlock.options?.min)
-              : undefined,
-            max: isNotEmpty(parsedBlock.options?.max as string)
-              ? Number(parsedBlock.options?.max)
-              : undefined,
-            step: isNotEmpty(parsedBlock.options?.step as string)
-              ? Number(parsedBlock.options?.step)
-              : undefined,
-          },
+    async (block: InputBlock): Promise<ContinueChatResponse['input']> => {
+      switch (block.type) {
+        case InputBlockType.CHOICE: {
+          return injectVariableValuesInButtonsInputBlock(state)(block)
         }
-      }
-      case InputBlockType.DATE: {
-        return parseDateInput(state)(block)
-      }
-      case InputBlockType.RATING: {
-        const parsedBlock = deepParseVariables(state.botsQueue[0].bot.variables)({
-          ...block,
-          prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
-        })
-        return {
-          ...parsedBlock,
-          options: {
-            ...parsedBlock.options,
-            startsAt: isNotEmpty(parsedBlock.options?.startsAt as string)
-              ? Number(parsedBlock.options?.startsAt)
-              : undefined,
-          },
+        case InputBlockType.NUMBER: {
+          const parsedBlock = deepParseVariables(state.botsQueue[0].bot.variables)({
+            ...block,
+            prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
+          })
+          return {
+            ...parsedBlock,
+            options: {
+              ...parsedBlock.options,
+              min: isNotEmpty(parsedBlock.options?.min as string)
+                ? Number(parsedBlock.options?.min)
+                : undefined,
+              max: isNotEmpty(parsedBlock.options?.max as string)
+                ? Number(parsedBlock.options?.max)
+                : undefined,
+              step: isNotEmpty(parsedBlock.options?.step as string)
+                ? Number(parsedBlock.options?.step)
+                : undefined,
+            },
+          }
         }
-      }
-      default: {
-        return deepParseVariables(state.botsQueue[0].bot.variables)({
-          ...block,
-          runtimeOptions: await computeRuntimeOptions(state)(block),
-          prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
-        })
+        case InputBlockType.DATE: {
+          return parseDateInput(state)(block)
+        }
+        case InputBlockType.RATING: {
+          const parsedBlock = deepParseVariables(state.botsQueue[0].bot.variables)({
+            ...block,
+            prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
+          })
+          return {
+            ...parsedBlock,
+            options: {
+              ...parsedBlock.options,
+              startsAt: isNotEmpty(parsedBlock.options?.startsAt as string)
+                ? Number(parsedBlock.options?.startsAt)
+                : undefined,
+            },
+          }
+        }
+        default: {
+          return deepParseVariables(state.botsQueue[0].bot.variables)({
+            ...block,
+            runtimeOptions: await computeRuntimeOptions(state)(block),
+            prefilledValue: getPrefilledInputValue(state.botsQueue[0].bot.variables)(block),
+          })
+        }
       }
     }
-  }

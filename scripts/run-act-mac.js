@@ -16,10 +16,16 @@ const actProcess = spawn(actPath, [//NOSONAR
   '-W',
   `.github/workflows/${workflowName}.yml`,
   '--container-architecture',
-  'linux/amd64'
+  'linux/amd64',
+  '--env',
+  '"NODE_OPTIONS=--no-node-snapshot --max-old-space-size=8192"'
 ], {
   shell: true,
-  stdio: 'inherit' // Esto redirige stdin/stdout/stderr directamente a la consola
+  stdio: 'inherit', // Esto redirige stdin/stdout/stderr directamente a la consola
+  env: {
+    ...process.env,
+    NODE_OPTIONS: '--no-node-snapshot --max-old-space-size=8192'
+  }
 })
 
 actProcess.on('error', (error) => {

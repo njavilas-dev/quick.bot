@@ -1,21 +1,19 @@
 import Highcharts from 'highcharts'
-import React, { useRef } from 'react'
+import React from 'react'
 import { useTranslate } from '@tolgee/react'
 import {
-  Box,
   Divider,
   Flex,
   HStack,
   Skeleton,
   Stack,
-  Text,
 } from '@chakra-ui/react'
 import {
   UserChatInfoCard,
   BoxCard,
   StackCard,
-  H2,
   MoreInfoTooltip,
+  H3,
 } from '@urbiport/ui'
 import {
   statFilterValues,
@@ -25,22 +23,27 @@ import {
   conversionFilterLabels,
   type Stats,
   ConversionFilterType,
+  timeFilterLabels,
+  type VariableAnalytics,
 } from '@/features/analytics/constants'
 import { BarChart } from '@/components/highchart/bar-chart'
 import { FunnelChart } from '@/components/highchart/funnel-chart'
-import { TimeFilterSelect } from './TimeFilterSelect'
 import { StatFilterSelect } from './StatFilterSelect'
 import { ConversionFilterSelect } from './ConversionFilterSelect'
+import { Variable } from '@quickbot.io/schemas'
 
 interface StatsChartsProps {
   stats?: Stats
   isLoading: boolean
   timeFilter: (typeof timeFilterValues)[number]
-  statFilter: (typeof statFilterValues)[number]
-  conversionFilter: ConversionFilterType
-  onTimeFilterChange: (timeFilter: (typeof timeFilterValues)[number]) => void
-  onStatFilterChange: (statFilter: (typeof statFilterValues)[number]) => void
-  onConversionFilterChange: (filter: ConversionFilterType) => void
+  statFilter: (typeof statFilterValues)[number] | string
+  conversionFilter: ConversionFilterType | string
+  onStatFilterChange: (statFilter: (typeof statFilterValues)[number] | string) => void
+  onConversionFilterChange: (filter: ConversionFilterType | string) => void
+  variables: Variable[]
+  selectedVariableId?: string
+  variableAnalytics?: VariableAnalytics
+  isVariableLoading: boolean
 }
 
 export const StatsCharts: React.FC<StatsChartsProps> = ({
@@ -49,40 +52,75 @@ export const StatsCharts: React.FC<StatsChartsProps> = ({
   timeFilter,
   statFilter,
   conversionFilter,
-  onTimeFilterChange,
   onStatFilterChange,
   onConversionFilterChange,
+  variables,
+  selectedVariableId,
+  variableAnalytics,
+  isVariableLoading,
 }) => {
   const { t } = useTranslate()
-  const ref = useRef<HTMLDivElement | null>(null)
 
-  const currentStatMetricLabel = statFilterLabels[statFilter]
-  const currentStatMetricDescription = statFilterDescriptions[statFilter]
-  const currentConversionMetricLabel = conversionFilterLabels[conversionFilter]
+  const isVariableStatSelected = typeof statFilter === 'string' && statFilter.startsWith('variable:')
+  const isVariableConversionSelected = typeof conversionFilter === 'string' && conversionFilter.startsWith('variable:')
+  const currentStatMetricLabel = isVariableStatSelected && variableAnalytics
+    ? variableAnalytics.variableName
+    : statFilterLabels[statFilter as (typeof statFilterValues)[number]]
+  const currentStatMetricDescription = isVariableStatSelected
+    ? 'Users who set a value for this variable'
+    : statFilterDescriptions[statFilter as (typeof statFilterValues)[number]]
+  const currentConversionMetricLabel = isVariableConversionSelected
+    ? `Collection Rate: ${variableAnalytics?.variableName}`
+    : conversionFilterLabels[conversionFilter as ConversionFilterType]
 
-  const getChartColor = (filter: string) => {
+  // Find the variable from the variables array to get the name even during loading
+  const selectedVariableFromList = selectedVariableId
+    ? variables.find(v => v.id === selectedVariableId)
+    : undefined
+
+  const selectedVariable = selectedVariableId && selectedVariableFromList
+    ? {
+      id: selectedVariableId,
+      name: variableAnalytics?.variableName || selectedVariableFromList.name
+    }
+    : undefined
+
+  const getChartColor = (filter: string, isConversion: boolean = false) => {
+
+    if (filter.startsWith('variable:')) {
+      if (isConversion) {
+        return 'var(--chakra-colors-purple-600)'
+      } else {
+        return 'var(--chakra-colors-purple-300)'
+      }
+    }
     switch (filter) {
       case 'view':
-        return '#00CD62' // Green for Views
+        return 'var(--chakra-colors-gray-300)'
       case 'started':
-        return '#4FD1C7' // Teal for Started
+        return 'var(--chakra-colors-green-400)'
       case 'completed':
-        return '#FFB800' // Orange for Completed
-      case 'conversionRate':
-        return '#9F7AEA' // Purple for Conversion Rate
+        return 'var(--chakra-colors-green-600)'
       case 'viewToStartRate':
-        return '#38B2AC' // Dark Teal for View to Start
+        return 'var(--chakra-colors-green-500)'
       case 'completionRate':
-        return '#ED8936' // Dark Orange for Completion Rate
+        return 'var(--chakra-colors-green-600)'
       case 'dropOffRate':
-        return '#E53E3E' // Red for Drop-off Rate
+        return 'var(--chakra-colors-red-500)'
       default:
-        return '#00CD62'
+        return 'var(--chakra-colors-green-500)'
     }
   }
 
+  // Check if we need to show average axis (for numeric variables)
+  const showAverageAxis = isVariableStatSelected && variableAnalytics?.isNumeric && variableAnalytics?.averageValue !== undefined
+
   const combinedChartOptions: Highcharts.Options = {
-    colors: [getChartColor(statFilter), getChartColor(conversionFilter)],
+    colors: [
+      getChartColor(statFilter, false),
+      getChartColor(conversionFilter, true),
+      showAverageAxis ? '#FF6B6B' : undefined, // Red for average line
+    ].filter(Boolean) as string[],
     chart: {
       type: 'column',
     },
@@ -143,6 +181,26 @@ export const StatsCharts: React.FC<StatsChartsProps> = ({
         },
         opposite: true,
       },
+      ...(showAverageAxis ? [{
+        // Third Y-axis for average value
+        min: 0,
+        title: {
+          text: 'Average Value',
+          style: {
+            color: 'var(--chakra-colors-text-light)',
+          },
+        },
+        labels: {
+          format: '{value}',
+          style: {
+            color: 'var(--chakra-colors-text-light)',
+          },
+        },
+        opposite: true,
+        top: '66%',
+        height: '33%',
+        offset: 0,
+      }] : []),
     ],
     legend: {
       enabled: true,
@@ -193,71 +251,69 @@ export const StatsCharts: React.FC<StatsChartsProps> = ({
         name: currentStatMetricLabel,
         yAxis: 0,
         data:
-          !isLoading && stats
-            ? (() => {
-              switch (statFilter) {
-                case 'view':
-                  return stats.totalViewsPerDay.map((item) => [item.date, item.count])
-                case 'started':
-                  return stats.totalStartsPerDay.map((item) => [item.date, item.count])
-                case 'completed':
-                  return stats.totalCompletedPerDay.map((item) => [item.date, item.count])
-                default:
-                  return stats.totalViewsPerDay.map((item) => [item.date, item.count])
-              }
-            })()
-            : [],
+          isVariableStatSelected && !isVariableLoading && variableAnalytics
+            ? variableAnalytics.collectionRatePerDay.map((item: { date: string; usersWithValue: number }) => [item.date, item.usersWithValue])
+            : !isLoading && stats
+              ? (() => {
+                switch (statFilter) {
+                  case 'view':
+                    return stats.totalViewsPerDay.map((item) => [item.date, item.count])
+                  case 'started':
+                    return stats.totalStartsPerDay.map((item) => [item.date, item.count])
+                  case 'completed':
+                    return stats.totalCompletedPerDay.map((item) => [item.date, item.count])
+                  default:
+                    return stats.totalViewsPerDay.map((item) => [item.date, item.count])
+                }
+              })()
+              : [],
         dataLabels: {
           enabled: false,
         },
       },
       {
         type: 'line',
-        name: currentConversionMetricLabel,
+        name: typeof conversionFilter === 'string' && conversionFilter.startsWith('variable:') && variableAnalytics
+          ? `Collection Rate: ${variableAnalytics.variableName}`
+          : currentConversionMetricLabel,
         yAxis: 1,
         data:
-          !isLoading && stats
-            ? (() => {
-              switch (conversionFilter) {
-                case 'conversionRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const started = startItem?.count || 0
-                    const completed = completedItem?.count || 0
-                    const rate = started > 0 ? (completed / started) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'viewToStartRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const views = viewItem.count
-                    const started = startItem?.count || 0
-                    const rate = views > 0 ? (started / views) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'completionRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const views = viewItem.count
-                    const completed = completedItem?.count || 0
-                    const rate = views > 0 ? (completed / views) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                case 'dropOffRate':
-                  return stats.totalViewsPerDay.map((viewItem) => {
-                    const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
-                    const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
-                    const started = startItem?.count || 0
-                    const completed = completedItem?.count || 0
-                    const rate = started > 0 ? ((started - completed) / started) * 100 : 0
-                    return [viewItem.date, Math.round(rate * 100) / 100]
-                  })
-                default:
-                  return stats.totalViewsPerDay.map((item) => [item.date, 0])
-              }
-            })()
-            : [],
+          typeof conversionFilter === 'string' && conversionFilter.startsWith('variable:') && !isVariableLoading && variableAnalytics
+            ? variableAnalytics.collectionRatePerDay.map((item: { date: string; collectionRate: number }) => [item.date, item.collectionRate])
+            : !isLoading && stats
+              ? (() => {
+                switch (conversionFilter) {
+                  case 'completionRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
+                      const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
+                      const started = startItem?.count || 0
+                      const completed = completedItem?.count || 0
+                      const rate = started > 0 ? (completed / started) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  case 'viewToStartRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
+                      const views = viewItem.count
+                      const started = startItem?.count || 0
+                      const rate = views > 0 ? (started / views) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  case 'dropOffRate':
+                    return stats.totalViewsPerDay.map((viewItem) => {
+                      const startItem = stats.totalStartsPerDay.find(s => s.date === viewItem.date)
+                      const completedItem = stats.totalCompletedPerDay.find(c => c.date === viewItem.date)
+                      const started = startItem?.count || 0
+                      const completed = completedItem?.count || 0
+                      const rate = started > 0 ? ((started - completed) / started) * 100 : 0
+                      return [viewItem.date, Math.round(rate * 100) / 100]
+                    })
+                  default:
+                    return stats.totalViewsPerDay.map((item) => [item.date, 0])
+                }
+              })()
+              : [],
         dataLabels: {
           enabled: false,
         },
@@ -267,6 +323,24 @@ export const StatsCharts: React.FC<StatsChartsProps> = ({
         },
         lineWidth: 2,
       },
+      ...(showAverageAxis && !isVariableLoading && variableAnalytics ? [{
+        type: 'line' as const,
+        name: `Average: ${variableAnalytics.variableName}`,
+        yAxis: 2,
+        data: variableAnalytics.collectionRatePerDay
+          .filter((item: { averageValue?: number }) => item.averageValue !== undefined)
+          .map((item: { date: string; averageValue?: number }) => [item.date, item.averageValue]),
+        dataLabels: {
+          enabled: false,
+        },
+        marker: {
+          enabled: true,
+          radius: 4,
+          symbol: 'diamond',
+        },
+        lineWidth: 2,
+        dashStyle: 'ShortDash' as const,
+      }] : []),
     ],
   } as Highcharts.Options
 
@@ -280,73 +354,90 @@ export const StatsCharts: React.FC<StatsChartsProps> = ({
     { name: 'Completed', value: 0 },
   ]
 
+  const timeFilterLabel = timeFilterLabels[timeFilter]
+
   return (
     <Stack spacing={6}>
-      <Stack spacing={4}>
+      <Stack spacing={3}>
         <StackCard bg="white">
           <UserChatInfoCard
             title={t('dashboard.label.userChat.totalViews')}
             content={!isLoading && stats ? stats.totalViews : 0}
             loading={isLoading}
-            conversionPercentage={!isLoading && stats ? `${stats.totalBots} bot${stats.totalBots !== 1 ? 's' : ''}` : '0 bots'}
+            conversionPercentage={!isLoading && stats ? `During ${timeFilterLabel.toLowerCase()}` : 'Total sessions'}
+            tooltip={`Total number of views during ${timeFilterLabel.toLowerCase()}`}
           />
           <Divider orientation="vertical" borderColor="divider.lighter" height="auto" />
           <UserChatInfoCard
             title={t('dashboard.label.userChat.totalStarted')}
             content={!isLoading && stats ? stats.totalStarts : 0}
             loading={isLoading}
-            conversionPercentage={!isLoading && stats ? `${stats.viewToStartRate}% views rate` : '0%'}
+            conversionPercentage={!isLoading && stats ? `${stats.viewToStartRate}% started rate` : '0%'}
+            tooltip={`Total number of started sessions during ${timeFilterLabel.toLowerCase()}`}
           />
           <Divider orientation="vertical" borderColor="divider.lighter" height="auto" />
           <UserChatInfoCard
             title={t('dashboard.label.userChat.totalCompleted')}
             content={!isLoading && stats ? stats.totalCompleted : 0}
             loading={isLoading}
-            conversionPercentage={!isLoading && stats ? `${stats.conversionRate}% conversion rate` : '0%'}
+            conversionPercentage={!isLoading && stats ? `${stats.completionRate}% completion rate` : '0%'}
+            tooltip={`Percentage of completed sessions during ${timeFilterLabel.toLowerCase()}`}
           />
+          {selectedVariableId && variableAnalytics && (
+            <>
+              <Divider orientation="vertical" borderColor="divider.lighter" height="auto" />
+              <UserChatInfoCard
+                title="Collection Rate"
+                content={`${variableAnalytics.collectionRate.toFixed(1)}%`}
+                loading={isVariableLoading}
+                conversionPercentage={`${variableAnalytics.usersWithValue} of ${variableAnalytics.totalStarts} sessions`}
+                tooltip="Percentage of started sessions that set a value for this variable during the selected period"
+              />
+            </>
+          )}
+          {selectedVariableId && variableAnalytics?.isNumeric && variableAnalytics?.averageValue !== undefined && (
+            <>
+              <Divider orientation="vertical" borderColor="divider.lighter" height="auto" />
+              <UserChatInfoCard
+                title="Average Value"
+                content={variableAnalytics.averageValue.toFixed(2)}
+                loading={isVariableLoading}
+                conversionPercentage={`Across ${variableAnalytics.usersWithValue} sessions`}
+                tooltip="Average numeric value for this variable across all sessions that set a value during the selected period"
+              />
+            </>
+          )}
         </StackCard>
       </Stack>
 
       <Stack spacing={3}>
-        <Stack direction="row" justifyContent="space-between">
-          <H2 as={Flex} alignItems="center" gap={2}>
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
+          <H3 as={Flex} alignItems="center" gap={2}>
             {currentStatMetricLabel}
             <MoreInfoTooltip>{currentStatMetricDescription}</MoreInfoTooltip>
-          </H2>
-          <Box ref={ref}>
-            <TimeFilterSelect
-              value={timeFilter}
-              onChange={onTimeFilterChange}
+          </H3>
+          <HStack spacing={4}>
+            <StatFilterSelect
+              value={statFilter}
+              onChange={onStatFilterChange}
+              variableOption={selectedVariable}
+              isLoading={isVariableLoading}
             />
-          </Box>
+            <ConversionFilterSelect
+              value={conversionFilter}
+              onChange={onConversionFilterChange}
+              variableOption={selectedVariable}
+              isLoading={isVariableLoading}
+            />
+          </HStack>
         </Stack>
-
-        <Stack spacing={3}>
-          <Stack direction="row" justifyContent="space-between" alignItems="flex-start">
-            <Stack spacing={2}>
-              <Text fontSize="sm" color="text.light">
-                Bars: {currentStatMetricLabel} | Line: {currentConversionMetricLabel}
-              </Text>
-            </Stack>
-            <HStack spacing={4}>
-              <StatFilterSelect
-                value={statFilter}
-                onChange={onStatFilterChange}
-              />
-              <ConversionFilterSelect
-                value={conversionFilter}
-                onChange={onConversionFilterChange}
-              />
-            </HStack>
-          </Stack>
-          <BoxCard>
-            {stats ? <BarChart options={combinedChartOptions} /> : <Skeleton height="300px" />}
-          </BoxCard>
-        </Stack>
+        <BoxCard>
+          {stats ? <BarChart options={combinedChartOptions} /> : <Skeleton height="300px" />}
+        </BoxCard>
       </Stack>
 
       <Stack spacing={3}>
-        <H2>Conversion Funnel</H2>
+        <H3>Conversion funnel</H3>
         <BoxCard>
           {stats ? <FunnelChart data={funnelData} /> : <Skeleton height="300px" />}
         </BoxCard>

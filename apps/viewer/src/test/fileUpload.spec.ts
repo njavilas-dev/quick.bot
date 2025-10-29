@@ -25,7 +25,8 @@ test('should work as expected', async ({ page, browser }) => {
   await page.locator('text="Upload 3 files"').click()
   await page.locator('text="3 files uploaded"').waitFor({ state: 'visible', timeout: 20000 })
   await page.goto(`${env.NEXTAUTH_URL}/analytics/${botId}/answers`)
-  await page.waitForTimeout(5000)
+  await page.waitForLoadState('domcontentloaded')
+  await page.waitForTimeout(2000)
   await expect(page.getByRole('link', { name: 'api.json' })).toHaveAttribute(
     'href',
     /.+\/api\.json/,

@@ -20,8 +20,11 @@ export type ClientSideActionContext = {
   sessionId: string
 }
 
-export type ChatChunk = Pick<ContinueChatResponse, 'messages' | 'input' | 'clientSideActions'> & {
+export type ChatChunk = Pick<ContinueChatResponse, 'messages' | 'clientSideActions'> & {
   streamingMessageId?: string
+  input?: NonNullable<ContinueChatResponse['input']> & {
+    answer?: InputSubmitContent
+  }
 }
 
 export type Attachment = {

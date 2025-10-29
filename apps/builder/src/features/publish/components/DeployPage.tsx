@@ -7,7 +7,7 @@ import { SidebarSlideConsumer, SidebarSlideProvider } from '@urbiport/ui'
 import { SIDEBAR_WIDTH } from '@/features/editor/constants'
 import { useBot } from '@/features/editor/providers/BotProvider'
 import { BotNotFoundPage } from '@/features/editor/components/BotNotFoundPage'
-import { BotFloatHeader } from '@/features/editor/components/BotFloatHeader'
+import { BotHeaderMenu } from '@/features/editor/components/BotHeaderMenu'
 import { parseDefaultPublicId } from '../helpers/parseDefaultPublicId'
 import { DeploySideMenu } from './DeploySideMenu'
 import { integrationsList } from './embeds/integrationsList'
@@ -36,7 +36,7 @@ export const DeployPage = () => {
         <SidebarSlideConsumer>
           {({ isExtended }) => (
             <>
-              <BotFloatHeader />
+              <BotHeaderMenu />
               <Flex h="full" w="full">
                 <Flex flex="1" w="full">
                   <Flex overflow="clip" h="100vh" width={'100%'} flexDir="column">

@@ -77,9 +77,104 @@ For advanced variable management, use the Set Variable logic block:
 2. **Choose or create a variable** to modify
 3. **Select the value type**:
    - **Custom**: Text or JavaScript expressions
-   - **System values**: Current date, user ID, random values, etc.
+   - **System variables**: Access built-in system values
    - **List operations**: Append, pop, or manipulate arrays
    - **Data mapping**: Transform data from other variables
+
+## System Variables
+
+QuickBot provides built-in system variables that give you access to contextual information about the
+conversation, user, and environment. These variables are automatically available and can be
+referenced directly using the `{{system_variableName}}` syntax.
+
+### Available System Variables
+
+#### Date and Time
+
+- **`{{system_today}}`**: Current date (YYYY-MM-DD format)
+- **`{{system_now}}`**: Current date and time (ISO 8601 format)
+- **`{{system_yesterday}}`**: Previous day's date
+- **`{{system_tomorrow}}`**: Next day's date
+- **`{{system_momentOfTheDay}}`**: Time-based greeting value: `morning`, `afternoon`, `evening`, or
+  `night`
+
+**Example usage:**
+
+```
+Today's date is {{system_today}}
+Current timestamp: {{system_now}}
+```
+
+#### Session Information
+
+- **`{{system_randomId}}`**: Unique random identifier (CUID algorithm)
+- **`{{Conversation}}`**: Complete conversation transcript including all messages exchanged
+
+**Example usage:**
+
+```
+Session ID: {{system_randomId}}
+```
+
+#### Environment Context
+
+- **`{{system_platform}}`**: Platform identifier (`web` or `whatsapp`)
+- **`{{system_device}}`**: Device type (`mobile` or `desktop`)
+
+**Example usage:**
+
+```
+You're using QuickBot on {{system_platform}}
+```
+
+#### WhatsApp-Specific Variables
+
+Available only when the conversation is on WhatsApp:
+
+- **`{{system_whatsapp_number}}`**: User's WhatsApp phone number
+- **`{{system_whatsapp_name}}`**: User's WhatsApp contact name
+
+**Example usage:**
+
+```
+Hello {{system_whatsapp_name}}, your number is {{system_whatsapp_number}}
+```
+
+### Using System Variables
+
+System variables can be used anywhere regular variables are accepted:
+
+**In text bubbles:**
+
+```
+Good {{system_momentOfTheDay}}, welcome to our bot!
+```
+
+**In Set Variable blocks:**
+
+```
+{{Conversation}}
+```
+
+**In JavaScript expressions:**
+
+```js
+{{=new Date({{system_now}}).toLocaleDateString()=}}
+```
+
+**In condition blocks:**
+
+```
+If {{system_platform}} equals "whatsapp"
+```
+
+### System Variable Characteristics
+
+- **Read-only**: System variables are automatically populated and cannot be manually modified
+- **Always available**: No need to create or initialize them
+- **Real-time**: Values are computed at runtime based on the current context
+- **Not saved in results**: Most system variables are not persisted in the results table by default
+- **No initialization required**: Ready to use immediately without any setup
 
 ## Using Variables in Your Bot
 

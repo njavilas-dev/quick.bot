@@ -14,10 +14,10 @@
     "typescript": "5.4.5"
   },
   "dependencies": {
-    "ai": "^4.0.0",
     "@ai-sdk/mistral": "^1.2.8",
     "@quickbot.io/ai": "workspace:*",
     "@quickbot.io/openai-block": "workspace:*",
+    "ai": "^4.0.0",
     "ky": "1.2.4"
   }
 }

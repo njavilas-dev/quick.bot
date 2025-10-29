@@ -35,7 +35,7 @@ test.describe("Blocks > BotLink", () => {
       await page.click('[aria-label="Navigate to bot"]');
       await expect(page).toHaveURL(`/bots/${linkedBotId}/flow?parentId=${botId}`);
       await page.waitForTimeout(500);
-      await page.click('[aria-label="Navigate back"]');
+      await page.goto(`/bots/${botId}/flow`);
       await expect(page).toHaveURL(`/bots/${botId}/flow`);
     });
 

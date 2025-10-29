@@ -3,13 +3,13 @@ import { Button, Stack } from '@chakra-ui/react'
 import { useTranslate } from '@tolgee/react'
 import { BoxCard, H2 } from '@urbiport/ui'
 import type { NextPageWithLayout } from '@/pages/_app'
-import Layout from '@/components/layouts/Layout'
 import BillingHeader from '@/features/billing/components/BillingHeader'
 import { InvoicesList } from '@/features/billing/components/InvoicesList'
 import BillingInfo from '@/features/billing/components/BillingInfo'
 import UpgradePlan from '@/features/billing/components/UpgradePlan'
 import { useWorkspace } from '@/hooks/useWorkspace'
 import { useWorkspaceRole } from '@/hooks/useWorkspaceRole'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const BillingWorkspace: NextPageWithLayout = () => {
   const { t } = useTranslate()
@@ -58,7 +58,7 @@ const BillingWorkspace: NextPageWithLayout = () => {
 }
 
 BillingWorkspace.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default BillingWorkspace

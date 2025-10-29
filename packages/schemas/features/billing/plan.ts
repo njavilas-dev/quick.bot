@@ -1,6 +1,6 @@
 import {
-  type WorkspaceBillingPlanTier as PrismaWorkspaceBillingPlanTier,
-  type WorkspaceBillingPlan as PrismaPlan,
+  WorkspaceBillingPlanTier as PrismaWorkspaceBillingPlanTier,
+  WorkspaceBillingPlan as PrismaPlan,
   BillingPlanType,
 } from '@quickbot.io/prisma'
 import { z } from '../../zod'

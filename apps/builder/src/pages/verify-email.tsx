@@ -1,8 +1,13 @@
-import { useHydration } from '@/hooks/useHydration'
 import { VerifyEmailPage } from '@/features/auth/components/VerifyEmailPage'
+import { AuthLayout } from '@/components/layouts/AuthLayout'
+import type { ReactNode } from 'react'
 
-export default function Page() {
-  const isHydrated = useHydration()
-  if (!isHydrated) return null
+function Page() {
   return <VerifyEmailPage />
 }
+
+Page.getLayout = function getLayout(page: ReactNode) {
+  return <AuthLayout>{page}</AuthLayout>
+}
+
+export default Page

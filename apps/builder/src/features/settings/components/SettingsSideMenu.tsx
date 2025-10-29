@@ -7,7 +7,7 @@ import {
   AccordionPanel,
   Stack,
 } from '@chakra-ui/react'
-import { H4, SidebarSlide } from '@urbiport/ui'
+import { FormControl, H4, InputText, SidebarSlide } from '@urbiport/ui'
 import { useTranslate } from '@tolgee/react'
 import { Settings } from '@quickbot.io/schemas'
 import { EditCustomDomain } from '@/features/publish/components/EditCustomDomain'
@@ -19,11 +19,14 @@ import { TypingEmulationForm } from './TypingEmulationForm'
 import { SecurityForm } from './SecurityForm'
 import { useWorkspace } from '@/hooks/useWorkspace'
 import { env } from '@quickbot.io/env'
+import { EditableBotIcon } from '@/components/EditableBotIcon'
 
 export const SettingsSideMenu = () => {
-  const { bot, updateBot } = useBot()
+  const { bot, updateBot, currentUserMode } = useBot()
   const { workspace } = useWorkspace()
   const allowCustomDomain = workspace?.billingPlan?.allowCustomDomain
+
+  const isGuest = currentUserMode === 'guest'
 
   const { t } = useTranslate()
 
@@ -45,6 +48,10 @@ export const SettingsSideMenu = () => {
   const handleMetadataChange = (metadata: Settings['metadata']) =>
     bot && updateBot({ updates: { settings: { ...bot.settings, metadata } } })
 
+  const handleBotNameChange = (name: string) => updateBot({ updates: { name }, save: true })
+
+  const handleChangeIcon = (icon: string) => updateBot({ updates: { icon }, save: true })
+
   return (
     <SidebarSlide
       title="Settings"
@@ -55,7 +62,47 @@ export const SettingsSideMenu = () => {
         lockIconAriaLabel: t('editor.sidebarBlocks.sidebar.icon.lock.label'),
       }}
     >
-      <Accordion allowMultiple defaultIndex={[1]} mx={-4}>
+      <Accordion allowMultiple defaultIndex={[0]} mx={-4}>
+        {!isGuest &&
+          <AccordionItem>
+            <AccordionButton>
+              Name
+              <AccordionIcon />
+            </AccordionButton>
+            <AccordionPanel>
+              {bot && (
+                <Stack spacing={3}>
+                  <FormControl
+                    label="Icon"
+                    direction="row"
+                  >
+                    <EditableBotIcon
+                      icon={bot.icon}
+                      uploadFileProps={{
+                        workspaceId: bot.workspaceId,
+                        botId: bot.id,
+                        fileName: 'icon',
+                        blockId: bot.id,
+                      }}
+                      onChange={handleChangeIcon}
+                    />
+                  </FormControl>
+                  <FormControl
+                    label="Name"
+                    direction="row"
+                  >
+                    <InputText
+                      defaultValue={bot?.name ?? ''}
+                      onChange={handleBotNameChange}
+                      placeholder="Enter bot name"
+                      debounceTimeout={800}
+                    />
+                  </FormControl>
+                </Stack>
+              )}
+            </AccordionPanel>
+          </AccordionItem>
+        }
         {env.NEXT_PUBLIC_BETA_ENV && (
           <AccordionItem>
             <AccordionButton>

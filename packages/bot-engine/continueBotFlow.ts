@@ -38,6 +38,7 @@ import { defaultChoiceInputOptions } from '@quickbot.io/schemas/features/blocks/
 import { defaultFileInputOptions } from '@quickbot.io/schemas/features/blocks/inputs/file/constants'
 import { BotResultVisitedEdge } from '@quickbot.io/prisma'
 import { getBlockById } from '@quickbot.io/schemas/helpers'
+import { updateConversation } from './updateConversation'
 import { ForgedBlock } from '@quickbot.io/forge-repository/types'
 import { forgedBlocks } from '@quickbot.io/forge-repository/definitions'
 import { env } from '@quickbot.io/env'
@@ -417,6 +418,26 @@ const saveAnswerInDb =
           },
       }
 
+      // Update conversation with user response
+      const userMessage =
+        (attachedFileUrls ?? []).length > 0
+          ? `${attachedFileUrls!.join(', ')}\n\n${contentToSave}`
+          : contentToSave
+      newSessionState = {
+        ...newSessionState,
+        botsQueue: newSessionState.botsQueue.map((bot, index) =>
+          index === 0
+            ? {
+              ...bot,
+              bot: {
+                ...bot.bot,
+                variables: updateConversation(bot.bot.variables, 'user', userMessage),
+              },
+            }
+            : bot,
+        ),
+      }
+
       const key = block.options?.variableId
         ? newSessionState.botsQueue[0].bot.variables.find(
           (variable) => variable.id === block.options?.variableId,
@@ -425,10 +446,7 @@ const saveAnswerInDb =
 
       return setNewAnswerInState(newSessionState)({
         key: key ?? block.id,
-        value:
-          (attachedFileUrls ?? []).length > 0
-            ? `${attachedFileUrls!.join(', ')}\n\n${contentToSave}`
-            : contentToSave,
+        value: userMessage,
       })
     }
 

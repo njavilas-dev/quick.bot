@@ -123,6 +123,26 @@ export const InputAnswerProvider = (props: Props) => {
     setIsRecovered(false)
     setHasError(false)
     const currentInputBlock = currentBlock()?.input
+
+    // Save answer in the last chunk before sending to server
+    if (answer) {
+      setChatChunks((displayedChunks) => {
+        const lastChunkIndex = displayedChunks.length - 1
+        if (lastChunkIndex < 0) return displayedChunks
+
+        const lastChunk = displayedChunks[lastChunkIndex]
+        if (!lastChunk.input) return displayedChunks
+
+        return [
+          ...displayedChunks.slice(0, lastChunkIndex),
+          {
+            ...lastChunk,
+            input: { ...lastChunk.input, answer },
+          },
+        ]
+      })
+    }
+
     if (currentInputBlock?.id && props.onAnswer && answer)
       props.onAnswer({
         message: getAnswerContent(answer),
@@ -172,6 +192,29 @@ export const InputAnswerProvider = (props: Props) => {
           formattedMessage: data.lastMessageNewFormat as string,
         },
       ])
+      // Update answer with formatted message in the chunk
+      setChatChunks((displayedChunks) => {
+        const lastChunkIndex = displayedChunks.length - 1
+        if (lastChunkIndex < 0) return displayedChunks
+
+        const lastChunk = displayedChunks[lastChunkIndex]
+        if (!lastChunk.input?.answer || lastChunk.input.answer.type !== 'text')
+          return displayedChunks
+
+        return [
+          ...displayedChunks.slice(0, lastChunkIndex),
+          {
+            ...lastChunk,
+            input: {
+              ...lastChunk.input,
+              answer: {
+                ...lastChunk.input.answer,
+                label: data.lastMessageNewFormat as string,
+              },
+            },
+          },
+        ]
+      })
     }
     if (data.logs) props.onNewLogs?.(data.logs)
     if (data.dynamicTheme) setDynamicTheme(data.dynamicTheme)

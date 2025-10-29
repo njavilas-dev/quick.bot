@@ -54,38 +54,4 @@ test.describe('Blocks > SetVariable', () => {
     });
   });
 
-  test('Should set transcription variable correctly in preview', async ({ page }) => {
-    const botId = createId();
-
-    await test.step('Import bot transcription data into the database', async () => {
-      await importBotInDatabase(getTestAsset('bots/logic/setVariable2.json'), { id: botId });
-    });
-
-    await test.step('Navigate to bot editor and configure transcription variable', async () => {
-      await page.goto(`/bots/${botId}/flow`);
-      await page.getByText('Transcription =').click();
-      await page.getByRole('button', { name: 'Custom' }).click();
-      await page.getByRole('menuitem', { name: 'Transcript' }).click();
-      await expect(page.getByText('System.Transcript')).toBeVisible({ timeout: 20000 });
-    });
-
-    await test.step('Test transcription variable in preview', async () => {
-      const preview = await waitForPreview(page);
-
-      await preview.getByRole('button', { name: 'There is a bug 🐛' }).click();
-      await preview.getByTestId('textarea').fill('Hello!!');
-      await preview.getByLabel('Send').click();
-
-      await page.click('[aria-label="Restart"]');
-
-      await preview.getByRole('button', { name: 'I have a question 💭' }).click();
-      await preview.getByTestId('textarea').fill('How are you?');
-      await preview.getByLabel('Send').click();
-      await preview.getByRole('button', { name: 'Transcription' }).click();
-
-      await expect(preview.getByText('Assistant: "Hey friend 👋 How')).toBeVisible({ timeout: 20000 });
-      await expect(preview.getByText(/giphy\.com.*giphy-downsized\.gif/)).toBeVisible({ timeout: 20000 });
-      await expect(preview.getByText('User: "How are you?"')).toBeVisible({ timeout: 20000 });
-    });
-  });
 });

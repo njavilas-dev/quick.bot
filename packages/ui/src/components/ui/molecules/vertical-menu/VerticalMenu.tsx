@@ -84,8 +84,7 @@ export const VerticalMenu = ({
     }
   }
 
-  // Rutas que tienen parámetros dinámicos (/:param/page)
-  const DYNAMIC_ROUTES = ['analytics', 'bots']
+  const DYNAMIC_ROUTES = ['analytics', 'bots', 'inbox']
 
   const languagePrefixes = new Set(['es', 'en', 'fr'])
 
@@ -95,16 +94,13 @@ export const VerticalMenu = ({
     ? pathSegments?.slice(1)
     : pathSegments
 
-  // Determinar el currentMenuPath de forma inteligente
   const getCurrentMenuPath = (): string => {
     if (pathSegmentsClean.length === 0) return ''
 
-    // Si es una ruta dinámica, usar el primer segmento
     if (DYNAMIC_ROUTES.includes(pathSegmentsClean[0])) {
       return pathSegmentsClean[0]
     }
 
-    // Para el resto, usar lógica tradicional
     const cleanPath = pathSegmentsClean.length > 2 ? pathSegmentsClean.slice(1) : pathSegmentsClean
     return cleanPath[0] || ''
   }
@@ -244,7 +240,7 @@ export const VerticalMenu = ({
               {
                 name: 'offset',
                 options: {
-                  offset: [16, 0]
+                  offset: [16, 0],
                 },
               },
             ]}
@@ -297,7 +293,7 @@ export const VerticalMenu = ({
           <Flex mt={0} align="center" h="48px" px={4}>
             <H3>{currentMenu?.name}</H3>
           </Flex>
-          <Flex direction="column" gap={2} p={2}>
+          <Flex direction="column" gap={2} p={2} overflowY="auto" maxH="calc(100vh - 200px)">
             {currentSubMenu.map((section, index) => {
               const isActive = section?.isActive?.()
               const Icon = section.icon
@@ -309,7 +305,8 @@ export const VerticalMenu = ({
                   color={isActive ? 'brand.dark' : 'text.light'}
                   aria-label={section.name}
                   onClick={() => redirectHandler(section?.href)}
-                  h="48px"
+                  minH="48px"
+                  maxH="48px"
                   justifyContent={'flex-start'}
                   gap={2}
                   width="full"

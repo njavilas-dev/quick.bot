@@ -31,20 +31,48 @@ test.describe('Blocks > Inputs > Buttons', () => {
     })
 
     await test.step('Add and edit items in the input block', async () => {
-      await page.getByRole('textbox').last().fill('Item 1')
-      await page.getByRole('textbox').last().press('Enter')
-      await page.getByRole('textbox').last().fill('Item 2')
-      await page.getByRole('textbox').last().press('Enter')
-      await page.getByRole('textbox').last().fill('Item 3')
-      await page.getByRole('textbox').last().press('Enter')
-      await page.getByRole('textbox').last().press('Escape')
+      const block = page.getByTestId('block block2')
+
+      await block.locator('textarea:not([hidden])').fill('Item 1')
+      await block.locator('textarea:not([hidden])').blur()
+      await page.waitForTimeout(200)
+
+      await block.getByText('Item 1', { exact: true }).first().hover()
+      await page.locator('[aria-label="Add item"]').click()
+
+      await page.waitForTimeout(300)
+      const newItem = block.locator('text=/Opción \\d+/').or(block.locator('text=/Option \\d+/')).first()
+      await newItem.click()
+
+      await block.locator('textarea:not([hidden])').waitFor({ state: 'visible', timeout: 2000 })
+      await block.locator('textarea:not([hidden])').fill('Item 2')
+      await block.locator('textarea:not([hidden])').blur()
+      await page.waitForTimeout(200)
+
+      await block.getByText('Item 2', { exact: true }).first().hover()
+      await page.locator('[aria-label="Add item"]').click()
+      await page.waitForTimeout(300)
+
+      const newItem2 = block.locator('text=/Opción \\d+/').or(block.locator('text=/Option \\d+/')).first()
+      await newItem2.click()
+      await block.locator('textarea:not([hidden])').waitFor({ state: 'visible', timeout: 2000 })
+      await block.locator('textarea:not([hidden])').fill('Item 3')
+      await block.locator('textarea:not([hidden])').blur()
+
+      // Click outside to close
+      await page.waitForTimeout(200)
+      await block.click({ position: { x: 0, y: 0 } })
     })
 
     await test.step('Delete an item and verify', async () => {
-      const item2 = await page.locator('text=Item 2').first()
+      const block = page.getByTestId('block block2')
+      // Use a more specific locator that targets the editable preview, not the hidden textarea
+      const item2 = block.getByText('Item 2', { exact: true }).first()
       await item2.hover()
-      await page.locator('[aria-label="Delete item"]').click()
-      await expect(page.locator('text=Item 2')).toBeHidden()
+      // Wait for the actions bar to appear and click the first visible delete button
+      await page.locator('[aria-label="Delete item"]').first().click()
+      // Verify the item is no longer visible in the block
+      await expect(block.getByText('Item 2', { exact: true })).toHaveCount(0)
     })
 
     await test.step('Preview and validate item interactions (single choice)', async () => {
@@ -63,16 +91,17 @@ test.describe('Blocks > Inputs > Buttons', () => {
     })
 
     await test.step('Add a new item via UI interactions', async () => {
-      const item1Container = page.locator('text=Item 1').first()
+      const block = page.getByTestId('block block2')
+      const item1Container = block.getByText('Item 1', { exact: true }).first()
       await item1Container.hover()
 
       const addButton = page.locator('[aria-label="Add item"]')
       await addButton.waitFor({ state: 'visible', timeout: 5000 })
 
       await addButton.click()
-      const block = page.getByTestId('block block2')
-      await block.getByRole('textbox').fill('Item 2')
-      await block.getByRole('textbox').press('Enter')
+
+      // Wait a bit for the action to complete
+      await page.waitForTimeout(200)
     })
 
     await test.step('Final preview and validate multi-selection', async () => {
@@ -103,9 +132,12 @@ test.describe('Blocks > Inputs > Buttons', () => {
     })
 
     await test.step('Edit and restart the block', async () => {
-      await page.click('text="Item 1"')
-      await page.getByRole('textbox').last().fill('{{Item 2}}')
-      await page.getByTestId('block block1').click({ position: { x: 0, y: 0 } })
+      const block = page.getByTestId('block block1')
+      await block.getByText('Item 1', { exact: true }).first().click()
+      await block.locator('textarea:not([hidden])').waitFor({ state: 'visible', timeout: 2000 })
+      await block.locator('textarea:not([hidden])').fill('{{Item 2}}')
+      await page.waitForTimeout(100)
+      await block.click({ position: { x: 0, y: 0 } })
       await page.click('text=Multiple choice?')
       await page.click('[aria-label="Restart"]')
     })

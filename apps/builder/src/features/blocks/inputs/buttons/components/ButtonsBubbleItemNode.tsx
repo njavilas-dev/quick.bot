@@ -25,6 +25,7 @@ import { useTranslate } from '@tolgee/react'
 import { convertStrToList } from '@quickbot.io/lib/convertStrToList'
 import { PlusIcon } from '@urbiport/icons'
 import { isSvgSrc } from '@quickbot.io/lib'
+import { createId } from '@quickbot.io/lib/createId'
 
 type Props = {
   item: ButtonItem
@@ -35,20 +36,48 @@ export const ButtonsBubbleItemNode = ({ item, indices }: Props) => {
   const { t } = useTranslate()
   const { deleteItem, updateItem, createItem, bot } = useBot()
   const { openedItemId, setOpenedItemId } = useGraph()
-  const [itemValue, setItemValue] = useState(
-    item.content ?? (indices.itemIndex === 0 ? t('blocks.inputs.button.clickToEdit.label') : ''),
-  )
+  const getNextItemName = React.useCallback(() => {
+    const group = bot?.groups.at(indices.groupIndex)
+    const block = group?.blocks.at(indices.blockIndex) as { items?: Array<{ content?: string }> } | undefined
+    const base = t('blocks.inputs.button.defaultItemName.base')
+    const existingNames = new Set(
+      (block?.items ?? [])
+        .map((i) => (i.content ?? '').trim())
+        .filter((name) => name.length > 0),
+    )
+    let nextName = `${base} 1`
+    let counter = 2
+    while (existingNames.has(nextName)) {
+      nextName = `${base} ${counter}`
+      counter += 1
+    }
+    return nextName
+  }, [bot, indices.groupIndex, indices.blockIndex, t])
+  const defaultItemName = React.useMemo(() => {
+    if (item.content && item.content.trim().length > 0) return item.content
+    return getNextItemName()
+  }, [item.content, getNextItemName])
+  const [itemValue, setItemValue] = useState(defaultItemName)
   const editableRef = useRef<HTMLDivElement | null>(null)
   const ref = useRef<HTMLDivElement | null>(null)
 
   const handleMouseDown = (e: React.MouseEvent) => e.stopPropagation()
-
+  
   const handleInputSubmit = () => {
-    if (itemValue === '') deleteItem(indices)
-    else
+    const nextName = getNextItemName()
+
+    if (
+      itemValue === '' ||
+      itemValue === t('blocks.inputs.button.clickToEdit.label')
+    ) {
       updateItem(indices, {
-        content: itemValue === '' ? undefined : itemValue,
+        content: nextName,
       } as Item)
+    } else {
+      updateItem(indices, {
+        content: itemValue,
+      } as Item)
+    }
   }
 
   const handleKeyPress = async (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -79,7 +108,9 @@ export const ButtonsBubbleItemNode = ({ item, indices }: Props) => {
 
   const handlePlusClick = () => {
     const itemIndex = indices.itemIndex + 1
-    createItem({}, { ...indices, itemIndex })
+    const newItemId = createId()
+    createItem({ id: newItemId }, { ...indices, itemIndex })
+    setOpenedItemId(newItemId)
   }
 
   const updateItemSettings = (settings: Omit<ButtonItem, 'content'>) => {
@@ -100,8 +131,6 @@ export const ButtonsBubbleItemNode = ({ item, indices }: Props) => {
     <Popover isLazy placement="right" isOpen={openedItemId === item.id} closeOnBlur={false}>
       <PopoverAnchor>
         <Flex
-          px={5}
-          py={5}
           justify="center"
           w="100%"
           pos="relative"

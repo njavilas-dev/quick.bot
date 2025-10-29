@@ -98,8 +98,8 @@ test.describe("Custom Domains > Enterprise Workspace", () => {
     });
 
     await test.step('Edit custom domain path', async () => {
-      await page.getByRole('button', { name: 'Edit' }).nth(2).waitFor({ state: 'visible', timeout: 20000 });
-      await page.getByRole('button', { name: 'Edit' }).nth(2).click();
+      await page.getByRole('button', { name: 'Edit' }).nth(1).waitFor({ state: 'visible', timeout: 20000 });
+      await page.getByRole('button', { name: 'Edit' }).nth(1).click();
 
       const urlInput = page.locator('[data-testid="url-input"]').nth(1);
       await urlInput.fill('custom-path');

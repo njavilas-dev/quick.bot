@@ -95,23 +95,45 @@ export const startSession = async ({
     ? prefillVariables(botVariables, startParams.prefilledVariables)
     : botVariables
 
-  let prefilledVariables =
-    startParams.type === 'live' && startParams.platform
-      ? prefilledVariablesFromParams.map((v) =>
-          v.id === 'system_platform' ? { ...v, value: startParams.platform } : v,
-        )
-      : startParams.type === 'preview'
-      ? prefilledVariablesFromParams.map((v) =>
-          v.id === 'system_platform' ? { ...v, value: 'preview' } : v,
-        )
-      : prefilledVariablesFromParams
-
-  const whatsAppPhoneNumber = initialSessionState?.whatsApp?.contact?.phoneNumber
-  if (whatsAppPhoneNumber) {
-    prefilledVariables = prefilledVariables.map((v) =>
-      v.id === 'system_whatsapp_number' ? { ...v, value: whatsAppPhoneNumber } : v,
-    )
+  const getMomentOfTheDay = () => {
+    const now = new Date()
+    if (now.getHours() < 12) return 'morning'
+    if (now.getHours() >= 12 && now.getHours() < 18) return 'afternoon'
+    if (now.getHours() >= 18) return 'evening'
+    if (now.getHours() >= 22 || now.getHours() < 6) return 'night'
+    return ''
   }
+
+  let prefilledVariables = prefilledVariablesFromParams.map((v) => {
+    switch (v.id) {
+      case 'system_platform':
+        return {
+          ...v,
+          value: startParams.type === 'preview' ? 'preview' : startParams.platform,
+        }
+      case 'system_whatsapp_number':
+        return {
+          ...v,
+          value: initialSessionState?.whatsApp?.contact?.phoneNumber ?? '',
+        }
+      case 'system_whatsapp_name':
+        return { ...v, value: initialSessionState?.whatsApp?.contact?.name ?? '' }
+      case 'system_randomId':
+        return { ...v, value: createId() }
+      case 'system_today':
+        return { ...v, value: new Date().toISOString() }
+      case 'system_now':
+        return { ...v, value: new Date().toISOString() }
+      case 'system_tomorrow':
+        return { ...v, value: new Date(Date.now() + 86400000).toISOString() }
+      case 'system_yesterday':
+        return { ...v, value: new Date(Date.now() - 86400000).toISOString() }
+      case 'system_momentOfTheDay':
+        return { ...v, value: getMomentOfTheDay() }
+      default:
+        return v
+    }
+  })
 
   if (startParams.type === 'live' && startParams.platform === 'whatsapp') {
     prefilledVariables = prefilledVariables.map((v) =>

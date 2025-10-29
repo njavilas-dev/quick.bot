@@ -117,6 +117,7 @@
   "blocks.inputs.button.conditionContent.if.label": "ΑΝ",
   "blocks.inputs.button.default.label": "Προεπιλογή",
   "blocks.inputs.button.else.label": "Αλλιώς",
+  "blocks.logic.condition.otherwise.label": "Διαφορετικά",
   "blocks.inputs.button.openSettings.ariaLabel": "Άνοιγμα ρυθμίσεων",
   "blocks.inputs.button.settings.dynamicData.infoText.label": "Εάν οριστεί, τα κουμπιά θα εμφανίζονται δυναμικά ανάλογα με το τι περιέχει η μεταβλητή.",
   "blocks.inputs.button.settings.dynamicData.label": "Δυναμικά δεδομένα:",

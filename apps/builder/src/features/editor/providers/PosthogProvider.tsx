@@ -5,6 +5,42 @@ import { useUser } from '@/hooks/useUser'
 import { isProduction, isPreview } from '@/lib/env'
 import { env } from '@quickbot.io/env'
 
+// PosthogProviderOptional para páginas de autenticación (sin dependencia de useUser)
+export const PosthogProviderOptional = ({ children }: { children: React.ReactNode }) => {
+  const initializedRef = useRef(false)
+
+  useEffect(() => {
+    if (!isProduction() && !isPreview()) return
+
+    if (!initializedRef.current) {
+      try {
+        posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY ?? '', {
+          api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+          capture_pageview: false,
+          disable_session_recording: true,
+          debug: isPreview(),
+          capture_exceptions: {
+            capture_unhandled_errors: true,
+            capture_unhandled_rejections: true,
+            capture_console_errors: true,
+          },
+        })
+      } catch (error) {
+        console.error('Failed to initialize PostHog', error)
+      }
+      initializedRef.current = true
+      posthog.opt_in_capturing()
+    }
+  }, [])
+
+  if (!isProduction()) {
+    return <>{children}</>
+  }
+
+  return <PHProvider client={posthog}>{children}</PHProvider>
+}
+
+// PosthogProvider original con dependencia de useUser
 const PostHogProvider = ({ children }: { children: React.ReactNode }) => {
   const { user } = useUser()
 
@@ -15,20 +51,17 @@ const PostHogProvider = ({ children }: { children: React.ReactNode }) => {
     if (user?.id) {
       if (!initializedRef.current) {
         try {
-          posthog.init(
-            env.NEXT_PUBLIC_POSTHOG_KEY ?? '',
-            {
-              api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
-              capture_pageview: false,
-              disable_session_recording: true,
-              debug: isPreview(),
-              capture_exceptions: {
-                capture_unhandled_errors: true,
-                capture_unhandled_rejections: true,
-                capture_console_errors: true,
-              },
-            }
-          )
+          posthog.init(env.NEXT_PUBLIC_POSTHOG_KEY ?? '', {
+            api_host: env.NEXT_PUBLIC_POSTHOG_HOST,
+            capture_pageview: false,
+            disable_session_recording: true,
+            debug: isPreview(),
+            capture_exceptions: {
+              capture_unhandled_errors: true,
+              capture_unhandled_rejections: true,
+              capture_console_errors: true,
+            },
+          })
         } catch (error) {
           console.error('Failed to initialize PostHog', error)
         }

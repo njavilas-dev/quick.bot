@@ -1,10 +1,14 @@
 import React from 'react'
 import { VStack, Text } from '@chakra-ui/react'
 import { TextInputBlock } from '@quickbot.io/schemas'
+import { InputBlockType } from '@quickbot.io/schemas/features/blocks/inputs/constants'
 import { defaultTextInputOptions } from '@quickbot.io/schemas/features/blocks/inputs/text/constants'
 import { useBot } from '@/features/editor/providers/BotProvider'
 import { SetVariableLabel } from '@/components/SetVariableLabel'
 import { useVariableTag } from '@/hooks/useVariableTag'
+import { useIntegrationValidation } from '@/features/graph/hooks/useIntegrationValidation'
+import { ValidationMessage } from '@/features/graph/components/nodes/block/ValidationMessage'
+import { useValidationColor } from '@/features/graph/hooks/useValidationColor'
 
 type Props = {
   options: TextInputBlock['options']
@@ -17,6 +21,12 @@ export const TextInputBubbleNode = ({ options }: Props) => {
     bot && options?.attachments?.isEnabled && options?.attachments.saveVariableId
   const audioClipVariableId =
     bot && options?.audioClip?.isEnabled && options?.audioClip.saveVariableId
+
+  // Create a block-like object to validate variables
+  const blockForValidation = { type: InputBlockType.TEXT, options } as TextInputBlock
+  const integrationValidation = useIntegrationValidation(blockForValidation)
+  const hasValidationErrors = integrationValidation.hasMissingVariablesError
+  const color = useValidationColor(integrationValidation, 'text.light', 'red.600')
 
   const renderVariableLabels = () => (
     <>
@@ -32,7 +42,7 @@ export const TextInputBubbleNode = ({ options }: Props) => {
   return (
     <VStack w="full" align="start" spacing={1}>
       <Text
-        color="text.light"
+        color={color}
         style={{
           wordBreak: 'break-word',
           overflowWrap: 'break-word',
@@ -42,6 +52,7 @@ export const TextInputBubbleNode = ({ options }: Props) => {
       </Text>
       {variableTag}
       {renderVariableLabels()}
+      {hasValidationErrors && <ValidationMessage validation={integrationValidation} />}
     </VStack>
   )
 }

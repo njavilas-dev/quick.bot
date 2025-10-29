@@ -1,6 +1,5 @@
 import resolve from '@rollup/plugin-node-resolve'
 import terser from '@rollup/plugin-terser'
-import { babel } from '@rollup/plugin-babel'
 import postcss from 'rollup-plugin-postcss'
 import autoprefixer from 'autoprefixer'
 import typescript from '@rollup/plugin-typescript'
@@ -54,12 +53,6 @@ const indexConfig = {
     }),
     commonjs({
       include: /node_modules/,
-    }),
-    babel({
-      babelHelpers: 'bundled',
-      exclude: 'node_modules/**',
-      presets: ['@babel/preset-typescript'],
-      extensions,
     }),
     typescriptPaths({ preserveExtensions: true }),
     typescript({

@@ -1,5 +1,5 @@
 import { Flex, HStack, IconButton, Popover, PopoverTrigger, useDisclosure } from '@chakra-ui/react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import {
   BubbleBlock,
   BubbleBlockContent,
@@ -81,7 +81,9 @@ export const BlockNode = ({
     groupId,
     isConnecting,
     hasError:
-      integrationValidation.hasCredentialsError || integrationValidation.hasRequiredFieldsError,
+      integrationValidation.hasCredentialsError ||
+      integrationValidation.hasRequiredFieldsError ||
+      integrationValidation.hasMissingVariablesError,
   })
 
   const { isDraggingGraph } = useGraphGroups()
@@ -145,10 +147,10 @@ export const BlockNode = ({
     setOpenedBlockId(undefined)
   }
 
-  const handleTexteditorChange = (content: TElement[]) => {
+  const handleTexteditorChange = useCallback((content: TElement[]) => {
     const updatedBlock = { ...block, content: { richText: content } }
     updateBlock(indices, updatedBlock)
-  }
+  }, [block, indices, updateBlock])
 
   const handleClick = (e: React.MouseEvent) => {
     setFocusedGroupId(groupId)
@@ -262,6 +264,7 @@ export const BlockNode = ({
         toolbarItems={toolbarItems}
         onChange={handleTexteditorChange}
         onClose={handleCloseEditor}
+        debounceTimeout={800}
       />
     )
   }
@@ -305,7 +308,8 @@ export const BlockNode = ({
                   p="3"
                   bg={
                     integrationValidation.hasCredentialsError ||
-                    integrationValidation.hasRequiredFieldsError
+                      integrationValidation.hasRequiredFieldsError ||
+                      integrationValidation.hasMissingVariablesError
                       ? 'red.100'
                       : 'bg.normal'
                   }

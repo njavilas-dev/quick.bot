@@ -1,13 +1,13 @@
 import { AccountProfileForm } from '@/features/account/components/AccountProfileForm'
 import { ResetPasswordForm } from '@/features/auth/components/ResetPasswordForm'
 import React, { ReactNode } from 'react'
-import Layout from '@/components/layouts/Layout'
 import { Stack, Text, Skeleton } from '@chakra-ui/react'
 import { BoxCard, H2 } from '@urbiport/ui'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { validateResetPasswordToken } from '@/features/auth/helpers/validateResetPasswordToken'
 import { SignInError } from '@/features/auth/components/SignInError'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const ProfilePage = () => {
   const router = useRouter()
@@ -62,7 +62,6 @@ const ProfilePage = () => {
 }
 
 ProfilePage.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
-
 export default ProfilePage

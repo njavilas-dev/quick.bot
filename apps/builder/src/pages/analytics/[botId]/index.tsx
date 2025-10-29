@@ -1,16 +1,14 @@
 import type { ReactNode } from 'react'
 import type { NextPageWithLayout } from '@/pages/_app'
 import { AnalyticsPage } from '@/features/analytics/components/AnalyticsPage'
-import Layout from '@/components/layouts/Layout'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
 
 const Page: NextPageWithLayout = () => {
-  return (
-    <AnalyticsPage />
-  )
+  return <AnalyticsPage />
 }
 
 Page.getLayout = function getLayout(page: ReactNode) {
-  return <Layout>{page}</Layout>
+  return <AccountLayout>{page}</AccountLayout>
 }
 
 export default Page

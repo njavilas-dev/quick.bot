@@ -12,8 +12,6 @@ export const timeFilterValues = [
 
 export const statFilterValues = ['view', 'started', 'completed'] as const
 
-export const defaultStatFilter = 'view' as const
-
 export const timeFilterLabels: Record<(typeof timeFilterValues)[number], string> = {
   today: 'Today',
   last7Days: 'Last 7 days',
@@ -29,7 +27,7 @@ export const defaultTimeFilter = 'last30Days' as const
 export type StatFilterType = (typeof statFilterValues)[number]
 
 export const statFilterLabels: Record<StatFilterType, string> = {
-  view: 'View',
+  view: 'Views',
   started: 'Started',
   completed: 'Completed',
 }
@@ -41,7 +39,6 @@ export const statFilterDescriptions: Record<StatFilterType, string> = {
 }
 
 export const conversionFilterValues = [
-  'conversionRate',
   'viewToStartRate',
   'completionRate',
   'dropOffRate',
@@ -50,16 +47,14 @@ export const conversionFilterValues = [
 export type ConversionFilterType = (typeof conversionFilterValues)[number]
 
 export const conversionFilterLabels: Record<ConversionFilterType, string> = {
-  conversionRate: 'Conversion Rate',
   viewToStartRate: 'Started Rate',
   completionRate: 'Completion Rate',
   dropOffRate: 'Drop-off Rate',
 }
 
 export const conversionFilterDescriptions: Record<ConversionFilterType, string> = {
-  conversionRate: 'Percentage of started users who completed (Completed/Started)',
   viewToStartRate: 'Percentage of viewers who started (Started/Views)',
-  completionRate: 'Percentage of viewers who completed (Completed/Views)',
+  completionRate: 'Percentage of started users who completed (Completed/Started)',
   dropOffRate: 'Percentage of users who started but did not complete',
 }
 
@@ -78,12 +73,51 @@ export const statsSchema = z.object({
   totalViewsPerDay: formattedPerDay,
   totalStartsPerDay: formattedPerDay,
   totalCompletedPerDay: formattedPerDay,
-  conversionRate: z.number(),
-  viewToStartRate: z.number(),
   completionRate: z.number(),
+  viewToStartRate: z.number(),
   dropOffRate: z.number(),
 })
 
 export type Stats = z.infer<typeof statsSchema>
 
 export type FormattedPerDay = z.infer<typeof formattedPerDay>
+
+// Variable Analytics Schemas
+export const variableValueStatsSchema = z.object({
+  value: z.string(),
+  totalStarts: z.number(),
+  totalCompleted: z.number(),
+  completionRate: z.number(),
+  dropOffRate: z.number(),
+})
+
+export const emptyVariableStatsSchema = z.object({
+  totalStarts: z.number(),
+  totalCompleted: z.number(),
+  completionRate: z.number(),
+})
+
+export const variableAnalyticsSchema = z.object({
+  variableId: z.string(),
+  variableName: z.string(),
+  isNumeric: z.boolean(),
+  averageValue: z.number().optional(),
+  valueStats: z.array(variableValueStatsSchema),
+  emptyStats: emptyVariableStatsSchema,
+  totalStarts: z.number(),
+  totalCompleted: z.number(),
+  collectionRate: z.number(),
+  usersWithValue: z.number(),
+  usersWithoutValue: z.number(),
+  collectionRatePerDay: z.array(z.object({
+    date: z.string(),
+    collectionRate: z.number(),
+    usersWithValue: z.number(),
+    totalStarts: z.number(),
+    averageValue: z.number().optional(),
+  })),
+})
+
+export type VariableValueStats = z.infer<typeof variableValueStatsSchema>
+export type EmptyVariableStats = z.infer<typeof emptyVariableStatsSchema>
+export type VariableAnalytics = z.infer<typeof variableAnalyticsSchema>

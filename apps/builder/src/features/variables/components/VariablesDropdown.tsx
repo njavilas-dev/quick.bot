@@ -54,6 +54,7 @@ export const VariablesDropdown: React.FC<VariablesDropdownProps> = ({
       return (
         <Box display="flex" alignItems="center" gap={1}>
           <IconButton
+            as="span"
             onClick={handleClearSelection}
             icon={<CloseIcon />}
             aria-label="Clear"

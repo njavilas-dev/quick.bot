@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo, useCallback } from 'react'
 import { Plate, PlatePlugin, PlateProps } from '@udecode/plate-core'
 import { TElement } from '@udecode/plate-common'
 import { BoxCard } from '../../atoms'
@@ -7,6 +7,7 @@ import { texteditorStyle } from './style'
 import { TexteditorContent } from './TexteditorContent'
 import { TexteditorToolbar, ToolbarItem } from './TexteditorToolbar'
 import { useOnChangeDebounced } from '../../../../hooks'
+import { DefaultLeaf, RenderLeafProps } from 'slate-react'
 
 export type TexteditorProps = {
   id: string
@@ -20,9 +21,14 @@ export type TexteditorProps = {
   toolbarItems?: ToolbarItem[]
 } & Omit<PlateProps, 'defaultValue' | 'onChange' | 'id' | 'children' | 'plugins'>
 
-import { DefaultLeaf, RenderLeafProps } from 'slate-react'
+const SanitizedLeaf = (props: RenderLeafProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { leafPosition, ...rest } = props as RenderLeafProps
+  return <DefaultLeaf {...rest} />
+}
 
-const SanitizedLeaf = ({ ...rest }: RenderLeafProps) => <DefaultLeaf {...rest} />
+// Memoize default empty value to avoid recreating on every render
+const DEFAULT_EMPTY_VALUE: TElement[] = [{ type: 'p', children: [{ text: '' }] }]
 
 export const Texteditor = ({
   id,
@@ -40,7 +46,7 @@ export const Texteditor = ({
     setLocalValue(defaultValue ?? '')
   }, [defaultValue])
 
-  const isDefaultEmpty = (content: TElement[]) => {
+  const isDefaultEmpty = useCallback((content: TElement[]) => {
     return (
       content.length === 1 &&
       content[0].type === 'p' &&
@@ -49,10 +55,11 @@ export const Texteditor = ({
       'text' in content[0].children[0] &&
       content[0].children[0].text === ''
     )
-  }
+  }, [])
 
-  const { onChange } = useOnChangeDebounced<TElement[]>({
-    onChange: (newContent) => {
+  // Memoize the onChange handler to avoid recreating on every render
+  const handleContentChange = useCallback(
+    (newContent: TElement[]) => {
       if (isInitialRender.current && defaultValue.length === 0 && isDefaultEmpty(newContent)) {
         isInitialRender.current = false
         return
@@ -60,14 +67,28 @@ export const Texteditor = ({
       isInitialRender.current = false
       _onChange(newContent)
     },
+    [defaultValue.length, isDefaultEmpty, _onChange]
+  )
+
+  const { onChange } = useOnChangeDebounced<TElement[]>({
+    onChange: handleContentChange,
     debounceTimeout,
   })
+
+  // Memoize plugins array to prevent Plate from re-initializing unnecessarily
+  const allPlugins = useMemo(() => [...plugins, ...platePlugins], [platePlugins])
+
+  // Memoize plate value to avoid unnecessary re-renders
+  const plateValue = useMemo(
+    () => (localValue.length === 0 ? DEFAULT_EMPTY_VALUE : localValue),
+    [localValue]
+  )
 
   return (
     <Plate
       id={id}
-      plugins={[...plugins, ...platePlugins]}
-      value={localValue.length === 0 ? [{ type: 'p', children: [{ text: '' }] }] : localValue}
+      plugins={allPlugins}
+      value={plateValue}
       onChange={onChange}
       renderLeaf={SanitizedLeaf}
     >

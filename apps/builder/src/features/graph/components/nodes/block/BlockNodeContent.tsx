@@ -78,7 +78,7 @@ export const BlockNodeContent = ({ block, indices, groupId }: Props): JSX.Elemen
       return <PhoneInputBubbleNode options={block.options} />
     }
     case InputBlockType.DATE: {
-      return <DateInputBubbleNode variableId={block.options?.variableId} />
+      return <DateInputBubbleNode options={block.options} />
     }
     case InputBlockType.RATING: {
       return <RatingInputBubbleNode block={block} />

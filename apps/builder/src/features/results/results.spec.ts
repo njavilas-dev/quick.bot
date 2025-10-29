@@ -26,6 +26,8 @@ test.describe("Results > Table", () => {
 
     await test.step("Navigate to the results page", async () => {
       await page.goto(`/analytics/${botId}/answers`);
+      await page.waitForLoadState('domcontentloaded');
+      await page.waitForTimeout(2000);
     });
 
     await test.step('Check header format', async () => {

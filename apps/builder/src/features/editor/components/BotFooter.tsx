@@ -43,7 +43,7 @@ export const BotFooter = () => {
 
   const isLoading = isNotDefined(bot)
   const isGuest = currentUserMode === 'guest'
-  const canInvite = currentUserMode === 'write' || 'read'
+  const canInvite = currentUserMode === 'write' || currentUserMode === 'read'
 
   useKeyboardShortcuts({
     undo: () => {
@@ -95,7 +95,8 @@ export const BotFooter = () => {
       left="auto"
       flexShrink={0}
       justifyContent="space-between"
-      p="4"
+      px={6}
+      py={3}
     >
       <HStack justify="center" align="center" spacing="6">
         <HStack alignItems="center" spacing={3}>

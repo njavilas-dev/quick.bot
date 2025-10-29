@@ -5,6 +5,8 @@ import { sign } from 'jsonwebtoken'
 import { getServerSession } from 'next-auth'
 import { getAuthOptions } from './api/auth/[...nextauth]'
 import { env } from '@quickbot.io/env'
+import { AccountLayout } from '@/components/layouts/AccountLayout'
+import type { ReactNode } from 'react'
 
 export default function Page() {
   return null
@@ -38,4 +40,8 @@ const createSSOToken = (user: User) => {
   }
 
   return sign(userData, env.SLEEKPLAN_SSO_KEY, { algorithm: 'HS256' })
+}
+
+Page.getLayout = function getLayout(page: ReactNode) {
+  return <AccountLayout>{page}</AccountLayout>
 }

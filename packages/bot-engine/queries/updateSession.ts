@@ -10,7 +10,7 @@ type Props = {
 }
 
 export const updateSession = ({ id, state, isReplying, lastWhatsAppMessageId }: Props): Prisma.PrismaPromise<any> =>
-  prisma.chatSession.updateMany({
+  prisma.chatSession.update({
     where: { id },
     data: {
       state,

@@ -19,9 +19,6 @@
   "author": "Urbiport",
   "license": "ISC",
   "keywords": [],
-  "dependencies": {
-    "slate-react": "^0.100.0"
-  },
   "peerDependencies": {
     "react": ">=18.2.0",
     "react-dom": ">=18.2.0",
@@ -46,7 +43,6 @@
     "@uiw/color-convert": "^2.3.4"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.25.0",
     "@rollup/plugin-babel": "6.0.3",
     "@rollup/plugin-commonjs": "26.0.1",
     "@rollup/plugin-node-resolve": "15.1.0",
@@ -60,9 +56,9 @@
     "eslint": "8.44.0",
     "eslint-config-custom": "workspace:*",
     "rollup": "3.26.2",
-    "rollup-plugin-dts": "^6.1.1",
     "rollup-plugin-postcss": "4.0.2",
     "rollup-plugin-typescript-paths": "1.4.0",
+    "rollup-plugin-dts": "^6.1.1",
     "sass": "^1.85.0",
     "tslib": "2.6.0",
     "typescript": "5.4.5"
