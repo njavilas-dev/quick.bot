@@ -186,10 +186,33 @@ jobs:
       - name: Verify viewer server is running
         run: |
           curl -f http://localhost:3001/health
+          echo "✓ Viewer server is ready"
 
       - name: Verify builder server is running
         run: |
           curl -f http://localhost:3000/health
+          # Verificar que la página de signin está accesible
+          curl -f http://localhost:3000/signin || echo "Warning: /signin endpoint not available yet"
+          echo "✓ Builder server is ready"
+
+      - name: Wait for servers to be fully ready
+        run: |
+          echo "Waiting for servers to be fully initialized..."
+          sleep 10
+          # Verificar que ambos servidores responden correctamente con retries
+          for i in {1..5}; do
+            if curl -f http://localhost:3001/health > /dev/null 2>&1 && curl -f http://localhost:3000/health > /dev/null 2>&1; then
+              echo "✓ Both servers are ready"
+              break
+            else
+              echo "Attempt $i: Servers not ready yet, waiting..."
+              sleep 3
+            fi
+          done
+          # Verificación final
+          curl -f http://localhost:3001/health && echo "✓ Viewer ready"
+          curl -f http://localhost:3000/health && echo "✓ Builder ready"
+          curl -f http://localhost:3000/signin > /dev/null 2>&1 && echo "✓ Builder /signin endpoint ready" || echo "⚠ Builder /signin endpoint may not be ready"
 
       - name: Run viewer tests
         run: |
