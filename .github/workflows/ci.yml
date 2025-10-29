@@ -168,7 +168,7 @@ jobs:
       - name: Start viewer server
         run: |
           cd apps/viewer/.next/standalone
-          PORT=3001 nohup node server.js > /tmp/viewer.log 2>&1 &
+          PORT=3001 nohup node apps/viewer/server.js > /tmp/viewer.log 2>&1 &
           echo $! > /tmp/viewer.pid
           cd ../../..
           sleep 5
@@ -177,7 +177,7 @@ jobs:
       - name: Start builder server
         run: |
           cd apps/builder/.next/standalone
-          PORT=3000 nohup node server.js > /tmp/builder.log 2>&1 &
+          PORT=3000 nohup node apps/builder/server.js > /tmp/builder.log 2>&1 &
           echo $! > /tmp/builder.pid
           cd ../../..
           sleep 5
@@ -211,7 +211,8 @@ jobs:
             sleep 2
             kill -9 $(cat /tmp/builder.pid) 2>/dev/null || true
           fi
-          pkill -f "node .next/standalone/server.js" || true
+          pkill -f "node apps/viewer/server.js" || true
+          pkill -f "node apps/builder/server.js" || true
 
   build:
     runs-on: ubuntu-latest
