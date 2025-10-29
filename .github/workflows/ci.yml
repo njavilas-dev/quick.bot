@@ -2,11 +2,11 @@ name: CI Pipeline
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ['main', 'develop']
   pull_request:
-    branches: ["**"]
+    branches: ['**']
   delete:
-    branches: ["feature/**"]
+    branches: ['feature/**']
 
 permissions:
   contents: read
@@ -15,7 +15,9 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
+    if:
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref ==
+      'refs/heads/develop')) || github.event_name == 'pull_request'
     env:
       CI: 1
       TEST_ENV: true
@@ -23,7 +25,8 @@ jobs:
       ENCRYPTION_SECRET: ${{ secrets.TEST_ENCRYPTION_SECRET }}
       NEXTAUTH_URL: ${{ secrets.TEST_NEXTAUTH_URL }}
       NEXT_PUBLIC_VIEWER_URL: ${{ secrets.TEST_NEXT_PUBLIC_VIEWER_URL }}
-      NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME: ${{ secrets.TEST_NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
+      NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME:
+        ${{ secrets.TEST_NEXT_PUBLIC_VERCEL_VIEWER_PROJECT_NAME }}
       VERCEL_TOKEN: ${{ secrets.TEST_VERCEL_TOKEN }}
       VERCEL_TEAM_ID: ${{ secrets.TEST_VERCEL_TEAM_ID }}
       NEXT_PUBLIC_SMTP_FROM: ${{ secrets.TEST_NEXT_PUBLIC_SMTP_FROM }}
@@ -56,9 +59,12 @@ jobs:
       NEXT_PUBLIC_GIPHY_API_KEY: ${{ secrets.TEST_NEXT_PUBLIC_GIPHY_API_KEY }}
       PLAYWRIGHT_GOOGLE_ACCESS_TOKEN: ${{ secrets.TEST_PLAYWRIGHT_GOOGLE_ACCESS_TOKEN }}
       PLAYWRIGHT_GOOGLE_REFRESH_TOKEN: ${{ secrets.TEST_PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}
-      PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}
-      PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}
-      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID: ${{ secrets.TEST_PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID:
+        ${{ secrets.TEST_PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID:
+        ${{ secrets.TEST_PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID:
+        ${{ secrets.TEST_PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
       NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.TEST_NEXT_PUBLIC_SENTRY_DSN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.TEST_SENTRY_AUTH_TOKEN }}
       SENTRY_PROJECT: ${{ secrets.TEST_SENTRY_PROJECT }}
@@ -113,7 +119,8 @@ jobs:
         run: bun install
 
       - name: Fix isolated-vm native module
-        run: cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
+        run:
+          cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
 
       - name: Fix Turborepo lockfile warning
         run: touch bun.lockb
@@ -160,15 +167,26 @@ jobs:
 
       - name: Start viewer server
         run: |
-          cd apps/viewer
-          bun run start &
-          npx wait-on http://localhost:3001
+          cd apps/viewer/.next/standalone
+          PORT=3001 nohup node server.js > /tmp/viewer.log 2>&1 &
+          echo $! > /tmp/viewer.pid
+          cd ../../..
+          sleep 5
+          npx wait-on http://localhost:3001 --timeout 60000 || (cat /tmp/viewer.log && exit 1)
 
       - name: Start builder server
         run: |
-          cd apps/builder
-          bun run start &
-          npx wait-on http://localhost:3000
+          cd apps/builder/.next/standalone
+          PORT=3000 nohup node server.js > /tmp/builder.log 2>&1 &
+          echo $! > /tmp/builder.pid
+          cd ../../..
+          sleep 5
+          npx wait-on http://localhost:3000 --timeout 60000 || (cat /tmp/builder.log && exit 1)
+
+      - name: Verify servers are running
+        run: |
+          curl -f http://localhost:3001/health || curl -f http://localhost:3001 || echo "Viewer health check skipped"
+          curl -f http://localhost:3000/health || curl -f http://localhost:3000 || echo "Builder health check skipped"
 
       - name: Run viewer tests
         run: |
@@ -180,9 +198,26 @@ jobs:
           cd apps/builder
           bun run test --project=auth --project=inputs --project=other --max-failures=5
 
+      - name: Stop servers
+        if: always()
+        run: |
+          if [ -f /tmp/viewer.pid ]; then
+            kill $(cat /tmp/viewer.pid) 2>/dev/null || true
+            sleep 2
+            kill -9 $(cat /tmp/viewer.pid) 2>/dev/null || true
+          fi
+          if [ -f /tmp/builder.pid ]; then
+            kill $(cat /tmp/builder.pid) 2>/dev/null || true
+            sleep 2
+            kill -9 $(cat /tmp/builder.pid) 2>/dev/null || true
+          fi
+          pkill -f "node .next/standalone/server.js" || true
+
   build:
     runs-on: ubuntu-latest
-    if: (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')) || github.event_name == 'pull_request'
+    if:
+      (github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref ==
+      'refs/heads/develop')) || github.event_name == 'pull_request'
     needs: test
     env:
       CI: 1
@@ -226,7 +261,8 @@ jobs:
       PLAYWRIGHT_GOOGLE_REFRESH_TOKEN: ${{ secrets.PLAYWRIGHT_GOOGLE_REFRESH_TOKEN }}
       PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_PERSONAL_CUSTOMER_ID }}
       PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_BUSINESS_CUSTOMER_ID }}
-      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID: ${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
+      PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID:
+        ${{ secrets.PLAYWRIGHT_STRIPE_ENTERPRISE_CUSTOMER_ID }}
       NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
       SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
@@ -244,7 +280,7 @@ jobs:
       NEXT_PUBLIC_SUPPORT_BOT: ${{ secrets.NEXT_PUBLIC_SUPPORT_BOT }}
       NEXT_PUBLIC_POSTHOG_KEY: ${{ secrets.NEXT_PUBLIC_POSTHOG_KEY }}
       NEXT_PUBLIC_POSTHOG_HOST: ${{ secrets.NEXT_PUBLIC_POSTHOG_HOST }}
-      
+
     services:
       postgres:
         image: postgres:15
@@ -281,7 +317,8 @@ jobs:
         run: bun install
 
       - name: Fix isolated-vm native module
-        run: cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
+        run:
+          cd packages/variables && npm rebuild isolated-vm || npm install isolated-vm@5.0.1 --force
 
       - name: Fix Turborepo lockfile warning
         run: touch bun.lockb
@@ -350,11 +387,12 @@ jobs:
           path: apps/viewer/node_modules
           retention-days: 1
 
-
   container:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
+    if:
+      github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref ==
+      'refs/heads/develop')
     strategy:
       matrix:
         app: [builder, viewer]
@@ -420,11 +458,13 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/quick.bot:${{ matrix.app }}-${{ steps.tag.outputs.tag }}
+          tags:
+            ghcr.io/${{ github.repository_owner }}/quick.bot:${{ matrix.app }}-${{
+            steps.tag.outputs.tag }}
           build-args: |
             SCOPE=${{ matrix.app }}
             ${{ env.docker_build_args }}
-  
+
   deploy-railway:
     runs-on: ubuntu-latest
     needs: [build, container]
@@ -585,10 +625,10 @@ jobs:
           echo "Deleted branch: $BRANCH_NAME"
           echo "App: ${{ matrix.app }}"
           echo "Environment: preview"
-          
+
           vercel list --meta branch="$BRANCH_NAME" --meta app="${{ matrix.app }}" --meta environment="preview" --token "$VERCEL_TOKEN" --cwd apps/${{ matrix.app }} 2>/dev/null | grep -o "https://[^ ]*\.vercel\.app" | while read url; do
             echo "   Removing deployment: $url"
             vercel remove "$url" --token "$VERCEL_TOKEN" --yes 2>/dev/null || true
           done
-          
+
           echo "✅ Cleanup completed for ${{ matrix.app }} (branch: $BRANCH_NAME)"
